@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../components/Appbar.dart';
 
 class Layout extends StatefulWidget {
   const Layout({
@@ -29,18 +32,18 @@ class Layout extends StatefulWidget {
 class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Column(
-            children: [
-              Row(
-                children: [],
-              )
-            ],
-          )
-        ],
-      ),
+    return Scaffold(
+      appBar:
+          PreferredSize(
+              preferredSize: const Size.fromHeight(110),
+              child: AppBarComponent(
+                title: widget.title,
+                isChat: widget.isChat,
+                forceCanNotBack: widget.forceCanNotBack,
+                onBack: widget.onBack,
+              ),
+            )
+
     );
   }
 }
