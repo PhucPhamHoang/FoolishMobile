@@ -33,8 +33,7 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          PreferredSize(
+      appBar: PreferredSize(
               preferredSize: const Size.fromHeight(110),
               child: AppBarComponent(
                 title: widget.title,
