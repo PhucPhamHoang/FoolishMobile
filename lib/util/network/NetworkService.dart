@@ -3,16 +3,28 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NetworkService {
-  String domain = 'http://localhost:8080';
+  static String domain = 'http://192.168.1.9:8080';
 
-  Future<void> getData(String url) async {
-    final response = await http.get(Uri.parse(domain + url));
+  const NetworkService._();
 
-    if (response.statusCode == 200) {
-      final ResponseDto responseModel = json.decode(response.body);
-      print(responseModel);
-    } else {
-      throw Exception('Failed to fetch data');
+  static Future<ResponseDto> getData(String url) async {
+    print(domain + url);
+
+    try{
+      final response = await http.get(Uri.parse(domain + url));
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        Map<String, dynamic> jsonMap = json.decode(response.body);
+        final ResponseDto responseModel = ResponseDto.fromJson(jsonMap);
+        return responseModel;
+      }
+      else {
+        throw Exception('Failed to fetch data');
+      }
+    }
+    catch(e) {
+      throw Exception(e);
     }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../components/Appbar.dart';
@@ -34,15 +33,17 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(110),
-              child: AppBarComponent(
-                title: widget.title,
-                isChat: widget.isChat,
-                forceCanNotBack: widget.forceCanNotBack,
-                onBack: widget.onBack,
-              ),
-            )
-
+        preferredSize: const Size.fromHeight(110),
+        child: AppBarComponent(
+          title: widget.title,
+          isChat: widget.isChat,
+          forceCanNotBack: widget.forceCanNotBack,
+          onBack: widget.onBack,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: widget.body,
+      ),
     );
   }
 }

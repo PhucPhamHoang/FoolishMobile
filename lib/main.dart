@@ -1,8 +1,31 @@
+import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';
+import 'package:fashionstore/repository/CategoryRepository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<CategoryRepository>(
+          create: (context) => CategoryRepository()
+        ),
+
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<CategoryBloc>(
+            create: (context) => CategoryBloc(
+              RepositoryProvider.of<CategoryRepository>(context)
+            )
+          ),
+
+        ],
+        child: const MyApp(),
+      ),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
