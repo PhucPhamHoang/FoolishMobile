@@ -12,3 +12,11 @@ class OnSearchProductEvent extends ProductEvent{
 
   const OnSearchProductEvent(this.productName);
 }
+
+class OnLoadProductListEvent extends ProductEvent {
+  final String type;
+
+  const OnLoadProductListEvent(this.type);
+}
+
+class OnClearProductListEvent extends ProductEvent {}

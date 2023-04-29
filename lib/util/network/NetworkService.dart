@@ -16,14 +16,14 @@ class NetworkService {
 
       if (response.statusCode == 200) {
         print(response.body);
-        print('------------------END---------------------');
+        print('\n------------------END---------------------\n');
         Map<String, dynamic> jsonMap = json.decode(response.body);
         final ResponseDto responseModel = ResponseDto.fromJson(jsonMap);
         return responseModel;
       }
       else {
         print(response.body);
-        print('------------------END---------------------');
+        print('\n------------------END---------------------\n');
         throw Exception('Failed to fetch data');
       }
     }
@@ -40,14 +40,14 @@ class NetworkService {
 
       if (response.statusCode == 200) {
         print(response.body);
-        print('------------------END---------------------');
+        print('\n------------------END---------------------\n');
         Map<String, dynamic> jsonMap = json.decode(response.body);
         final ResponseDto responseModel = ResponseDto.fromJson(jsonMap);
         return responseModel;
       }
       else {
         print(response.body);
-        print('------------------END---------------------');
+        print('\n------------------END---------------------\n');
         throw Exception('Failed to fetch data');
       }
     }

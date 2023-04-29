@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../components/Appbar.dart';
@@ -14,6 +13,9 @@ class Layout extends StatefulWidget {
     required this.body,
     this.bottomNavigateBarItemData,
     this.textEditingController,
+    required this.reload,
+    required this.scrollController,
+    required this.refreshIndicatorKey,
   }) : super(key: key);
 
   final bool useSafeArea;
@@ -23,8 +25,10 @@ class Layout extends StatefulWidget {
   final void Function()? onBack;
   final Widget body;
   final TextEditingController? textEditingController;
-
   final Map<String, dynamic>? bottomNavigateBarItemData;
+  final Future<void> Function() reload;
+  final ScrollController scrollController;
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -44,9 +48,15 @@ class _LayoutState extends State<Layout> {
           textEditingController: widget.textEditingController,
         ),
       ),
-      body: SingleChildScrollView(
-        child: widget.body,
-      ),
+      body: RefreshIndicator(
+        onRefresh: widget.reload,
+        color: Colors.orange,
+        key: widget.refreshIndicatorKey,
+        child: SingleChildScrollView(
+          controller: widget.scrollController,
+          child: widget.body,
+        ),
+      )
     );
   }
 }

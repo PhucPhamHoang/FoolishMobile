@@ -7,16 +7,27 @@ import '../util/network/NetworkService.dart';
 class ShopRepository {
   String baseUrl = '/shop';
 
-  Future<List<Product>> getAllProducts() async {
-    try{
-      ResponseDto response = await NetworkService.getDataFromGetRequest('$baseUrl/allProoducts');
+  Future<List<Product>> getProductList(String type) async {
+    String url = '';
 
-      List<dynamic> jsonList = json.decode(jsonEncode(response.content));
-
-      return jsonList.map((json) => Product.fromJson(json)).toList();
+    switch(type){
+      case 'NEW_ARRIVAL': url = '/newArrivalProducts';break;
+      case 'TOP_SELLING': url = '/top8BestSellers';break;
+      case 'HOT_DISCOUNT': url = '/hotDiscountProducts';break;
+      case 'ALL': url = '/allProoducts';break;
     }
-    catch(e, stackTrace) {
-      print('Caught exception: $e\n$stackTrace');
+
+    if(url != '') {
+      try{
+        ResponseDto response = await NetworkService.getDataFromGetRequest(baseUrl + url);
+
+        List<dynamic> jsonList = json.decode(jsonEncode(response.content));
+
+        return jsonList.map((json) => Product.fromJson(json)).toList();
+      }
+      catch(e, stackTrace) {
+        print('Caught exception: $e\n$stackTrace');
+      }
     }
 
     return [];
