@@ -9,7 +9,7 @@ class CategoryRepository {
 
   Future<List<Category>> getAllCategories() async {
     try{
-      ResponseDto response = await NetworkService.getData('$baseUrl/allCategories');
+      ResponseDto response = await NetworkService.getDataFromGetRequest('$baseUrl/allCategories');
 
       List<dynamic> jsonList = json.decode(jsonEncode(response.content));
 

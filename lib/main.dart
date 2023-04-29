@@ -1,8 +1,11 @@
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';
 import 'package:fashionstore/repository/CategoryRepository.dart';
+import 'package:fashionstore/repository/ShopRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/products/product_bloc.dart';
 
 void main() {
   runApp(
@@ -11,7 +14,9 @@ void main() {
         RepositoryProvider<CategoryRepository>(
           create: (context) => CategoryRepository()
         ),
-
+        RepositoryProvider<ShopRepository>(
+            create: (context) => ShopRepository()
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -20,7 +25,11 @@ void main() {
               RepositoryProvider.of<CategoryRepository>(context)
             )
           ),
-
+          BlocProvider<ProductBloc>(
+              create: (context) => ProductBloc(
+                  RepositoryProvider.of<ShopRepository>(context)
+              )
+          ),
         ],
         child: const MyApp(),
       ),

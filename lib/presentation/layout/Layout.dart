@@ -13,6 +13,7 @@ class Layout extends StatefulWidget {
     this.onBack,
     required this.body,
     this.bottomNavigateBarItemData,
+    this.textEditingController,
   }) : super(key: key);
 
   final bool useSafeArea;
@@ -21,6 +22,7 @@ class Layout extends StatefulWidget {
   final bool forceCanNotBack;
   final void Function()? onBack;
   final Widget body;
+  final TextEditingController? textEditingController;
 
   final Map<String, dynamic>? bottomNavigateBarItemData;
 
@@ -39,6 +41,7 @@ class _LayoutState extends State<Layout> {
           isChat: widget.isChat,
           forceCanNotBack: widget.forceCanNotBack,
           onBack: widget.onBack,
+          textEditingController: widget.textEditingController,
         ),
       ),
       body: SingleChildScrollView(
