@@ -8,6 +8,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/entity/Product.dart';
+import '../../util/render/UiRender.dart';
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -137,11 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
           List<Category> categoryList = BlocProvider.of<CategoryBloc>(context).categoryList;
 
           if(categoryState is CategoryLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.orange,
-              ),
-            );
+            return UiRender.loadingCircle();
           }
 
           if(categoryState is CategoryLoadedState) {
@@ -167,7 +166,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _productList(String type) {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, productState) {
+        List<Product> productList = [];
+        if(productState is ProductLoadingState) {
+          return UiRender.loadingCircle();
+        }
 
+        if(productState is ProductListLoadedState) {
+          productList = productState.productList;
+        }
 
         return Container();
       }

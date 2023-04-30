@@ -53,6 +53,7 @@ class _LayoutState extends State<Layout> {
         color: Colors.orange,
         key: widget.refreshIndicatorKey,
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           child: widget.body,
         ),
