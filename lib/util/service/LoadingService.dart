@@ -1,5 +1,4 @@
 import 'package:fashionstore/bloc/products/product_bloc.dart';
-import 'package:fashionstore/data/enum/ProductListTypeEnum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,8 +12,8 @@ class LoadingService {
 
   void reloadHomePage() {
     BlocProvider.of<CategoryBloc>(context).add(OnLoadCategoryEvent());
-    BlocProvider.of<ProductBloc>(context).add(OnLoadProductListEvent(ProductListTypeEnum.HOT_DISCOUNT.name));
-    BlocProvider.of<ProductBloc>(context).add(OnLoadProductListEvent(ProductListTypeEnum.NEW_ARRIVAL.name));
-    BlocProvider.of<ProductBloc>(context).add(OnLoadProductListEvent(ProductListTypeEnum.TOP_SELLING.name));
+    BlocProvider.of<ProductBloc>(context).add(const OnLoadHotDiscountProductListEvent());
+    BlocProvider.of<ProductBloc>(context).add(const OnLoadTopBestSellerProductListEvent());
+    BlocProvider.of<ProductBloc>(context).add(const OnLoadNewArrivalProductListEvent());
   }
 }

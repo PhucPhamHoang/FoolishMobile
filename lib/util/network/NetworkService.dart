@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class NetworkService {
-  static String domain = 'http://192.168.1.9:8080';
+  static String domain = 'http://192.168.111.219:8080';
 
   const NetworkService._();
 

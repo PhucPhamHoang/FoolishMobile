@@ -18,7 +18,7 @@ class Product {
   String image2;
   String image3;
   String image4;
-  int overallRating;
+  double overallRating;
 
   Product(
       this.id,

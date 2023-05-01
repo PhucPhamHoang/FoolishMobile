@@ -13,10 +13,20 @@ class OnSearchProductEvent extends ProductEvent{
   const OnSearchProductEvent(this.productName);
 }
 
-class OnLoadProductListEvent extends ProductEvent {
-  final String type;
+class OnLoadAllProductListEvent extends ProductEvent {
+  const OnLoadAllProductListEvent();
+}
 
-  const OnLoadProductListEvent(this.type);
+class OnLoadHotDiscountProductListEvent extends ProductEvent {
+  const OnLoadHotDiscountProductListEvent();
+}
+
+class OnLoadTopBestSellerProductListEvent extends ProductEvent {
+  const OnLoadTopBestSellerProductListEvent();
+}
+
+class OnLoadNewArrivalProductListEvent extends ProductEvent {
+  const OnLoadNewArrivalProductListEvent();
 }
 
 class OnClearProductListEvent extends ProductEvent {}

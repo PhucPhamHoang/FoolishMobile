@@ -12,7 +12,7 @@ class ShopRepository {
 
     switch(type){
       case 'NEW_ARRIVAL': url = '/newArrivalProducts';break;
-      case 'TOP_SELLING': url = '/top8BestSellers';break;
+      case 'TOP_BEST_SELLERS': url = '/top8BestSellers';break;
       case 'HOT_DISCOUNT': url = '/hotDiscountProducts';break;
       case 'ALL': url = '/allProoducts';break;
     }

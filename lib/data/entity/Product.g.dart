@@ -20,7 +20,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       json['image2'] as String,
       json['image3'] as String,
       json['image4'] as String,
-      json['overallRating'] as int,
+      json['overallRating'] as double,
     );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{

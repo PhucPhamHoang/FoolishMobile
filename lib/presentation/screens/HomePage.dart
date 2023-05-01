@@ -1,6 +1,8 @@
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/data/entity/Category.dart';
+import 'package:fashionstore/data/enum/ProductListTypeEnum.dart';
+import 'package:fashionstore/presentation/components/ProductFrame.dart';
 import 'package:fashionstore/presentation/layout/Layout.dart';
 import 'package:fashionstore/util/render/ValueRender.dart';
 import 'package:fashionstore/util/service/LoadingService.dart';
@@ -57,7 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             ),
             _categoryListComponent(),
+            _header('New Arrivals', false),
+            _productList(ProductListTypeEnum.NEW_ARRIVAL.name),
             _header('Hot Discount', false),
+            _productList(ProductListTypeEnum.HOT_DISCOUNT.name),
           ],
         ),
       ),
@@ -166,16 +171,48 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _productList(String type) {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, productState) {
-        List<Product> productList = [];
+        List<Product>? productList = [];
         if(productState is ProductLoadingState) {
           return UiRender.loadingCircle();
         }
-
-        if(productState is ProductListLoadedState) {
-          productList = productState.productList;
+        else if(productState is! ProductErrorState) {
+          switch(type) {
+            case 'HOT_DISCOUNT': {
+              productList = BlocProvider.of<ProductBloc>(context).hotDiscountProductList;
+              break;
+            }
+            case 'NEW_ARRIVAL': {
+              productList = BlocProvider.of<ProductBloc>(context).newArrivalProductList;
+              break;
+            }
+            case 'TOP_BEST_SELLERS': {
+              productList = BlocProvider.of<ProductBloc>(context).top8BestSellerProductList;
+              break;
+            }
+          }
         }
 
-        return Container();
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: productList?.length ?? 0,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 0.65,
+            crossAxisCount: 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 25,
+          ),
+          itemBuilder: (context, index) {
+            if(productList != null) {
+              return ProductComponent(product: productList![index]);
+            }
+            else {
+              return const Center(
+                child: Text('NOT AVAILABLE!!'),
+              );
+            }
+          },
+        );
       }
     );
   }

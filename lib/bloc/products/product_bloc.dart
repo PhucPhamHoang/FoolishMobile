@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/entity/Product.dart';
+import '../../data/enum/ProductListTypeEnum.dart';
 import '../../repository/ShopRepository.dart';
 
 part 'product_event.dart';
@@ -27,7 +28,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       try{
         List<Product> list = await _shopRepository.searchProduct(event.productName);
         searchingProductList = list;
-        emit(ProductListLoadedState(list));
+        emit(ProductSearchingListLoadedState(list));
       }
       catch(e){
         print(e);
@@ -35,32 +36,55 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       }
     });
 
-    on<OnLoadProductListEvent>((event, emit) async {
+    on<OnLoadAllProductListEvent>((event, emit) async {
       emit(ProductLoadingState());
 
       try{
-        List<Product> list = await _shopRepository.getProductList(event.type);
+        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.ALL.name);
+        allProductList = list;
+        emit(ProductAllListLoadedState(list));
+      }
+      catch(e){
+        print(e);
+        emit(ProductErrorState(e.toString()));
+      }
+    });
 
-        switch(event.type) {
-          case 'NEW_ARRIVAL': {
-            newArrivalProductList = list;
-            break;
-          }
-          case 'TOP_SELLING': {
-            top8BestSellerProductList = list;
-            break;
-          }
-          case 'HOT_DISCOUNT': {
-            hotDiscountProductList = list;
-            break;
-          }
-          case 'ALL': {
-            allProductList = list;
-            break;
-          }
-        }
+    on<OnLoadHotDiscountProductListEvent>((event, emit) async {
+      emit(ProductLoadingState());
 
-        emit(ProductListLoadedState(list));
+      try{
+        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.HOT_DISCOUNT.name);
+        hotDiscountProductList = list;
+        emit(ProductHotDiscountListLoadedState(list));
+      }
+      catch(e){
+        print(e);
+        emit(ProductErrorState(e.toString()));
+      }
+    });
+
+    on<OnLoadNewArrivalProductListEvent>((event, emit) async {
+      emit(ProductLoadingState());
+
+      try{
+        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.NEW_ARRIVAL.name);
+        newArrivalProductList = list;
+        emit(ProductNewArrivalListLoadedState(list));
+      }
+      catch(e){
+        print(e);
+        emit(ProductErrorState(e.toString()));
+      }
+    });
+
+    on<OnLoadTopBestSellerProductListEvent>((event, emit) async {
+      emit(ProductLoadingState());
+
+      try{
+        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.TOP_BEST_SELLERS.name);
+        top8BestSellerProductList = list;
+        emit(ProductTopBestSellerListLoadedState(list));
       }
       catch(e){
         print(e);
