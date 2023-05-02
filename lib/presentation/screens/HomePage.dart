@@ -2,11 +2,11 @@ import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/data/entity/Category.dart';
 import 'package:fashionstore/data/enum/ProductListTypeEnum.dart';
+import 'package:fashionstore/data/static/GlobalVariable.dart';
 import 'package:fashionstore/presentation/components/ProductFrame.dart';
 import 'package:fashionstore/presentation/layout/Layout.dart';
 import 'package:fashionstore/util/render/ValueRender.dart';
 import 'package:fashionstore/util/service/LoadingService.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,6 +31,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    GlobalVariable.currentPage = 'HOME';
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LoadingService(context).reloadHomePage();
@@ -61,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
             _categoryListComponent(),
             _header('New Arrivals', false),
             _productList(ProductListTypeEnum.NEW_ARRIVAL.name),
+            _header('Best Sellers', false),
+            _productList(ProductListTypeEnum.TOP_BEST_SELLERS.name),
             _header('Hot Discount', false),
             _productList(ProductListTypeEnum.HOT_DISCOUNT.name),
           ],
@@ -109,7 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
           style: const TextStyle(
               fontFamily: 'Work Sans',
               fontSize: 18,
-              fontWeight: FontWeight.w600
+              fontWeight: FontWeight.w600,
+              height: 3.5
           ),
         ),
         canViewAll
@@ -192,27 +197,33 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         }
 
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: productList?.length ?? 0,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 0.65,
-            crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 25,
-          ),
-          itemBuilder: (context, index) {
-            if(productList != null) {
-              return ProductComponent(product: productList![index]);
-            }
-            else {
-              return const Center(
-                child: Text('NOT AVAILABLE!!'),
-              );
-            }
-          },
-        );
+        if(productList!.isEmpty) {
+          return const Center(
+            child: Text('NOT AVAILABLE!!'),
+          );
+        }
+        else {
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: productList?.length ?? 0,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 0.65,
+              crossAxisCount: 2,
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 25,
+            ),
+            itemBuilder: (context, index) {
+              if(productList != null || productList!.isNotEmpty) {
+                return ProductComponent(product: productList![index]);
+              }
+              else {
+                return Container();
+              }
+            },
+          );
+        }
+
       }
     );
   }

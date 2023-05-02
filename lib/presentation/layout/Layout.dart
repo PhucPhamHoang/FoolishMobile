@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/Appbar.dart';
+import '../components/BottomNavigationBar.dart';
 
 class Layout extends StatefulWidget {
   const Layout({
@@ -48,6 +49,7 @@ class _LayoutState extends State<Layout> {
           textEditingController: widget.textEditingController,
         ),
       ),
+      backgroundColor: const Color(0xfff3f3f3),
       body: RefreshIndicator(
         onRefresh: widget.reload,
         color: Colors.orange,
@@ -57,7 +59,8 @@ class _LayoutState extends State<Layout> {
           controller: widget.scrollController,
           child: widget.body,
         ),
-      )
+      ),
+      bottomNavigationBar: const BottomNavigationBarComponent(),
     );
   }
 }
