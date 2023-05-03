@@ -1,7 +1,9 @@
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
+import 'package:fashionstore/data/enum/LocalStorageKeyEnum.dart';
 import 'package:fashionstore/presentation/components/GradientButton.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';
 import 'package:fashionstore/util/render/UiRender.dart';
+import 'package:fashionstore/util/render/ValueRender.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,13 +23,20 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _phoneNumberTextEditingController = TextEditingController();
   TextEditingController _emailTextEditingController = TextEditingController();
 
-  bool isPasswordShowed = false;
-  bool isConfirmPasswordShowed = false;
+  bool isPasswordHiddened = true;
+  bool isConfirmPasswordHiddened = true;
   bool isLogin = true;
   bool isRememberPassword = false;
 
+  Future<void> _initLocalStorageValues() async {
+    _userNameTextEditingController.text = await ValueRender.getLocalStorageVariable(LocalStorageKeyEnum.SAVED_USER_NAME.name) as String;
+    _passwordTextEditingController.text = await ValueRender.getLocalStorageVariable(LocalStorageKeyEnum.SAVED_PASSWORD.name) as String;
+  }
+
   @override
   void initState() {
+    _initLocalStorageValues();
+
     super.initState();
   }
 
@@ -93,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       _textField('User Name', false, _userNameTextEditingController),
-                      _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordShowed),
+                      _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordHiddened),
                       const SizedBox(height: 10,),
                       _radioTextButton('Remember password'),
                       Row(
@@ -146,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if(isLogin == true) {
                                     _userNameTextEditingController.clear();
                                     _passwordTextEditingController.clear();
+                                    isPasswordHiddened = true;
                                     isLogin = false;
                                   }
                                 });
@@ -217,8 +227,8 @@ class _LoginPageState extends State<LoginPage> {
                       _textField('Email', false, _emailTextEditingController),
                       _textField('Phone Number', false, _phoneNumberTextEditingController),
                       _textField('User Name', false, _userNameTextEditingController),
-                      _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordShowed),
-                      _textField('Confirm Password', true, _confirmPasswordTextEditingController, isShowed: isConfirmPasswordShowed),
+                      _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordHiddened),
+                      _textField('Confirm Password', true, _confirmPasswordTextEditingController, isShowed: isConfirmPasswordHiddened),
                       const SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,6 +248,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if(isLogin == false) {
                                     _userNameTextEditingController.clear();
                                     _passwordTextEditingController.clear();
+                                    isPasswordHiddened = true;
                                     isLogin = true;
                                   }
                                 });
@@ -310,11 +321,32 @@ class _LoginPageState extends State<LoginPage> {
             value: isRememberPassword,
             onChanged: (value) {
               setState(() {
-                if(value == true) {
+                if(value == false &&
+                   (_userNameTextEditingController.text != '' &&
+                    _passwordTextEditingController.text != '')) {
+                  ValueRender.setLocalStorageVariable(
+                      LocalStorageKeyEnum.SAVED_USER_NAME.name,
+                      _userNameTextEditingController.text
+                  );
+
+                  ValueRender.setLocalStorageVariable(
+                      LocalStorageKeyEnum.SAVED_PASSWORD.name,
+                      _passwordTextEditingController.text
+                  );
+
+                  isRememberPassword = true;
+                }
+                else if(_userNameTextEditingController.text == '' ||
+                        _passwordTextEditingController.text == '') {
+                  UiRender.showDialog(context, '', 'Please input User Name and Password!');
                   isRememberPassword = false;
                 }
                 else {
-                  isRememberPassword = true;
+                  isRememberPassword = false;
+
+                  ValueRender.setLocalStorageVariable(LocalStorageKeyEnum.SAVED_USER_NAME.name, '');
+
+                  ValueRender.setLocalStorageVariable(LocalStorageKeyEnum.SAVED_PASSWORD.name, '');
                 }
               });
             }
@@ -346,20 +378,20 @@ class _LoginPageState extends State<LoginPage> {
                   if(isShowed == true) {
                     setState(() {
                       if(hintText == 'Password') {
-                        isPasswordShowed = false;
+                        isPasswordHiddened = false;
                       }
                       else if(hintText == 'Confirm Password') {
-                        isConfirmPasswordShowed = false;
+                        isConfirmPasswordHiddened = false;
                       }
                     });
                   }
                   else {
                     setState(() {
                       if(hintText == 'Password') {
-                        isPasswordShowed = true;
+                        isPasswordHiddened = true;
                       }
                       else if(hintText == 'Confirm Password') {
-                        isConfirmPasswordShowed = true;
+                        isConfirmPasswordHiddened = true;
                       }
                     });
                   }
