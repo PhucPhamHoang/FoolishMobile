@@ -41,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      forceCanNotBack: true,
       reload: () async {
         LoadingService(context).reloadHomePage();
       },

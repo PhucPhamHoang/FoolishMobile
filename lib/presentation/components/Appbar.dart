@@ -46,6 +46,22 @@ class _AppBarComponentState extends State<AppBarComponent> {
               bottomOpacity: 0,
               titleSpacing: 0,
               leadingWidth: 48,
+              automaticallyImplyLeading: false,
+              leading: Navigator.of(context).canPop() && widget.forceCanNotBack == false
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Theme.of(context).colorScheme.inverseSurface,
+                        ),
+                        onPressed: () {
+                          if (widget.onBack != null) {
+                            widget.onBack!();
+                          } else {
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      )
+                    : null,
               //leading:
               title: _buildTitle(),
               centerTitle: true,

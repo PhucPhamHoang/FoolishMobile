@@ -15,7 +15,7 @@ class User {
   String? address;
   String? city;
   String? country;
-  String avatar;
+  String? avatar;
 
   User(
       this.id,

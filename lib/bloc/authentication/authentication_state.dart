@@ -24,12 +24,12 @@ class AuthenticationLoggedInState extends AuthenticationState {
 }
 
 class AuthenticationRegisteredState extends AuthenticationState {
-  final String result;
+  final String message;
 
-  const AuthenticationRegisteredState(this.result);
+  const AuthenticationRegisteredState(this.message);
 
   @override
-  List<Object> get props => [result];
+  List<Object> get props => [message];
 }
 
 class AuthenticationErrorState extends AuthenticationState {

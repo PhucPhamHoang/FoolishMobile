@@ -17,7 +17,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       json['address'] as String?,
       json['city'] as String?,
       json['country'] as String?,
-      json['avatar'] as String,
+      json['avatar'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

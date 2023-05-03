@@ -13,3 +13,13 @@ class OnLoginAuthenticationEvent extends AuthenticationEvent {
 
   const OnLoginAuthenticationEvent(this.userName, this.password);
 }
+
+class OnRegisterAuthenticationEvent extends AuthenticationEvent {
+  final String userName;
+  final String password;
+  final String name;
+  final String email;
+  final String phoneNumber;
+
+  const OnRegisterAuthenticationEvent(this.userName, this.password, this.name, this.email, this.phoneNumber);
+}
