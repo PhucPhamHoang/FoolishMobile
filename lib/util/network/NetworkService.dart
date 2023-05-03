@@ -16,14 +16,18 @@ class NetworkService {
 
       if (response.statusCode == 200) {
         print(response.body);
-        print('\n------------------END---------------------\n');
+        print('\n');
+        print('\n---------------------------------END-------------------------------------\n');
+        print('\n');
         Map<String, dynamic> jsonMap = json.decode(response.body);
         final ResponseDto responseModel = ResponseDto.fromJson(jsonMap);
         return responseModel;
       }
       else {
         print(response.body);
-        print('\n------------------END---------------------\n');
+        print('\n');
+        print('\n---------------------------------END-------------------------------------\n');
+        print('\n');
         throw Exception('Failed to fetch data');
       }
     }
@@ -35,19 +39,27 @@ class NetworkService {
 
   static Future<ResponseDto> getDataFromPostRequest(String url, Map<String, dynamic> param) async {
     try{
-      final Response response = await http.post(Uri.parse(domain + url), body: json.encode(param));
+      final Response response = await http.post(
+        Uri.parse(domain + url),
+        body: json.encode(param),
+        headers: {'Content-Type': 'application/json'},
+      );
       print('$domain$url | ${json.encode(param)}');
 
       if (response.statusCode == 200) {
         print(response.body);
-        print('\n------------------END---------------------\n');
+        print('\n');
+        print('\n---------------------------------END-------------------------------------\n');
+        print('\n');
         Map<String, dynamic> jsonMap = json.decode(response.body);
         final ResponseDto responseModel = ResponseDto.fromJson(jsonMap);
         return responseModel;
       }
       else {
         print(response.body);
-        print('\n------------------END---------------------\n');
+        print('\n');
+        print('\n---------------------------------END-------------------------------------\n');
+        print('\n');
         throw Exception('Failed to fetch data');
       }
     }

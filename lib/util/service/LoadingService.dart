@@ -12,8 +12,8 @@ class LoadingService {
 
   void reloadHomePage() {
     BlocProvider.of<CategoryBloc>(context).add(OnLoadCategoryEvent());
-    BlocProvider.of<ProductBloc>(context).add(const OnLoadHotDiscountProductListEvent());
-    BlocProvider.of<ProductBloc>(context).add(const OnLoadTopBestSellerProductListEvent());
     BlocProvider.of<ProductBloc>(context).add(const OnLoadNewArrivalProductListEvent());
+    BlocProvider.of<ProductBloc>(context).add(const OnLoadTopBestSellerProductListEvent());
+    BlocProvider.of<ProductBloc>(context).add(const OnLoadHotDiscountProductListEvent());
   }
 }

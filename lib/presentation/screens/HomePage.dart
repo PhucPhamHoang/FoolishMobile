@@ -15,8 +15,7 @@ import '../../util/render/UiRender.dart';
 
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -197,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         }
 
-        if(productList!.isEmpty) {
+        if(productList == null || productList.isEmpty) {
           return const Center(
             child: Text('NOT AVAILABLE!!'),
           );
@@ -214,12 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisSpacing: 25,
             ),
             itemBuilder: (context, index) {
-              if(productList != null || productList!.isNotEmpty) {
-                return ProductComponent(product: productList![index]);
-              }
-              else {
-                return Container();
-              }
+              return ProductComponent(product: productList![index]);
             },
           );
         }

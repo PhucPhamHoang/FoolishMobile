@@ -20,9 +20,15 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       categoryList = [];
 
       try{
-        List<Category> list = await _categoryRepository.getAllCategories();
-        categoryList = list;
-        emit(CategoryLoadedState(list));
+        dynamic response = await _categoryRepository.getAllCategories();
+
+        if(response is List<Category>) {
+          categoryList = response;
+          emit(CategoryLoadedState(response));
+        }
+        else {
+          emit(CategoryErrorState(response.toString()));
+        }
       }
       catch(e){
         print(e);

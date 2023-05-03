@@ -7,18 +7,28 @@ import 'package:fashionstore/util/network/NetworkService.dart';
 class CategoryRepository {
   String baseUrl = '/category';
 
-  Future<List<Category>> getAllCategories() async {
+  Future<dynamic> getList(String url) async {
     try{
-      ResponseDto response = await NetworkService.getDataFromGetRequest('$baseUrl/allCategories');
+      ResponseDto response = await NetworkService.getDataFromGetRequest(baseUrl + url);
 
-      List<dynamic> jsonList = json.decode(jsonEncode(response.content));
-
-      return jsonList.map((json) => Category.fromJson(json)).toList();
+      if(json.decode(jsonEncode(response.result)) == 'success') {
+        List<dynamic> jsonList = json.decode(jsonEncode(response.content));
+        return jsonList.map((json) => Category.fromJson(json)).toList();
+      }
+      else {
+        Map<String, dynamic> jsonMap = json.decode(jsonEncode(response.content));
+        return jsonMap.toString();
+      }
     }
     catch(e, stackTrace) {
       print('Caught exception: $e\n$stackTrace');
     }
 
     return [];
+  }
+
+
+  Future<dynamic> getAllCategories() async {
+    return getList('/allCategories');
   }
 }

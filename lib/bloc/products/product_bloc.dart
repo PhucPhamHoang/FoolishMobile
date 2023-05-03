@@ -26,9 +26,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       searchingProductList = [];
 
       try{
-        List<Product> list = await _shopRepository.searchProduct(event.productName);
-        searchingProductList = list;
-        emit(ProductSearchingListLoadedState(list));
+        dynamic response = await _shopRepository.searchProduct(event.productName);
+
+        if(response is List<Product>) {
+          searchingProductList = response;
+          emit(ProductSearchingListLoadedState(response));
+        }
+        else {
+          emit(ProductErrorState(response.toString()));
+        }
       }
       catch(e){
         print(e);
@@ -40,9 +46,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
 
       try{
-        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.ALL.name);
-        allProductList = list;
-        emit(ProductAllListLoadedState(list));
+        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.ALL.name);
+
+        if(response is List<Product>) {
+          allProductList = response;
+          emit(ProductAllListLoadedState(response));
+        }
+        else {
+          emit(ProductErrorState(response.toString()));
+        }
       }
       catch(e){
         print(e);
@@ -54,9 +66,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
 
       try{
-        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.HOT_DISCOUNT.name);
-        hotDiscountProductList = list;
-        emit(ProductHotDiscountListLoadedState(list));
+        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.HOT_DISCOUNT.name);
+
+        if(response is List<Product>) {
+          hotDiscountProductList = response;
+          emit(ProductHotDiscountListLoadedState(response));
+        }
+        else {
+          emit(ProductErrorState(response.toString()));
+        }
       }
       catch(e){
         print(e);
@@ -68,9 +86,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
 
       try{
-        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.NEW_ARRIVAL.name);
-        newArrivalProductList = list;
-        emit(ProductNewArrivalListLoadedState(list));
+        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.NEW_ARRIVAL.name);
+
+        if(response is List<Product>) {
+          newArrivalProductList = response;
+          emit(ProductNewArrivalListLoadedState(response));
+        }
+        else {
+          emit(ProductErrorState(response.toString()));
+        }
       }
       catch(e){
         print(e);
@@ -82,9 +106,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
 
       try{
-        List<Product> list = await _shopRepository.getProductList(ProductListTypeEnum.TOP_BEST_SELLERS.name);
-        top8BestSellerProductList = list;
-        emit(ProductTopBestSellerListLoadedState(list));
+        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.TOP_BEST_SELLERS.name);
+
+        if(response is List<Product>) {
+          top8BestSellerProductList = response;
+          emit(ProductTopBestSellerListLoadedState(response));
+        }
+        else {
+          emit(ProductErrorState(response.toString()));
+        }
       }
       catch(e){
         print(e);

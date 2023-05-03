@@ -1,5 +1,7 @@
+import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
-import 'package:fashionstore/presentation/screens/HomePage.dart';
+import 'package:fashionstore/presentation/screens/LoginPage.dart';
+import 'package:fashionstore/repository/AuthenticationRepository.dart';
 import 'package:fashionstore/repository/CategoryRepository.dart';
 import 'package:fashionstore/repository/ShopRepository.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,9 @@ void main() {
         RepositoryProvider<ShopRepository>(
             create: (context) => ShopRepository()
         ),
+        RepositoryProvider<AuthenticationRepository>(
+            create: (context) => AuthenticationRepository()
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -28,6 +33,11 @@ void main() {
           BlocProvider<ProductBloc>(
               create: (context) => ProductBloc(
                   RepositoryProvider.of<ShopRepository>(context)
+              )
+          ),
+          BlocProvider<AuthenticationBloc>(
+              create: (context) => AuthenticationBloc(
+                  RepositoryProvider.of<AuthenticationRepository>(context)
               )
           ),
         ],
@@ -44,12 +54,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const LoginPage(),
     );
   }
 }
