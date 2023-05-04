@@ -19,6 +19,8 @@ class GradientElevatedButton extends StatefulWidget {
     this.isLoading = false,
     required this.onPress,
     this.textFontStyle = FontStyle.normal,
+    this.begin = Alignment.centerRight,
+    this.end = Alignment.centerLeft,
   }) : super(key: key);
 
   final Color textColor;
@@ -36,6 +38,8 @@ class GradientElevatedButton extends StatefulWidget {
   final EdgeInsets buttonMargin;
   final bool isLoading;
   final FontStyle textFontStyle;
+  final Alignment begin;
+  final Alignment end;
   final void Function() onPress;
 
   @override
@@ -71,8 +75,8 @@ class _GradientElevatedButtonState extends State<GradientElevatedButton> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(widget.borderRadiusIndex),
                 gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                    begin: widget.begin,
+                    end: widget.end,
                     colors: [
                       widget.topColor,
                       widget.bottomColor,

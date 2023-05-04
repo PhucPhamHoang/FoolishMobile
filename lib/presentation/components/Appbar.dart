@@ -10,6 +10,8 @@ class AppBarComponent extends StatefulWidget {
     this.forceCanNotBack = false,
     this.onBack,
     this.textEditingController,
+    this.hintSearchBarText,
+    this.onSearch,
   }) : super(key: key);
 
   final bool isChat;
@@ -17,6 +19,8 @@ class AppBarComponent extends StatefulWidget {
   final bool forceCanNotBack;
   final TextEditingController? textEditingController;
   final void Function()? onBack;
+  final void Function()? onSearch;
+  final String? hintSearchBarText;
 
   @override
   State<AppBarComponent> createState() => _AppBarComponentState();
@@ -39,7 +43,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
               toolbarHeight: 80,
               flexibleSpace: Container(
                 decoration: BoxDecoration(
-                    gradient: UiRender.generalLinearGradient(),
+                  gradient: UiRender.generalLinearGradient(),
                 ),
               ),
               elevation: 0,
@@ -49,9 +53,9 @@ class _AppBarComponentState extends State<AppBarComponent> {
               automaticallyImplyLeading: false,
               leading: Navigator.of(context).canPop() && widget.forceCanNotBack == false
                     ? IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_ios_new,
-                          color: Theme.of(context).colorScheme.inverseSurface,
+                          color: Colors.white,
                         ),
                         onPressed: () {
                           if (widget.onBack != null) {
@@ -95,16 +99,14 @@ class _AppBarComponentState extends State<AppBarComponent> {
                 controller: widget.textEditingController,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
-                    onPressed: () {
-
-                    },
+                    onPressed: widget.onSearch,
                     icon: const ImageIcon(
                       AssetImage('assets/icon/search_icon.png'),
                       color: Colors.grey,
                     ),
                   ),
                   border: InputBorder.none,
-                  hintText: 'What product are you looking for?',
+                  hintText: widget.hintSearchBarText,
                   hintStyle: const TextStyle(
                     fontFamily: 'Sen',
                     fontWeight: FontWeight.w400,

@@ -3,8 +3,10 @@ import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/data/entity/Category.dart';
 import 'package:fashionstore/data/enum/ProductListTypeEnum.dart';
 import 'package:fashionstore/data/static/GlobalVariable.dart';
+import 'package:fashionstore/presentation/components/GradientButton.dart';
 import 'package:fashionstore/presentation/components/ProductFrame.dart';
 import 'package:fashionstore/presentation/layout/Layout.dart';
+import 'package:fashionstore/presentation/screens/AllProductsPage.dart';
 import 'package:fashionstore/util/render/ValueRender.dart';
 import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
       reload: () async {
         LoadingService(context).reloadHomePage();
       },
+      hintSearchBarText: 'What product are you looking for?',
+      onSearch: () {
+
+      },
       refreshIndicatorKey: _refreshIndicatorKey,
       scrollController: _scrollController,
       textEditingController: _textEditingController,
@@ -67,6 +73,21 @@ class _MyHomePageState extends State<MyHomePage> {
             _productList(ProductListTypeEnum.TOP_BEST_SELLERS.name),
             _header('Hot Discount', false),
             _productList(ProductListTypeEnum.HOT_DISCOUNT.name),
+            Align(
+              alignment: Alignment.center,
+              child: GradientElevatedButton(
+                text: 'View all products',
+                topColor: const Color(0xff000000),
+                bottomColor: const Color(0xff8D8D8C),
+                textColor: Colors.white,
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AllProductsPage()),
+                  );
+                }
+              ),
+            )
           ],
         ),
       ),

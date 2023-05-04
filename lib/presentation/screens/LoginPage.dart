@@ -31,6 +31,15 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _initLocalStorageValues() async {
     _userNameTextEditingController.text = await ValueRender.getLocalStorageVariable(LocalStorageKeyEnum.SAVED_USER_NAME.name) as String;
     _passwordTextEditingController.text = await ValueRender.getLocalStorageVariable(LocalStorageKeyEnum.SAVED_PASSWORD.name) as String;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        if(_userNameTextEditingController.text != '' &&
+            _passwordTextEditingController.text != '' ) {
+          isRememberPassword = true;
+        }
+      });
+    });
   }
 
   @override
@@ -115,8 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: isLogin ? Colors.white30 : Colors.white,
-                              bottomColor: isLogin ? Colors.white30 : Colors.white,
+                              topColor: isLogin ? Colors.black : Colors.white,
+                              bottomColor: isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -147,8 +156,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: !isLogin ? Colors.white30 : Colors.white,
-                              bottomColor: !isLogin ? Colors.white30 : Colors.white,
+                              topColor: !isLogin ? Colors.black : Colors.white,
+                              bottomColor: !isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: !isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -240,8 +249,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: isLogin ? Colors.white30 : Colors.white,
-                              bottomColor: isLogin ? Colors.white30 : Colors.white,
+                              topColor: isLogin ? Colors.black : Colors.white,
+                              bottomColor: isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -261,8 +270,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: !isLogin ? Colors.white30 : Colors.white,
-                              bottomColor: !isLogin ? Colors.white30 : Colors.white,
+                              topColor: !isLogin ? Colors.black : Colors.white,
+                              bottomColor: !isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: !isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -316,12 +325,15 @@ class _LoginPageState extends State<LoginPage> {
           width: 24,
           height: 24,
           child: Checkbox(
-            activeColor: Colors.orange,
-            checkColor: Colors.red,
+            activeColor: Colors.white,
+            checkColor: Colors.orange,
             value: isRememberPassword,
             onChanged: (value) {
+              print('@@@');
+              print(value);
+
               setState(() {
-                if(value == false &&
+                if(value == true &&
                    (_userNameTextEditingController.text != '' &&
                     _passwordTextEditingController.text != '')) {
                   ValueRender.setLocalStorageVariable(

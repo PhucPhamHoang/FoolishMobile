@@ -16,14 +16,16 @@ class Layout extends StatefulWidget {
     this.textEditingController,
     required this.reload,
     required this.scrollController,
-    required this.refreshIndicatorKey,
+    required this.refreshIndicatorKey, this.hintSearchBarText, this.onSearch,
   }) : super(key: key);
 
   final bool useSafeArea;
   final bool isChat;
   final String title;
+  final String? hintSearchBarText;
   final bool forceCanNotBack;
   final void Function()? onBack;
+  final void Function()? onSearch;
   final Widget body;
   final TextEditingController? textEditingController;
   final Map<String, dynamic>? bottomNavigateBarItemData;
@@ -47,6 +49,8 @@ class _LayoutState extends State<Layout> {
           forceCanNotBack: widget.forceCanNotBack,
           onBack: widget.onBack,
           textEditingController: widget.textEditingController,
+          onSearch: widget.onSearch,
+          hintSearchBarText: widget.hintSearchBarText,
         ),
       ),
       backgroundColor: const Color(0xfff3f3f3),
