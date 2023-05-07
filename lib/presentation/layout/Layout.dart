@@ -16,11 +16,16 @@ class Layout extends StatefulWidget {
     this.textEditingController,
     required this.reload,
     required this.scrollController,
-    required this.refreshIndicatorKey, this.hintSearchBarText, this.onSearch,
+    required this.refreshIndicatorKey,
+    this.hintSearchBarText,
+    this.onSearch,
+    this.scaffoldKey,
+    this.isAlwaysScrollable = true,
   }) : super(key: key);
 
   final bool useSafeArea;
   final bool isChat;
+  final bool isAlwaysScrollable;
   final String title;
   final String? hintSearchBarText;
   final bool forceCanNotBack;
@@ -32,15 +37,19 @@ class Layout extends StatefulWidget {
   final Future<void> Function() reload;
   final ScrollController scrollController;
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   @override
   State<Layout> createState() => _LayoutState();
 }
 
 class _LayoutState extends State<Layout> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget.scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(110),
         child: AppBarComponent(
@@ -59,7 +68,7 @@ class _LayoutState extends State<Layout> {
         color: Colors.orange,
         key: widget.refreshIndicatorKey,
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: widget.isAlwaysScrollable ? const AlwaysScrollableScrollPhysics() : null,
           controller: widget.scrollController,
           child: widget.body,
         ),

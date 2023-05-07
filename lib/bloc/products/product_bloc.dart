@@ -20,6 +20,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   List<Product>? newArrivalProductList;
   List<Product>? searchingProductList;
 
+  int currentAllProductListPage = 1;
+
   ProductBloc(this._shopRepository) : super(ProductInitial()) {
     on<OnSearchProductEvent>((event, emit) async {
       emit(ProductLoadingState());
@@ -46,15 +48,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
 
       try{
-        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.ALL.name);
+        dynamic response = await _shopRepository.getAllProducts(event.page, event.limit);
 
-        if(response is List<Product>) {
-          allProductList = response;
-          emit(ProductAllListLoadedState(response));
+        if(response is List<Product> && response.isNotEmpty) {
+          allProductList = _removeDuplicates([...?allProductList,...response]);
+          currentAllProductListPage = event.page;
         }
-        else {
-          emit(ProductErrorState(response.toString()));
-        }
+        emit(ProductAllListLoadedState(allProductList ?? []));
       }
       catch(e){
         print(e);
@@ -129,5 +129,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       newArrivalProductList = [];
       searchingProductList = [];
     });
+  }
+
+  List<Product> _removeDuplicates(List<Product> list) {
+    Set<int> set = {};
+    List<Product> uniqueList = list.where((element) => set.add(element.id),).toList();
+
+    return uniqueList;
   }
 }

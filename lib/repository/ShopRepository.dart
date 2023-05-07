@@ -74,4 +74,14 @@ class ShopRepository {
         }
     );
   }
+
+  Future<dynamic> getAllProducts(int page, int limit) async {
+    return sendPostAndGetList(
+        '/allProducts',
+        {
+          'page': page,
+          'limit': limit
+        }
+    );
+  }
 }

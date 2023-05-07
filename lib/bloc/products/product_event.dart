@@ -14,7 +14,10 @@ class OnSearchProductEvent extends ProductEvent{
 }
 
 class OnLoadAllProductListEvent extends ProductEvent {
-  const OnLoadAllProductListEvent();
+  final int page;
+  final int limit;
+
+  const OnLoadAllProductListEvent(this.page, this.limit);
 }
 
 class OnLoadHotDiscountProductListEvent extends ProductEvent {
