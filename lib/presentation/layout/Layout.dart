@@ -14,19 +14,16 @@ class Layout extends StatefulWidget {
     required this.body,
     this.bottomNavigateBarItemData,
     this.textEditingController,
-    required this.reload,
-    required this.scrollController,
-    required this.refreshIndicatorKey,
     this.hintSearchBarText,
     this.onSearch,
     this.scaffoldKey,
-    this.isAlwaysScrollable = true,
+    this.pageName = '',
   }) : super(key: key);
 
   final bool useSafeArea;
   final bool isChat;
-  final bool isAlwaysScrollable;
   final String title;
+  final String pageName;
   final String? hintSearchBarText;
   final bool forceCanNotBack;
   final void Function()? onBack;
@@ -34,9 +31,6 @@ class Layout extends StatefulWidget {
   final Widget body;
   final TextEditingController? textEditingController;
   final Map<String, dynamic>? bottomNavigateBarItemData;
-  final Future<void> Function() reload;
-  final ScrollController scrollController;
-  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
   final GlobalKey<ScaffoldState>? scaffoldKey;
 
   @override
@@ -54,6 +48,7 @@ class _LayoutState extends State<Layout> {
         preferredSize: const Size.fromHeight(110),
         child: AppBarComponent(
           title: widget.title,
+          pageName: widget.pageName,
           isChat: widget.isChat,
           forceCanNotBack: widget.forceCanNotBack,
           onBack: widget.onBack,
@@ -63,16 +58,7 @@ class _LayoutState extends State<Layout> {
         ),
       ),
       backgroundColor: const Color(0xfff3f3f3),
-      body: RefreshIndicator(
-        onRefresh: widget.reload,
-        color: Colors.orange,
-        key: widget.refreshIndicatorKey,
-        child: SingleChildScrollView(
-          physics: widget.isAlwaysScrollable ? const AlwaysScrollableScrollPhysics() : null,
-          controller: widget.scrollController,
-          child: widget.body,
-        ),
-      ),
+      body: widget.body,
       bottomNavigationBar: const BottomNavigationBarComponent(),
     );
   }

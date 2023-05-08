@@ -14,11 +14,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ShopRepository _shopRepository;
 
   Product? selectedProduct;
-  List<Product>? allProductList;
-  List<Product>? hotDiscountProductList;
-  List<Product>? top8BestSellerProductList;
-  List<Product>? newArrivalProductList;
-  List<Product>? searchingProductList;
+  List<Product> allProductList = [];
+  List<Product> filteredProductList = [];
+  List<Product> hotDiscountProductList = [];
+  List<Product> top8BestSellerProductList = [];
+  List<Product> newArrivalProductList = [];
+  List<Product> searchingProductList = [];
 
   int currentAllProductListPage = 1;
 
@@ -45,16 +46,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<OnLoadAllProductListEvent>((event, emit) async {
-      emit(ProductLoadingState());
-
       try{
-        dynamic response = await _shopRepository.getAllProducts(event.page, event.limit);
+        List<Product> response = await _shopRepository.getAllProducts(event.page, event.limit);
 
-        if(response is List<Product> && response.isNotEmpty) {
-          allProductList = _removeDuplicates([...?allProductList,...response]);
+        if(response.isNotEmpty) {
+          emit(ProductLoadingState());
+          response = _removeDuplicates([...allProductList,...response]);
+
           currentAllProductListPage = event.page;
+          allProductList = response;
+
+          emit(ProductAllListLoadedState(response));
         }
-        emit(ProductAllListLoadedState(allProductList ?? []));
+        else {
+          emit(ProductAllListLoadedState(allProductList ?? []));
+        }
       }
       catch(e){
         print(e);
@@ -129,11 +135,33 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       newArrivalProductList = [];
       searchingProductList = [];
     });
+
+    on<OnLoadFilterProductListEvent>((event, emit) async {
+      emit(ProductLoadingState());
+
+      try{
+        List<Product> response = await _shopRepository.getFilteredProducts(
+          event.page,
+          event.limit,
+          brand: event.brand,
+          maxPrice: event.minPrice,
+          minPrice: event.minPrice,
+          categories: event.categoryList
+        );
+
+        filteredProductList = response;
+        emit(ProductFilteredListLoadedState(response));
+      }
+      catch(e){
+        print(e);
+        emit(ProductErrorState(e.toString()));
+      }
+    });
   }
 
   List<Product> _removeDuplicates(List<Product> list) {
     Set<int> set = {};
-    List<Product> uniqueList = list.where((element) => set.add(element.id),).toList();
+    List<Product> uniqueList = list.where((element) => set.add(element.id)).toList();
 
     return uniqueList;
   }

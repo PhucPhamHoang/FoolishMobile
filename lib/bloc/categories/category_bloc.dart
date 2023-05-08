@@ -13,6 +13,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final CategoryRepository _categoryRepository;
 
   List<Category> categoryList = [];
+  String selectedCategoryName = '';
 
   CategoryBloc(this._categoryRepository) : super(CategoryInitial()) {
     on<OnLoadCategoryEvent>((event, emit) async {
@@ -34,6 +35,14 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         print(e);
         emit(CategoryErrorState(e.toString()));
       }
+    });
+
+    on<OnSelectedCategoryEvent>((event, emit) {
+      selectedCategoryName = event.selectedCategoryName;
+    });
+
+    on<OnClearSelectedCategoryEvent>((event, emit) {
+      selectedCategoryName = '';
     });
   }
 }

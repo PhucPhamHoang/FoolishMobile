@@ -1,9 +1,12 @@
 import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
+import 'package:fashionstore/presentation/screens/AllCategoriesPage.dart';
+import 'package:fashionstore/presentation/screens/HomePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/static/GlobalVariable.dart';
 import '../../util/render/UiRender.dart';
+import '../screens/AllProductsPage.dart';
 
 class BottomNavigationBarComponent extends StatefulWidget {
   const BottomNavigationBarComponent({
@@ -41,16 +44,45 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                 'assets/icon/home_icon.png',
                 'Home',
                 onTap: () {
-                  GlobalVariable.currentPage = NavigationNameEnum.HOME.name;
-                  //pop to page
+                  if(GlobalVariable.currentPage != NavigationNameEnum.HOME.name) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MyHomePage()),
+                      (Route<dynamic> route) => false
+                    );
+
+                    GlobalVariable.currentPage = NavigationNameEnum.HOME.name;
+                  }
                 }
               ),
               _navBarButton(
                   'assets/icon/category_icon.png',
-                  'Category',
+                  'Categories',
                   onTap: () {
-                    GlobalVariable.currentPage = NavigationNameEnum.CATEGORIES.name;
-                    //pop to page
+                    if(GlobalVariable.currentPage != NavigationNameEnum.CATEGORIES.name) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AllCategoriesPage()),
+                        (Route<dynamic> route) => false
+                      );
+
+                      GlobalVariable.currentPage = NavigationNameEnum.CATEGORIES.name;
+                    }
+                  }
+              ),
+              _navBarButton(
+                  'assets/icon/clothing_icon.png',
+                  'Clothing',
+                  onTap: () {
+                    if(GlobalVariable.currentPage != NavigationNameEnum.CLOTHING.name) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AllProductsPage()),
+                        (Route<dynamic> route) => false
+                      );
+
+                      GlobalVariable.currentPage = NavigationNameEnum.CLOTHING.name;
+                    }
                   }
               ),
               _navBarButton(
@@ -82,7 +114,7 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(right: 35),
+        margin: const EdgeInsets.only(right: 25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -32,6 +32,15 @@ class ProductTopBestSellerListLoadedState extends ProductState {
   List<Object> get props => [productList];
 }
 
+class ProductFilteredListLoadedState extends ProductState {
+  final List<Product> productList;
+
+  const ProductFilteredListLoadedState(this.productList);
+
+  @override
+  List<Object> get props => [productList];
+}
+
 class ProductHotDiscountListLoadedState extends ProductState {
   final List<Product> productList;
 

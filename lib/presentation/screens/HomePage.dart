@@ -13,7 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/entity/Product.dart';
+import '../../data/enum/NavigationNameEnum.dart';
 import '../../util/render/UiRender.dart';
+import 'AllCategoriesPage.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -25,7 +27,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textEditingController = TextEditingController();
-
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    GlobalVariable.currentPage = 'HOME';
+    GlobalVariable.currentPage = NavigationNameEnum.HOME.name;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LoadingService(context).reloadHomePage();
@@ -44,51 +45,64 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Layout(
       forceCanNotBack: true,
-      reload: () async {
-        LoadingService(context).reloadHomePage();
-      },
       hintSearchBarText: 'What product are you looking for?',
       onSearch: () {
 
       },
-      refreshIndicatorKey: _refreshIndicatorKey,
-      scrollController: _scrollController,
       textEditingController: _textEditingController,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _header(
-              'Categories',
-              true,
-              action: () {
 
-              }
+      body: RefreshIndicator(
+        onRefresh: () async {
+          LoadingService(context).reloadHomePage();
+        },
+        color: Colors.orange,
+        key: _refreshIndicatorKey,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _header(
+                    'Categories',
+                    true,
+                    action: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AllCategoriesPage()),
+                          (Route<dynamic> route) => false
+                      );
+
+                      GlobalVariable.currentPage = NavigationNameEnum.CATEGORIES.name;
+                    }
+                ),
+                _categoryListComponent(),
+                _header('New Arrivals', false),
+                _productList(ProductListTypeEnum.NEW_ARRIVAL.name),
+                _header('Best Sellers', false),
+                _productList(ProductListTypeEnum.TOP_BEST_SELLERS.name),
+                _header('Hot Discount', false),
+                _productList(ProductListTypeEnum.HOT_DISCOUNT.name),
+                Align(
+                  alignment: Alignment.center,
+                  child: GradientElevatedButton(
+                      text: 'View all products',
+                      topColor: const Color(0xff000000),
+                      bottomColor: const Color(0xff8D8D8C),
+                      textColor: Colors.white,
+                      onPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AllProductsPage()),
+                        );
+                      }
+                  ),
+                )
+              ],
             ),
-            _categoryListComponent(),
-            _header('New Arrivals', false),
-            _productList(ProductListTypeEnum.NEW_ARRIVAL.name),
-            _header('Best Sellers', false),
-            _productList(ProductListTypeEnum.TOP_BEST_SELLERS.name),
-            _header('Hot Discount', false),
-            _productList(ProductListTypeEnum.HOT_DISCOUNT.name),
-            Align(
-              alignment: Alignment.center,
-              child: GradientElevatedButton(
-                text: 'View all products',
-                topColor: const Color(0xff000000),
-                bottomColor: const Color(0xff8D8D8C),
-                textColor: Colors.white,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AllProductsPage()),
-                  );
-                }
-              ),
-            )
-          ],
+          ),
         ),
       ),
     );
@@ -126,42 +140,45 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _header(String headerContent, bool canViewAll, {void Function()? action}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          headerContent,
-          style: const TextStyle(
-              fontFamily: 'Work Sans',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              height: 3.5
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            headerContent,
+            style: const TextStyle(
+                fontFamily: 'Work Sans',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                height: 1.5
+            ),
           ),
-        ),
-        canViewAll
-          ? TextButton(
-                onPressed: action,
-                child: Row(
-                  children: const [
-                    Text(
-                      'View All',
-                      style: TextStyle(
-                          fontFamily: 'Work Sans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xffacacac)
+          canViewAll
+            ? TextButton(
+                  onPressed: action,
+                  child: Row(
+                    children: const [
+                      Text(
+                        'View All',
+                        style: TextStyle(
+                            fontFamily: 'Work Sans',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xffacacac)
+                        ),
                       ),
-                    ),
-                    ImageIcon(
-                        size: 18,
-                        color: Color(0xffacacac),
-                        AssetImage('assets/icon/right_dash_arrow_icon.png')
-                    )
-                  ],
-                )
-            )
-          : Container()
-      ],
+                      ImageIcon(
+                          size: 18,
+                          color: Color(0xffacacac),
+                          AssetImage('assets/icon/right_dash_arrow_icon.png')
+                      )
+                    ],
+                  )
+              )
+            : Container()
+        ],
+      ),
     );
   }
 

@@ -23,6 +23,15 @@ class CategoryLoadedState extends CategoryState {
   List<Object> get props => [categoryList];
 }
 
+class SelectedCategoryLoadedState extends CategoryState {
+  final String selectedCategoryName;
+
+  const SelectedCategoryLoadedState(this.selectedCategoryName);
+
+  @override
+  List<Object> get props => [selectedCategoryName];
+}
+
 class CategoryErrorState extends CategoryState {
   final String message;
 

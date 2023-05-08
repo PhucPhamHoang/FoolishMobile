@@ -12,9 +12,11 @@ class AppBarComponent extends StatefulWidget {
     this.textEditingController,
     this.hintSearchBarText,
     this.onSearch,
+    this.pageName = '',
   }) : super(key: key);
 
   final bool isChat;
+  final String pageName;
   final String title;
   final bool forceCanNotBack;
   final TextEditingController? textEditingController;
@@ -123,7 +125,8 @@ class _AppBarComponentState extends State<AppBarComponent> {
   }
 
   Widget _buildTitle() {
-    return RichText(
+    return widget.pageName == ''
+      ? RichText(
         text: const TextSpan(
             children: [
               TextSpan(
@@ -138,15 +141,55 @@ class _AppBarComponentState extends State<AppBarComponent> {
               TextSpan(
                   text: 'Store',
                   style:
-                      TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffFFffff),
-                        fontSize: 20,
-                      )
+                  TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xffFFffff),
+                    fontSize: 20,
+                  )
               ),
             ]
         )
-    );
+    )
+      : Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            RichText(
+                text: const TextSpan(
+                    children: [
+                      TextSpan(
+                          text: 'Foolish ',
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xffFF7A00),
+                            fontSize: 12,
+                          )
+                      ),
+                      TextSpan(
+                          text: 'Store',
+                          style:
+                          TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 12,
+                          )
+                      ),
+                    ]
+                )
+            ),
+            Text(
+              widget.pageName,
+              style: const TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            )
+          ],
+        );
   }
 }

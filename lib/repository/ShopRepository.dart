@@ -84,4 +84,22 @@ class ShopRepository {
         }
     );
   }
+
+  Future<dynamic> getFilteredProducts(int page, int limit, {String? brand, double? minPrice, double? maxPrice, List<String>? categories}) async {
+    return sendPostAndGetList(
+        '/filterProducts',
+        {
+          'filter': {
+            'brand': brand,
+            'maxPrice': maxPrice,
+            'minPrice': minPrice,
+            'categories': categories
+          },
+          'pagination': {
+            'page': page,
+            'limit': limit
+          }
+        }
+    );
+  }
 }
