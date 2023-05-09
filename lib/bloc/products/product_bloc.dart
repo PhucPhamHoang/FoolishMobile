@@ -13,7 +13,6 @@ part 'product_state.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ShopRepository _shopRepository;
 
-  Product? selectedProduct;
   List<Product> allProductList = [];
   List<Product> filteredProductList = [];
   List<Product> hotDiscountProductList = [];

@@ -7,6 +7,7 @@ import 'package:fashionstore/repository/ShopRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/productDetails/product_details_bloc.dart';
 import 'bloc/products/product_bloc.dart';
 
 void main() {
@@ -32,6 +33,11 @@ void main() {
           ),
           BlocProvider<ProductBloc>(
               create: (context) => ProductBloc(
+                  RepositoryProvider.of<ShopRepository>(context)
+              )
+          ),
+          BlocProvider<ProductDetailsBloc>(
+              create: (context) => ProductDetailsBloc(
                   RepositoryProvider.of<ShopRepository>(context)
               )
           ),

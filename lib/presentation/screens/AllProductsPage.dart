@@ -1,17 +1,20 @@
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
 import 'package:fashionstore/presentation/layout/Layout.dart';
+import 'package:fashionstore/presentation/screens/ProductDetails.dart';
 import 'package:fashionstore/util/render/UiRender.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../bloc/products/product_bloc.dart';
 import '../../data/entity/Category.dart';
 import '../../data/entity/Product.dart';
 import '../../data/static/GlobalVariable.dart';
-import '../components/ProductFrame.dart';
+import '../../util/service/LoadingService.dart';
+import '../components/ProductComponent.dart';
 
 class AllProductsPage extends StatefulWidget {
   const AllProductsPage({super.key, this.isFromCategoryPage = false});
@@ -176,7 +179,7 @@ class _AllProductsPageState extends State<AllProductsPage> {
   Widget _productsList() {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, productState) {
-        List<Product>? productList = [];
+        List<Product> productList = [];
 
         // if(productState is ProductLoadingState) {
         //   return const Center(
@@ -197,7 +200,7 @@ class _AllProductsPageState extends State<AllProductsPage> {
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: productList?.length ?? 0,
+            itemCount: productList.length,
             dragStartBehavior: DragStartBehavior.down,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 0.65,
@@ -206,7 +209,17 @@ class _AllProductsPageState extends State<AllProductsPage> {
               mainAxisSpacing: 25,
             ),
             itemBuilder: (context, index) {
-              return ProductComponent(product: productList![index]);
+              return ProductComponent(
+                product: productList[index],
+                onClick: () {
+                  LoadingService(context).selectToViewProduct(productList[index]);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ProductDetailsPage())
+                  );
+                },
+              );
             },
           );
         }

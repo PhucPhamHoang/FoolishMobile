@@ -4,7 +4,7 @@ import 'package:fashionstore/data/entity/Category.dart';
 import 'package:fashionstore/data/enum/ProductListTypeEnum.dart';
 import 'package:fashionstore/data/static/GlobalVariable.dart';
 import 'package:fashionstore/presentation/components/GradientButton.dart';
-import 'package:fashionstore/presentation/components/ProductFrame.dart';
+import 'package:fashionstore/presentation/components/ProductComponent.dart';
 import 'package:fashionstore/presentation/layout/Layout.dart';
 import 'package:fashionstore/presentation/screens/AllProductsPage.dart';
 import 'package:fashionstore/util/render/ValueRender.dart';
@@ -12,10 +12,12 @@ import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../data/entity/Product.dart';
 import '../../data/enum/NavigationNameEnum.dart';
 import '../../util/render/UiRender.dart';
 import 'AllCategoriesPage.dart';
+import 'ProductDetails.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -97,6 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           context,
                           MaterialPageRoute(builder: (context) => const AllProductsPage()),
                         );
+
+                        BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
+
+                        GlobalVariable.currentPage = NavigationNameEnum.CLOTHING.name;
                       }
                   ),
                 )
@@ -214,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _productList(String type) {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, productState) {
-        List<Product>? productList = [];
+        List<Product> productList = [];
         if(productState is ProductLoadingState) {
           return UiRender.loadingCircle();
         }
@@ -244,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: productList?.length ?? 0,
+            itemCount: productList.length ?? 0,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 0.65,
               crossAxisCount: 2,
@@ -252,7 +258,17 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisSpacing: 25,
             ),
             itemBuilder: (context, index) {
-              return ProductComponent(product: productList![index]);
+              return ProductComponent(
+                product: productList[index],
+                onClick: () {
+                  LoadingService(context).selectToViewProduct(productList[index]);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ProductDetailsPage())
+                  );
+                },
+              );
             },
           );
         }

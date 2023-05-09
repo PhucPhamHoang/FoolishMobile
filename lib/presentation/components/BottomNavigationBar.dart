@@ -1,9 +1,12 @@
+import 'package:fashionstore/data/entity/Product.dart';
 import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
 import 'package:fashionstore/presentation/screens/AllCategoriesPage.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/categories/category_bloc.dart';
 import '../../data/static/GlobalVariable.dart';
 import '../../util/render/UiRender.dart';
 import '../screens/AllProductsPage.dart';
@@ -82,6 +85,7 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                       );
 
                       GlobalVariable.currentPage = NavigationNameEnum.CLOTHING.name;
+                      BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
                     }
                   }
               ),

@@ -27,6 +27,25 @@ class ShopRepository {
     return [];
   }
 
+  Future<dynamic> getObject(String url) async {
+    Map<String, dynamic> jsonMap;
+
+    try{
+      ResponseDto response = await NetworkService.getDataFromGetRequest(baseUrl + url);
+
+      if(json.decode(jsonEncode(response.result)) == 'success') {
+        jsonMap = json.decode(jsonEncode(response.content));
+        return Product.fromJson(jsonMap);
+      }
+      else {
+        return response.content;
+      }
+    }
+    catch(e, stackTrace) {
+      print('Caught exception: $e\n$stackTrace');
+    }
+  }
+
   Future<dynamic> sendPostAndGetList(String url, Map<String, dynamic> paramBody) async {
     try{
       ResponseDto response = await NetworkService.getDataFromPostRequest(
@@ -101,5 +120,9 @@ class ShopRepository {
           }
         }
     );
+  }
+
+  Future<dynamic> getProductDetails(int productId) {
+    return getList('/product_id=$productId');
   }
 }
