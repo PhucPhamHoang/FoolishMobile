@@ -1,3 +1,4 @@
+import 'package:fashionstore/presentation/components/ProductDetailsBottomNavigationBar.dart';
 import 'package:flutter/material.dart';
 
 import '../components/Appbar.dart';
@@ -18,9 +19,13 @@ class Layout extends StatefulWidget {
     this.onSearch,
     this.scaffoldKey,
     this.pageName = '',
+    this.needAppBar = true,
+    this.needProductDetailsBottomNavBar = false,
   }) : super(key: key);
 
   final bool useSafeArea;
+  final bool needAppBar;
+  final bool needProductDetailsBottomNavBar;
   final bool isChat;
   final String title;
   final String pageName;
@@ -44,22 +49,26 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: widget.scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(110),
-        child: AppBarComponent(
-          title: widget.title,
-          pageName: widget.pageName,
-          isChat: widget.isChat,
-          forceCanNotBack: widget.forceCanNotBack,
-          onBack: widget.onBack,
-          textEditingController: widget.textEditingController,
-          onSearch: widget.onSearch,
-          hintSearchBarText: widget.hintSearchBarText,
-        ),
-      ),
+      appBar: widget.needAppBar == true
+        ?  PreferredSize(
+            preferredSize: const Size.fromHeight(110),
+            child: AppBarComponent(
+              title: widget.title,
+              pageName: widget.pageName,
+              isChat: widget.isChat,
+              forceCanNotBack: widget.forceCanNotBack,
+              onBack: widget.onBack,
+              textEditingController: widget.textEditingController,
+              onSearch: widget.onSearch,
+              hintSearchBarText: widget.hintSearchBarText,
+            ),
+          )
+        : null,
       backgroundColor: const Color(0xfff3f3f3),
       body: widget.body,
-      bottomNavigationBar: const BottomNavigationBarComponent(),
+      bottomNavigationBar: widget.needProductDetailsBottomNavBar == false
+        ? const BottomNavigationBarComponent()
+        : ProductDetailsBottomNavigationBarComponent(textEditingController: widget.textEditingController)
     );
   }
 }

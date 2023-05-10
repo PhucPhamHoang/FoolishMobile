@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class UiRender {
   const UiRender._();
@@ -109,6 +110,37 @@ class UiRender {
           ),
         );
       },
+    );
+  }
+
+  static Future<void> showTextFieldDialog(BuildContext context, TextEditingController? controller) async {
+    showPlatformDialog(
+      context: context,
+      builder: (_) => PlatformAlertDialog(
+        title: const Text('Input the quantity you want to purchase!'),
+        content: TextFormField(
+          controller: controller,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            hintText: 'Your quantity...',
+            hintStyle: TextStyle(
+                fontFamily: 'Trebuchet MS',
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+                color: Color(0xff8D8D8C)
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          PlatformDialogAction(
+            child: const Text('OK'),
+            onPressed: () {
+              // Do something with the input text
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

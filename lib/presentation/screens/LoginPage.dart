@@ -124,8 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: isLogin ? Colors.black : Colors.white,
-                              bottomColor: isLogin ? const Color(0xff727272) : Colors.white,
+                              beginColor: isLogin ? Colors.black : Colors.white,
+                              endColor: isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -156,8 +156,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: !isLogin ? Colors.black : Colors.white,
-                              bottomColor: !isLogin ? const Color(0xff727272) : Colors.white,
+                              beginColor: !isLogin ? Colors.black : Colors.white,
+                              endColor: !isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: !isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -249,8 +249,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: isLogin ? Colors.black : Colors.white,
-                              bottomColor: isLogin ? const Color(0xff727272) : Colors.white,
+                              beginColor: isLogin ? Colors.black : Colors.white,
+                              endColor: isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {
@@ -270,8 +270,8 @@ class _LoginPageState extends State<LoginPage> {
                               textWeight: FontWeight.w400,
                               buttonWidth: 125,
                               buttonHeight: 45,
-                              topColor: !isLogin ? Colors.black : Colors.white,
-                              bottomColor: !isLogin ? const Color(0xff727272) : Colors.white,
+                              beginColor: !isLogin ? Colors.black : Colors.white,
+                              endColor: !isLogin ? const Color(0xff727272) : Colors.white,
                               textColor: !isLogin ? Colors.white : Colors.black,
                               onPress: () {
                                 setState(() {

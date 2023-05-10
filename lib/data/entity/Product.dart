@@ -18,6 +18,7 @@ class Product {
   String image2;
   String image3;
   String image4;
+  String description;
   double overallRating;
 
   Product(
@@ -34,7 +35,8 @@ class Product {
       this.image2,
       this.image3,
       this.image4,
-      this.overallRating
+      this.overallRating,
+      this.description
   );
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
@@ -43,6 +45,6 @@ class Product {
 
   @override
   String toString() {
-    return 'Product{id: $id, productId: $productId, name: $name, sellingPrice: $sellingPrice, discount: $discount, brand: $brand, size: $size, color: $color, availableQuantity: $availableQuantity, image1: $image1, image2: $image2, image3: $image3, image4: $image4, overallRating: $overallRating}';
+    return 'Product{id: $id, productId: $productId, name: $name, sellingPrice: $sellingPrice, discount: $discount, brand: $brand, size: $size, color: $color, availableQuantity: $availableQuantity, image1: $image1, image2: $image2, image3: $image3, image4: $image4, description: $description, overallRating: $overallRating}';
   }
 }

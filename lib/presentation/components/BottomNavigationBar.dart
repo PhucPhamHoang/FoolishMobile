@@ -1,4 +1,3 @@
-import 'package:fashionstore/data/entity/Product.dart';
 import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
 import 'package:fashionstore/presentation/screens/AllCategoriesPage.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';

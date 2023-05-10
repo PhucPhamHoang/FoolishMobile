@@ -6,8 +6,8 @@ class GradientElevatedButton extends StatefulWidget {
     required this.text,
     this.borderColor = Colors.transparent,
     this.borderRadiusIndex = 20,
-    required this.topColor,
-    required this.bottomColor,
+    required this.beginColor,
+    required this.endColor,
     required this.textColor,
     this.buttonHeight = 30,
     this.buttonWidth = 178,
@@ -26,8 +26,8 @@ class GradientElevatedButton extends StatefulWidget {
   final Color textColor;
   final FontWeight textWeight;
   final double textSize;
-  final Color topColor;
-  final Color bottomColor;
+  final Color beginColor;
+  final Color endColor;
   final Color borderColor;
   final String text;
   final double borderRadiusIndex;
@@ -78,8 +78,8 @@ class _GradientElevatedButtonState extends State<GradientElevatedButton> {
                     begin: widget.begin,
                     end: widget.end,
                     colors: [
-                      widget.topColor,
-                      widget.bottomColor,
+                      widget.beginColor,
+                      widget.endColor,
                     ]),
               ),
               child: Container(

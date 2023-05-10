@@ -92,8 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   alignment: Alignment.center,
                   child: GradientElevatedButton(
                       text: 'View all products',
-                      topColor: const Color(0xff000000),
-                      bottomColor: const Color(0xff8D8D8C),
+                      beginColor: const Color(0xff000000),
+                      endColor: const Color(0xff8D8D8C),
                       textColor: Colors.white,
                       onPress: () {
                         Navigator.push(

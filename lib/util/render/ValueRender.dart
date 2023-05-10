@@ -11,7 +11,7 @@ class ValueRender {
   }
 
   static double getDiscountPrice(double orgPrice, double discount) {
-    return orgPrice * (discount / 100);
+    return orgPrice - (orgPrice * (discount / 100));
   }
 
   static void setLocalStorageVariable(String key, dynamic value) async {
@@ -22,6 +22,25 @@ class ValueRender {
   static Future<dynamic> getLocalStorageVariable(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.get(key) ?? '';
+  }
+
+  static List<String> getProductColorList(List<Product> productList) {
+    List<String> result = [];
+
+    String color = '';
+
+    for(int i = 0; i < productList.length; i++){
+      if(i == 0) {
+        color = productList[i].color;
+        result.add(color);
+      }
+      else if(productList[i].color != productList[i-1].color) {
+        color = productList[i].color;
+        result.add(color);
+      }
+    }
+
+    return result;
   }
 
   static List<String> getProductImagesFromDifferentColors(List<Product> productList) {
@@ -41,6 +60,11 @@ class ValueRender {
     }
 
     return result;
+  }
+
+  static List<String> getProductImageUrlListByColor(String color, List<Product> productList) {
+    List<Product> coloredSelectedProductList = productList.where((element) => element.color == color).toList();
+    return [coloredSelectedProductList[0].image1, coloredSelectedProductList[0].image2, coloredSelectedProductList[0].image3, coloredSelectedProductList[0].image4];
   }
 
   static List<String> getProductSizeListByColor(String color, List<Product> productList) {
