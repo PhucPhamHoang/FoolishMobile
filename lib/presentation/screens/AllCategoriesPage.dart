@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/data/entity/Category.dart';
 import 'package:fashionstore/presentation/screens/AllProductsPage.dart';
+import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,21 +64,7 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
   Widget _category(Category category) {
     return GestureDetector(
       onTap: () {
-        BlocProvider.of<ProductBloc>(context).add(
-            OnLoadFilterProductListEvent(
-                1,
-                8,
-                categoryList: [category.name]
-            )
-        );
-
-        BlocProvider.of<CategoryBloc>(context).add(OnSelectedCategoryEvent(category.name));
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const AllProductsPage(isFromCategoryPage: true,)),
-            (Route<dynamic> route) => false
-        );
+        LoadingService(context).selectCategory(category);
       },
       child: Container(
         height: 90,
@@ -97,17 +85,22 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
                 fontSize: 22,
               ),
             ),
-            Container(
-              height: 90,
-              width: 90,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(ValueRender.getGoogleDriveImageUrl(category.image))
-                )
+            CachedNetworkImage(
+              imageUrl: ValueRender.getGoogleDriveImageUrl(category.image),
+              imageBuilder: (context, imageProvider)
+              => Container(
+                height: 90,
+                width: 90,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            )
+              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ],
         ),
       ),

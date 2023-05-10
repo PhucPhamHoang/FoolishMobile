@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/entity/Product.dart';
+
 class ValueRender {
   const ValueRender._();
 
@@ -20,5 +22,28 @@ class ValueRender {
   static Future<dynamic> getLocalStorageVariable(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.get(key) ?? '';
+  }
+
+  static List<String> getProductImagesFromDifferentColors(List<Product> productList) {
+    List<String> result = [];
+
+    String imgUrl = '';
+
+    for(int i = 0; i < productList.length; i++){
+      if(i == 0) {
+        imgUrl = productList[i].image1;
+        result.add(imgUrl);
+      }
+      else if(productList[i].image1 != productList[i-1].image1) {
+        imgUrl = productList[i].image1;
+        result.add(imgUrl);
+      }
+    }
+
+    return result;
+  }
+
+  static List<String> getProductSizeListByColor(String color, List<Product> productList) {
+    return productList.where((element) => element.color == color).map((e) => e.size).toList();
   }
 }

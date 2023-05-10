@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/data/entity/Category.dart';
@@ -118,29 +119,35 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _categoryComponent(Category category) {
     return GestureDetector(
       onTap: () {
-
+        LoadingService(context).selectCategory(category);
       },
-      child: Container(
-        alignment: Alignment.center,
-        width: 90,
-        margin: const EdgeInsets.only(right: 13),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(ValueRender.getGoogleDriveImageUrl(category.image))
-          )
-        ),
-        child: Text(
-          category.name,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontFamily: 'Work Sans',
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: Colors.white
+      child: CachedNetworkImage(
+        imageUrl: ValueRender.getGoogleDriveImageUrl(category.image),
+        imageBuilder: (context, imageProvider)
+        => Container(
+          alignment: Alignment.center,
+          width: 90,
+          margin: const EdgeInsets.only(right: 13),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(ValueRender.getGoogleDriveImageUrl(category.image))
+              )
+          ),
+          child: Text(
+            category.name,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontFamily: 'Work Sans',
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.white
+            ),
           ),
         ),
+        placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
   }
