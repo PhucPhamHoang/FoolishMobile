@@ -26,6 +26,7 @@ class UiRender {
       String title,
       String message, {
         String confirmText = 'OK',
+        bool needCenterMessage = true
       }) async {
     bool? result = await showCupertinoDialog(
       barrierDismissible: true,
@@ -33,7 +34,7 @@ class UiRender {
       builder: (BuildContext ctx) {
         return CupertinoAlertDialog(
           title: title.isNotEmpty ? Text(title) : null,
-          content: message.isNotEmpty ? Text(message) : null,
+          content: message.isNotEmpty ? Text(message, textAlign: needCenterMessage == true ? TextAlign.center : TextAlign.start) : null,
           actions: [
             // The "Yes" button
             CupertinoDialogAction(
@@ -113,34 +114,57 @@ class UiRender {
     );
   }
 
-  static Future<void> showTextFieldDialog(BuildContext context, TextEditingController? controller) async {
-    showPlatformDialog(
+  static Future<bool> showTextFieldDialog(
+      BuildContext context,
+      TextEditingController? controller,
+      {String? title, String? hintText, bool needCenterText = false}) async {
+    bool? result = await showPlatformDialog(
+      barrierDismissible: true,
       context: context,
-      builder: (_) => PlatformAlertDialog(
-        title: const Text('Input the quantity you want to purchase!'),
-        content: TextFormField(
-          controller: controller,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Your quantity...',
-            hintStyle: TextStyle(
-                fontFamily: 'Trebuchet MS',
-                fontWeight: FontWeight.w400,
-                fontSize: 15,
-                color: Color(0xff8D8D8C)
+      builder: (BuildContext ctx) {
+        return PlatformAlertDialog(
+          title: Text(title ?? ''),
+          content: TextFormField(
+            textAlign: needCenterText == true ? TextAlign.center : TextAlign.start,
+            controller: controller,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: hintText ?? '',
+              hintStyle: const TextStyle(
+                  fontFamily: 'Trebuchet MS',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15,
+                  color: Color(0xff8D8D8C)
+              ),
             ),
           ),
-        ),
-        actions: <Widget>[
-          PlatformDialogAction(
-            child: const Text('OK'),
-            onPressed: () {
-              // Do something with the input text
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
+          actions: [
+            // The "Yes" button
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              isDefaultAction: true,
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: CupertinoColors.activeBlue,
+                ),
+              ),
+            ),
+            // The "No" button
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              isDestructiveAction: true,
+              child: const Text('Cancel'),
+            )
+          ],
+        );
+      },
     );
+
+    return result ?? false;
   }
 }

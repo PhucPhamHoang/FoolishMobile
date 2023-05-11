@@ -1,3 +1,4 @@
+import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,13 @@ class LoadingService {
   void selectToViewProduct(Product product) {
     BlocProvider.of<ProductDetailsBloc>(context).add(OnSelectProductEvent(product.productId));
     BlocProvider.of<ProductDetailsBloc>(context).add(OnSelectProductColorEvent(product.color));
+    BlocProvider.of<ProductAddToCartBloc>(context).add(
+        OnSelectProductAddToCartEvent(
+          productName: product.name,
+          color: product.color,
+          size: product.size.toLowerCase() == 'none' ? product.size : ''
+        )
+    );
   }
 
   void selectCategory(Category category) {

@@ -1,5 +1,6 @@
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
+import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/presentation/screens/LoginPage.dart';
 import 'package:fashionstore/repository/AuthenticationRepository.dart';
 import 'package:fashionstore/repository/CategoryRepository.dart';
@@ -40,6 +41,9 @@ void main() {
               create: (context) => ProductDetailsBloc(
                   RepositoryProvider.of<ShopRepository>(context)
               )
+          ),
+          BlocProvider<ProductAddToCartBloc>(
+              create: (context) => ProductAddToCartBloc()
           ),
           BlocProvider<AuthenticationBloc>(
               create: (context) => AuthenticationBloc(

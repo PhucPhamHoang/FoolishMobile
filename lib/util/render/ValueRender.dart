@@ -70,4 +70,26 @@ class ValueRender {
   static List<String> getProductSizeListByColor(String color, List<Product> productList) {
     return productList.where((element) => element.color == color).map((e) => e.size).toList();
   }
+
+  static String getAddToCartPopupContent(String productName, String color, String size, int quantity) {
+    String result = 'Selected product details:\n';
+
+    if(productName != '') {
+      result +=  '  + Name: $productName\n';
+    }
+
+    if(color != '' && color.toLowerCase() != 'none') {
+      result +=  '  + Color: $color\n';
+    }
+
+    if(size != '' && size.toLowerCase() != 'none') {
+      result +=  '  + Size: $size\n';
+    }
+
+    if(quantity > 0) {
+      result +=  '  + Quantity: $quantity\n';
+    }
+
+    return '${result}Are you sure to add this product to your cart?';
+  }
 }

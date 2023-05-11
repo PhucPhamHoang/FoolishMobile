@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../data/entity/Product.dart';
 import '../../util/render/ValueRender.dart';
@@ -102,42 +103,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   _ratingStarsAndProductStatus(colorSelectedProductList),
                                   _productNameAndPrice(colorSelectedProductList),
                                   _productColors(productColorImageUrlList, productColorList, selectedProductDetails),
-                                  _productSizes(productSizeList),
+                                  productSizeList.first.toLowerCase() != 'none'
+                                   ? _productSizes(productSizeList)
+                                   : Container()
                                 ],
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Item Description',
-                                    style: TextStyle(
-                                      fontFamily: 'Work Sans',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: Colors.black
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    colorSelectedProductList[0].description,
-                                    style: const TextStyle(
-                                      fontFamily: 'Work Sans',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 11,
-                                      color: Color(0xff868686),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            _itemDescription(colorSelectedProductList[0].description),
                           ],
                         ),
                       ],
@@ -153,6 +125,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
         ),
       )
+    );
+  }
+  
+  Widget _itemDescription(String content) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8)
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Description',
+            style: TextStyle(
+                fontFamily: 'Work Sans',
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Colors.black
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            content,
+            style: const TextStyle(
+              fontFamily: 'Work Sans',
+              fontWeight: FontWeight.w400,
+              fontSize: 11,
+              color: Color(0xff868686),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -270,6 +278,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     imageBuilder: (context, imageProvider)
                     => GestureDetector(
                       onTap: () {
+                        BlocProvider.of<ProductAddToCartBloc>(context).add(
+                            OnSelectProductAddToCartEvent(
+                                color: productColorList[index]
+                            )
+                        );
+
                         setState(() {
                           selectedColor = productColorList[index];
                           selectedSize = '';
@@ -322,6 +336,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
+                    BlocProvider.of<ProductAddToCartBloc>(context).add(
+                        OnSelectProductAddToCartEvent(
+                            size: productSizeList[index]
+                        )
+                    );
+
                     setState(() {
                       selectedSize = productSizeList[index];
                     });
@@ -365,9 +385,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       carouselController: carouselController,
       items: _imageComponentList(imageUrlList),
       options: CarouselOptions(
-          enableInfiniteScroll: true,
-          height: MediaQuery.of(context).size.height * 3/5,
-          viewportFraction: 1
+        autoPlay: true,
+        autoPlayAnimationDuration: const Duration(milliseconds: 1500),
+        autoPlayInterval: const Duration(seconds: 4),
+        autoPlayCurve: Curves.easeInOutCubicEmphasized,
+        enableInfiniteScroll: true,
+        height: MediaQuery.of(context).size.height * 3/5,
+        viewportFraction: 1
       ),
     );
   }
