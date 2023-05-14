@@ -7,7 +7,7 @@ import 'package:fashionstore/data/dto/ResponseDto.dart';
 import 'dart:convert';
 
 class NetworkService {
-  static String domain = 'http://192.168.111.48:8080';
+  static String domain = 'http://192.168.1.9:8080';
 
   const NetworkService._();
 
