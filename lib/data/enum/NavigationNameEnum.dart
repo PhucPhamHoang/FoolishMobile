@@ -2,6 +2,6 @@ enum NavigationNameEnum {
   CATEGORIES,
   HOME,
   CART,
-  ACCOUNT,
+  PROFILE,
   CLOTHING,
 }

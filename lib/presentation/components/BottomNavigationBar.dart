@@ -1,5 +1,7 @@
+import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
 import 'package:fashionstore/presentation/screens/AllCategoriesPage.dart';
+import 'package:fashionstore/presentation/screens/CartPage.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,14 +48,14 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                 'assets/icon/home_icon.png',
                 'Home',
                 onTap: () {
-                  if(GlobalVariable.currentPage != NavigationNameEnum.HOME.name) {
+                  if(GlobalVariable.currentNavBarPage != NavigationNameEnum.HOME.name) {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const MyHomePage()),
+                      MaterialPageRoute(builder: (context) => const HomePage()),
                       (Route<dynamic> route) => false
                     );
 
-                    GlobalVariable.currentPage = NavigationNameEnum.HOME.name;
+                    GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
                   }
                 }
               ),
@@ -61,14 +63,14 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                   'assets/icon/category_icon.png',
                   'Categories',
                   onTap: () {
-                    if(GlobalVariable.currentPage != NavigationNameEnum.CATEGORIES.name) {
+                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CATEGORIES.name) {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const AllCategoriesPage()),
                         (Route<dynamic> route) => false
                       );
 
-                      GlobalVariable.currentPage = NavigationNameEnum.CATEGORIES.name;
+                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CATEGORIES.name;
                     }
                   }
               ),
@@ -76,23 +78,23 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                   'assets/icon/clothing_icon.png',
                   'Clothing',
                   onTap: () {
-                    if(GlobalVariable.currentPage != NavigationNameEnum.CLOTHING.name) {
+                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CLOTHING.name) {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const AllProductsPage()),
                         (Route<dynamic> route) => false
                       );
 
-                      GlobalVariable.currentPage = NavigationNameEnum.CLOTHING.name;
+                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHING.name;
                       BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
                     }
                   }
               ),
               _navBarButton(
                   'assets/icon/account_icon.png',
-                  'Account',
+                  'Profile',
                   onTap: () {
-                    GlobalVariable.currentPage = NavigationNameEnum.ACCOUNT.name;
+                    GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
                     //pop to page
                   }
               ),
@@ -104,8 +106,15 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
             right: 0,
             child: _cartButton(
               onTap: () {
-                GlobalVariable.currentPage = NavigationNameEnum.CART.name;
-                //pop to page
+                if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CART.name) {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CartPage()),
+                      (Route<dynamic> route) => false
+                  );
+
+                  GlobalVariable.currentNavBarPage = NavigationNameEnum.CART.name;
+                }
               }
             )
         ),
@@ -127,7 +136,7 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                 height: 20,
                 width: 20,
                 fit: BoxFit.fill,
-                color: GlobalVariable.currentPage != name.toUpperCase() ? const Color(0xffa4a4a4) : Colors.orange
+                color: GlobalVariable.currentNavBarPage != name.toUpperCase() ? const Color(0xffa4a4a4) : Colors.orange
             ),
             Text(
               name,
@@ -135,7 +144,7 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                   fontFamily: 'Work Sans',
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
-                  color: GlobalVariable.currentPage != name.toUpperCase() ? const Color(0xffa4a4a4) : Colors.orange
+                  color: GlobalVariable.currentNavBarPage != name.toUpperCase() ? const Color(0xffa4a4a4) : Colors.orange
               ),
             ),
           ],
@@ -152,11 +161,12 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
         height: 54,
         width: 120,
         decoration: BoxDecoration(
+          color: GlobalVariable.currentNavBarPage == NavigationNameEnum.CART.name ? Colors.orange : null,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             bottomLeft: Radius.circular(40),
           ),
-          gradient: UiRender.generalLinearGradient(),
+          gradient: GlobalVariable.currentNavBarPage == NavigationNameEnum.CART.name ? null : UiRender.generalLinearGradient(),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -173,8 +183,8 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '\$9999',
+                const Text(
+                  'My Cart',
                   style: TextStyle(
                       fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w600,
@@ -182,15 +192,24 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                       color: Colors.white
                   ),
                 ),
-                Text(
-                  '3 items',
-                  style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      fontFamily: 'Work Sans',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.white
-                  ),
+                BlocBuilder<CartBloc, CartState>(
+                  builder:(context, cartState) {
+                    int totalItems = BlocProvider.of<CartBloc>(context).totalCartItemQuantity;
+                    if(cartState is TotalCartItemQuantityLoadedState) {
+                      totalItems = cartState.totalQuantity;
+                    }
+
+                    return Text(
+                      '$totalItems items',
+                      style: const TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontFamily: 'Work Sans',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Colors.white
+                      ),
+                    );
+                  }
                 )
               ],
             )

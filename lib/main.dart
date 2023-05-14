@@ -1,8 +1,10 @@
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
+import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/presentation/screens/LoginPage.dart';
 import 'package:fashionstore/repository/AuthenticationRepository.dart';
+import 'package:fashionstore/repository/CartRepository.dart';
 import 'package:fashionstore/repository/CategoryRepository.dart';
 import 'package:fashionstore/repository/ShopRepository.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,9 @@ void main() {
         ),
         RepositoryProvider<AuthenticationRepository>(
             create: (context) => AuthenticationRepository()
+        ),
+        RepositoryProvider<CartRepository>(
+            create: (context) => CartRepository()
         ),
       ],
       child: MultiBlocProvider(
@@ -48,6 +53,11 @@ void main() {
           BlocProvider<AuthenticationBloc>(
               create: (context) => AuthenticationBloc(
                   RepositoryProvider.of<AuthenticationRepository>(context)
+              )
+          ),
+          BlocProvider<CartBloc>(
+              create: (context) => CartBloc(
+                  RepositoryProvider.of<CartRepository>(context)
               )
           ),
         ],

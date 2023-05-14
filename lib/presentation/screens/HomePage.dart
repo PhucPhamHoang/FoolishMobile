@@ -13,7 +13,6 @@ import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../data/entity/Product.dart';
 import '../../data/enum/NavigationNameEnum.dart';
 import '../../util/render/UiRender.dart';
@@ -21,14 +20,14 @@ import 'AllCategoriesPage.dart';
 import 'ProductDetails.dart';
 
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -37,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    GlobalVariable.currentPage = NavigationNameEnum.HOME.name;
+    GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LoadingService(context).reloadHomePage();
@@ -78,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           (Route<dynamic> route) => false
                       );
 
-                      GlobalVariable.currentPage = NavigationNameEnum.CATEGORIES.name;
+                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CATEGORIES.name;
                     }
                 ),
                 _categoryListComponent(),
@@ -103,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
 
-                        GlobalVariable.currentPage = NavigationNameEnum.CLOTHING.name;
+                        GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHING.name;
                       }
                   ),
                 )

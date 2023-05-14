@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/entity/CartItem.dart';
 import '../../data/entity/Product.dart';
 
 class ValueRender {
@@ -91,5 +92,15 @@ class ValueRender {
     }
 
     return '${result}Are you sure to add this product to your cart?';
+  }
+
+  static double totalCartPrice(List<CartItem> cartItemList) {
+    double result = 0;
+
+    for(CartItem cartItem in cartItemList) {
+      result += getDiscountPrice(cartItem.sellingPrice, cartItem.discount) * cartItem.quantity;
+    }
+
+    return result;
   }
 }

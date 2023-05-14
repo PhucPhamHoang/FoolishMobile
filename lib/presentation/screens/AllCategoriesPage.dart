@@ -29,7 +29,7 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
 
   @override
   void initState() {
-    GlobalVariable.currentPage = NavigationNameEnum.CATEGORIES.name;
+    GlobalVariable.currentNavBarPage = NavigationNameEnum.CATEGORIES.name;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<CategoryBloc>(context).add(OnLoadCategoryEvent());

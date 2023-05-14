@@ -1,3 +1,3 @@
 class GlobalVariable {
-  static var currentPage = '';
+  static var currentNavBarPage = '';
 }

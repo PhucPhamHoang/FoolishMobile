@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     if(authenState is AuthenticationLoggedInState) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage()),
+                        MaterialPageRoute(builder: (context) => const HomePage()),
                       );
                     }
 

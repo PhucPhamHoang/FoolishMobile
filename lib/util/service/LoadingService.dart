@@ -1,3 +1,4 @@
+import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,7 @@ class LoadingService {
     BlocProvider.of<ProductBloc>(context).add(const OnLoadNewArrivalProductListEvent());
     BlocProvider.of<ProductBloc>(context).add(const OnLoadTopBestSellerProductListEvent());
     BlocProvider.of<ProductBloc>(context).add(const OnLoadHotDiscountProductListEvent());
+    BlocProvider.of<CartBloc>(context).add(OnLoadTotalCartItemQuantityState());
   }
 
   void selectToViewProduct(Product product) {

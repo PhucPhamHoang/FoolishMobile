@@ -46,7 +46,7 @@ class _AllProductsPageState extends State<AllProductsPage> {
 
   @override
   void initState() {
-    GlobalVariable.currentPage = NavigationNameEnum.CLOTHING.name;
+    GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHING.name;
 
     _scrollController.addListener(_scrollListener);
 
