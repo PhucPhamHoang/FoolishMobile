@@ -46,7 +46,7 @@ class _AllProductsPageState extends State<AllProductsPage> {
 
   @override
   void initState() {
-    GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHING.name;
+    GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHINGS.name;
 
     _scrollController.addListener(_scrollListener);
 
@@ -69,9 +69,9 @@ class _AllProductsPageState extends State<AllProductsPage> {
       scaffoldKey: _scaffoldKey,
       forceCanNotBack: false,
       textEditingController: _textEditingController,
-      pageName: 'Clothing',
+      pageName: 'Clothings',
       hintSearchBarText: 'What product are you looking for?',
-      onSearch: () {
+      onSearch: (text) {
 
       },
       body: RefreshIndicator(

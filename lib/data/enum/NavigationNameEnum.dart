@@ -3,5 +3,5 @@ enum NavigationNameEnum {
   HOME,
   CART,
   PROFILE,
-  CLOTHING,
+  CLOTHINGS,
 }

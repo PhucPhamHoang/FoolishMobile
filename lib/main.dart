@@ -2,15 +2,18 @@ import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
+import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:fashionstore/presentation/screens/LoginPage.dart';
 import 'package:fashionstore/repository/AuthenticationRepository.dart';
 import 'package:fashionstore/repository/CartRepository.dart';
 import 'package:fashionstore/repository/CategoryRepository.dart';
 import 'package:fashionstore/repository/ShopRepository.dart';
+import 'package:fashionstore/repository/TranslatorRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/productDetails/product_details_bloc.dart';
+import 'bloc/productSearching/product_searching_bloc.dart';
 import 'bloc/products/product_bloc.dart';
 
 void main() {
@@ -29,6 +32,9 @@ void main() {
         RepositoryProvider<CartRepository>(
             create: (context) => CartRepository()
         ),
+        RepositoryProvider<TranslatorRepository>(
+            create: (context) => TranslatorRepository()
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -39,6 +45,11 @@ void main() {
           ),
           BlocProvider<ProductBloc>(
               create: (context) => ProductBloc(
+                  RepositoryProvider.of<ShopRepository>(context)
+              )
+          ),
+          BlocProvider<ProductSearchingBloc>(
+              create: (context) => ProductSearchingBloc(
                   RepositoryProvider.of<ShopRepository>(context)
               )
           ),
@@ -58,6 +69,11 @@ void main() {
           BlocProvider<CartBloc>(
               create: (context) => CartBloc(
                   RepositoryProvider.of<CartRepository>(context)
+              )
+          ),
+          BlocProvider<TranslatorBloc>(
+              create: (context) => TranslatorBloc(
+                  RepositoryProvider.of<TranslatorRepository>(context)
               )
           ),
         ],

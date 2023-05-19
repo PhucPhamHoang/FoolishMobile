@@ -7,12 +7,6 @@ abstract class ProductEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class OnSearchProductEvent extends ProductEvent{
-  final String productName;
-
-  const OnSearchProductEvent(this.productName);
-}
-
 class OnLoadAllProductListEvent extends ProductEvent {
   final int page;
   final int limit;

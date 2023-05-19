@@ -92,7 +92,7 @@ class _ProductDetailsBottomNavigationBarComponentState extends State<ProductDeta
             buttonMargin: EdgeInsets.zero,
             textColor: Colors.white,
             onPress: () {
-              UiRender.showTextFieldDialog(
+              UiRender.showSingleTextFieldDialog(
                 context,
                 hintText: 'Your quantity...',
                 needCenterText: true,
@@ -114,7 +114,7 @@ class _ProductDetailsBottomNavigationBarComponentState extends State<ProductDeta
                     }
                   }
                   catch (e) {
-                    UiRender.showDialog(context, '', 'Letters are not accepted!');
+                    UiRender.showDialog(context, '', 'Not accepted!');
                     widget.textEditingController?.text = '';
                   }
                 }

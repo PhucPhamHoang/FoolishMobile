@@ -14,15 +14,6 @@ class ProductLoadingState extends ProductState {
   List<Object> get props => [];
 }
 
-class ProductSearchingListLoadedState extends ProductState {
-  final List<Product> productList;
-
-  const ProductSearchingListLoadedState(this.productList);
-
-  @override
-  List<Object> get props => [productList];
-}
-
 class ProductTopBestSellerListLoadedState extends ProductState {
   final List<Product> productList;
 

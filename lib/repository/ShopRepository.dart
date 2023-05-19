@@ -58,8 +58,7 @@ class ShopRepository {
         return jsonList.map((json) => Product.fromJson(json)).toList();
       }
       else {
-        Map<String, dynamic> jsonMap = json.decode(jsonEncode(response.content));
-        return jsonMap.toString();
+        return response.content;
       }
     }
     catch(e, stackTrace) {
@@ -83,12 +82,16 @@ class ShopRepository {
     return getList(url);
   }
 
-  Future<dynamic> searchProduct(String productName) async {
+  Future<dynamic> searchProduct(String productName, {int page = 1, int limit = 10}) async {
     return sendPostAndGetList(
         '/filterProducts',
         {
           'filter': {
             'name': productName
+          },
+          'pagination': {
+            'page': page,
+            'limit': limit
           }
         }
     );

@@ -13,6 +13,7 @@ import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/productSearching/product_searching_bloc.dart';
 import '../../data/entity/Product.dart';
 import '../../data/enum/NavigationNameEnum.dart';
 import '../../util/render/UiRender.dart';
@@ -48,9 +49,6 @@ class _HomePageState extends State<HomePage> {
     return Layout(
       forceCanNotBack: true,
       hintSearchBarText: 'What product are you looking for?',
-      onSearch: () {
-
-      },
       textEditingController: _textEditingController,
 
       body: RefreshIndicator(
@@ -102,7 +100,7 @@ class _HomePageState extends State<HomePage> {
 
                         BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
 
-                        GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHING.name;
+                        GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHINGS.name;
                       }
                   ),
                 )
@@ -226,28 +224,36 @@ class _HomePageState extends State<HomePage> {
   Widget _productList(String type) {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, productState) {
-        List<Product> productList = [];
+        List<Product> productList = (type == 'HOT_DISCOUNT'
+            ? BlocProvider.of<ProductBloc>(context).hotDiscountProductList
+            : type == 'NEW_ARRIVAL'
+              ? BlocProvider.of<ProductBloc>(context).newArrivalProductList
+              : BlocProvider.of<ProductBloc>(context).top8BestSellerProductList
+        );
         if(productState is ProductLoadingState) {
           return UiRender.loadingCircle();
         }
-        else if(productState is! ProductErrorState) {
+
+        if(productState is! ProductErrorState &&
+            productState is! ProductSearchingListLoadedState &&
+            productState is! ProductLoadingState) {
           switch(type) {
             case 'HOT_DISCOUNT': {
-              productList = BlocProvider.of<ProductBloc>(context).hotDiscountProductList;
+              productList = List.from(BlocProvider.of<ProductBloc>(context).hotDiscountProductList);
               break;
             }
             case 'NEW_ARRIVAL': {
-              productList = BlocProvider.of<ProductBloc>(context).newArrivalProductList;
+              productList = List.from(BlocProvider.of<ProductBloc>(context).newArrivalProductList);
               break;
             }
             case 'TOP_BEST_SELLERS': {
-              productList = BlocProvider.of<ProductBloc>(context).top8BestSellerProductList;
+              productList = List.from(BlocProvider.of<ProductBloc>(context).top8BestSellerProductList);
               break;
             }
           }
         }
 
-        if(productList == null || productList.isEmpty) {
+        if(productList.isEmpty) {
           return const Center(
             child: Text('NOT AVAILABLE!!'),
           );

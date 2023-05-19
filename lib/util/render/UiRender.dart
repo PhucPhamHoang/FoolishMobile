@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fashionstore/bloc/translator/translator_bloc.dart';
+import 'package:fashionstore/data/entity/TranslatorLanguage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class UiRender {
@@ -114,29 +118,121 @@ class UiRender {
     );
   }
 
-  static Future<bool> showTextFieldDialog(
+  static Future<bool> showSingleTextFieldDialog(
       BuildContext context,
       TextEditingController? controller,
-      {String? title, String? hintText, bool needCenterText = false}) async {
+      {String? title, String? hintText,
+       bool needCenterText = false,
+       bool isTranslator = false}) async {
     bool? result = await showPlatformDialog(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext ctx) {
         return PlatformAlertDialog(
           title: Text(title ?? ''),
-          content: TextFormField(
-            textAlign: needCenterText == true ? TextAlign.center : TextAlign.start,
-            controller: controller,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hintText ?? '',
-              hintStyle: const TextStyle(
-                  fontFamily: 'Trebuchet MS',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                  color: Color(0xff8D8D8C)
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                textAlign: needCenterText == true ? TextAlign.center : TextAlign.start,
+                controller: controller,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: hintText ?? '',
+                  hintStyle: const TextStyle(
+                      fontFamily: 'Trebuchet MS',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                      color: Color(0xff8D8D8C)
+                  ),
+                ),
               ),
-            ),
+              isTranslator == true
+                ? BlocBuilder<TranslatorBloc, TranslatorState>(
+                    builder: (context, translatorState) {
+                      List<TranslatorLanguage> languageList = BlocProvider.of<TranslatorBloc>(context).languageList;
+                      List<DropdownMenuItem> dropDownItemList = [];
+                      TranslatorLanguage? selectedLanguage = BlocProvider.of<TranslatorBloc>(context).selectedLanguage;
+
+                      if(translatorState is TranslatorSelectedState) {
+                        selectedLanguage = translatorState.selectedLanguage;
+                      }
+
+                      if(translatorState is TranslatorLanguageListLoadedState) {
+                        languageList = translatorState.translatorLanguageList;
+                      }
+
+                      for(TranslatorLanguage language in languageList) {
+                        dropDownItemList.add(
+                            DropdownMenuItem(
+                              value: language.languageCode,
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        height: 40,
+                                        width: 60,
+                                        margin: const EdgeInsets.only(right: 15),
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: AssetImage(
+                                                    language.imageLocalStoragePath
+                                                )
+                                            ),
+                                            borderRadius: BorderRadius.circular(5)
+                                        )
+                                    ),
+                                    Text(
+                                      language.name,
+                                      style: const TextStyle(
+                                          fontFamily: 'Trebuchet MS',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 17,
+                                          color: Color(0xff8D8D8C)
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                        );
+                      }
+
+                      return Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            // value: selectedLanguage ?? '',
+                              itemHeight: null,
+                              items: dropDownItemList,
+                              isDense: true,
+                              isExpanded: true,
+                              hint: Text(
+                                selectedLanguage != null
+                                    ? selectedLanguage.name
+                                    : 'Select your language...',
+                                style: const TextStyle(
+                                    fontFamily: 'Trebuchet MS',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Color(0xff8D8D8C)
+                                ),
+                              ),
+                              selectedItemBuilder: (context) {
+                                return dropDownItemList;
+                              },
+                              onChanged: (value) {
+                                BlocProvider.of<TranslatorBloc>(context).add(OnSelectLanguageCodeTranslatorEvent(value));
+                              }
+                          ),
+                        ),
+                      );
+                    }
+                )
+                : Container()
+            ],
           ),
           actions: [
             // The "Yes" button

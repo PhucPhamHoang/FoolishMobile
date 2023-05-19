@@ -76,16 +76,16 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
               ),
               _navBarButton(
                   'assets/icon/clothing_icon.png',
-                  'Clothing',
+                  'Clothings',
                   onTap: () {
-                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CLOTHING.name) {
+                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CLOTHINGS.name) {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const AllProductsPage()),
                         (Route<dynamic> route) => false
                       );
 
-                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHING.name;
+                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHINGS.name;
                       BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
                     }
                   }

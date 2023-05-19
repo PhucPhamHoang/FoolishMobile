@@ -18,32 +18,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   List<Product> hotDiscountProductList = [];
   List<Product> top8BestSellerProductList = [];
   List<Product> newArrivalProductList = [];
-  List<Product> searchingProductList = [];
 
   int currentAllProductListPage = 1;
 
   ProductBloc(this._shopRepository) : super(ProductInitial()) {
-    on<OnSearchProductEvent>((event, emit) async {
-      emit(ProductLoadingState());
-      searchingProductList = [];
-
-      try{
-        dynamic response = await _shopRepository.searchProduct(event.productName);
-
-        if(response is List<Product>) {
-          searchingProductList = response;
-          emit(ProductSearchingListLoadedState(response));
-        }
-        else {
-          emit(ProductErrorState(response.toString()));
-        }
-      }
-      catch(e){
-        print(e);
-        emit(ProductErrorState(e.toString()));
-      }
-    });
-
     on<OnLoadAllProductListEvent>((event, emit) async {
       try{
         List<Product> response = await _shopRepository.getAllProducts(event.page, event.limit);
@@ -132,7 +110,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       hotDiscountProductList = [];
       top8BestSellerProductList = [];
       newArrivalProductList = [];
-      searchingProductList = [];
     });
 
     on<OnLoadFilterProductListEvent>((event, emit) async {

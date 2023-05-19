@@ -44,7 +44,7 @@ class _CartPageState extends State<CartPage> {
       textEditingController: _textEditingController,
       pageName: 'My Cart',
       hintSearchBarText: 'What item are you looking for?',
-      onSearch: () {
+      onSearch: (text) {
 
       },
       body: RefreshIndicator(
@@ -60,6 +60,7 @@ class _CartPageState extends State<CartPage> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
