@@ -30,6 +30,12 @@ class _SearchingPageState extends State<SearchingPage> {
   }
 
   @override
+  void initState() {
+    BlocProvider.of<ProductSearchingBloc>(context).add(OnClearProductResultsEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Layout(
       textEditingController: _searchingController,

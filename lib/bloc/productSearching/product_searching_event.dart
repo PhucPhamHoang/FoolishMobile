@@ -15,3 +15,5 @@ class OnSearchProductEvent extends ProductSearchingEvent{
   const OnSearchProductEvent(this.productName, this.page, this.limit);
 }
 
+class OnClearProductResultsEvent extends ProductSearchingEvent{}
+

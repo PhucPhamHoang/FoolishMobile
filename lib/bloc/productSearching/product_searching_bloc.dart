@@ -42,5 +42,10 @@ class ProductSearchingBloc extends Bloc<ProductSearchingEvent, ProductSearchingS
         emit(ProductSearchingErrorState(e.toString()));
       }
     });
+
+    on<OnClearProductResultsEvent>((event, emit) {
+      searchingProductList = [];
+      currentSearchingProductListPage = 1;
+    });
   }
 }
