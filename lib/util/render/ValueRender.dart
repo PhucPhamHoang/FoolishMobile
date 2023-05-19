@@ -44,6 +44,7 @@ class ValueRender {
     return result;
   }
 
+  // get first images of product from different colors
   static List<String> getProductImagesFromDifferentColors(List<Product> productList) {
     List<String> result = [];
 
@@ -68,6 +69,7 @@ class ValueRender {
     return [coloredSelectedProductList[0].image1, coloredSelectedProductList[0].image2, coloredSelectedProductList[0].image3, coloredSelectedProductList[0].image4];
   }
 
+  // get list of products size using product color
   static List<String> getProductSizeListByColor(String color, List<Product> productList) {
     return productList.where((element) => element.color == color).map((e) => e.size).toList();
   }

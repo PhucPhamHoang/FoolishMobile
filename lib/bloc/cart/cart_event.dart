@@ -19,9 +19,9 @@ class OnLoadAllCartListState extends CartEvent {
 class OnLoadTotalCartItemQuantityState extends CartEvent {}
 
 class OnUpdateCartState extends CartEvent {
-  final List<Cart> cartList;
+  final List<Cart> cartItemList;
 
-  const OnUpdateCartState(this.cartList);
+  const OnUpdateCartState(this.cartItemList);
 }
 
 class OnRemoveCartItemState extends CartEvent {
@@ -31,7 +31,10 @@ class OnRemoveCartItemState extends CartEvent {
 }
 
 class OnAddCartItemState extends CartEvent {
-  final Cart cartItem;
+  final int productId;
+  final String color;
+  final String size;
+  final int quantity;
 
-  const OnAddCartItemState(this.cartItem);
+  const OnAddCartItemState(this.productId, this.color, this.size, this.quantity);
 }

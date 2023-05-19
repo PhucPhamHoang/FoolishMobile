@@ -2,6 +2,7 @@ import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/data/entity/CartItem.dart';
 import 'package:fashionstore/presentation/components/CartItemComponent.dart';
 import 'package:fashionstore/util/render/UiRender.dart';
+import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,7 @@ class _CartPageState extends State<CartPage> {
     GlobalVariable.currentNavBarPage = NavigationNameEnum.CART.name;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<CartBloc>(context).add(const OnLoadAllCartListState(1, 10));
+      LoadingService(context).reloadCartPage();
     });
 
     super.initState();
@@ -51,7 +52,7 @@ class _CartPageState extends State<CartPage> {
         color: Colors.orange,
         key: _refreshIndicatorKey,
         onRefresh: () async {
-          BlocProvider.of<CartBloc>(context).add(const OnLoadAllCartListState(1, 10));
+          LoadingService(context).reloadCartPage();
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +124,22 @@ class _CartPageState extends State<CartPage> {
   }
 
   Widget _cartItemList() {
-    return BlocBuilder<CartBloc, CartState>(
+    return BlocConsumer<CartBloc, CartState>(
+      listener: (context, cartState) {
+        if(cartState is CartRemovedState) {
+          UiRender.showConfirmDialog(context, '', cartState.message);
+          LoadingService(context).reloadCartPage();
+        }
+
+        if(cartState is CartUpdatedState) {
+          UiRender.showConfirmDialog(context, '', cartState.message);
+          LoadingService(context).reloadCartPage();
+        }
+
+        if(cartState is CartErrorState) {
+          UiRender.showConfirmDialog(context, '', cartState.message);
+        }
+      },
       builder: (context, cartState) {
         List<CartItem> cartItemList = BlocProvider.of<CartBloc>(context).cartItemList;
 
@@ -132,7 +148,11 @@ class _CartPageState extends State<CartPage> {
         }
 
         if(cartState is AllCartListLoadedState) {
-          cartItemList = cartState.cartItemList;
+          cartItemList = List.from(cartState.cartItemList);
+
+          print('@@@');
+          print(cartItemList.last.name);
+          print(cartItemList.last.quantity);
         }
 
         return ListView.builder(
@@ -143,9 +163,6 @@ class _CartPageState extends State<CartPage> {
             return CartItemComponent(
               cartItem: cartItemList[index],
               onTap: () {
-
-              },
-              onClear: () {
 
               },
             );

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/presentation/layout/Layout.dart';
 import 'package:fashionstore/util/render/UiRender.dart';
@@ -47,7 +48,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       textEditingController: _textEditingController,
       body: RefreshIndicator(
         onRefresh: () async {
-
+          
         },
         color: Colors.orange,
         child: SingleChildScrollView(
@@ -55,72 +56,83 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           controller: _scrollController,
           child: Column(
             children: [
-              BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
-                listener: (context, productState) {
-                  if(productState is ProductDetailsLoadedState) {
-                    setState(() {
-                      selectedImageUrlList = ValueRender.getProductImageUrlListByColor(selectedColor, productState.productList);
-                    });
+              BlocListener<CartBloc, CartState>(
+                listener: (context, cartState) {
+                  if(cartState is CartAddedState) {
+                    UiRender.showDialog(context, '', cartState.message);
+                    BlocProvider.of<CartBloc>(context).add(OnLoadTotalCartItemQuantityState());
                   }
-
                 },
-                builder: (context, productState) {
-                  List<Product> selectedProductDetails = [];
+                child: BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
+                  listener: (context, productState) {
+                    if(productState is ProductDetailsLoadedState) {
+                      setState(() {
+                        selectedImageUrlList = ValueRender.getProductImageUrlListByColor(selectedColor, productState.productList);
+                      });
+                    }
 
-                  if(productState is ProductLoadingState) {
-                    return UiRender.loadingCircle();
-                  }
+                  },
+                  builder: (context, productState) {
+                    List<Product> selectedProductDetails = [];
 
-                  if(productState is ProductDetailsLoadedState) {
-                    selectedProductDetails = productState.productList;
-                  }
+                    if(productState is ProductLoadingState) {
+                      return UiRender.loadingCircle();
+                    }
 
-                  if(selectedProductDetails.isNotEmpty) {
-                    List<Product> colorSelectedProductList = selectedProductDetails.where((element) => element.color == selectedColor).toList();
-                    List<String> productColorImageUrlList = ValueRender.getProductImagesFromDifferentColors(selectedProductDetails);
-                    List<String> productColorList = ValueRender.getProductColorList(selectedProductDetails);
-                    List<String> productSizeList = ValueRender.getProductSizeListByColor(selectedColor ,selectedProductDetails);
+                    if(productState is ProductDetailsLoadedState) {
+                      selectedProductDetails = productState.productList;
+                    }
 
-                    return Column(
-                      children: [
-                        _productImagesSlider(selectedImageUrlList),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                )
+                    if(selectedProductDetails.isNotEmpty) {
+                      // get list of products from selected color
+                      List<Product> colorSelectedProductList = selectedProductDetails.where((element) => element.color == selectedColor).toList();
+                      // get list of products first image from different colors
+                      List<String> productColorImageUrlList = ValueRender.getProductImagesFromDifferentColors(selectedProductDetails);
+                      // get all colors of a product
+                      List<String> productColorList = ValueRender.getProductColorList(selectedProductDetails);
+                      // get list of products size using product color
+                      List<String> productSizeList = ValueRender.getProductSizeListByColor(selectedColor ,selectedProductDetails);
+
+                      return Column(
+                        children: [
+                          _productImagesSlider(selectedImageUrlList),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                  )
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _ratingStarsAndProductStatus(colorSelectedProductList),
+                                    _productNameAndPrice(colorSelectedProductList),
+                                    _productColors(productColorImageUrlList, productColorList, selectedProductDetails),
+                                    productSizeList.first.toLowerCase() != 'none'
+                                     ? _productSizes(productSizeList)
+                                     : Container()
+                                  ],
+                                ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _ratingStarsAndProductStatus(colorSelectedProductList),
-                                  _productNameAndPrice(colorSelectedProductList),
-                                  _productColors(productColorImageUrlList, productColorList, selectedProductDetails),
-                                  productSizeList.first.toLowerCase() != 'none'
-                                   ? _productSizes(productSizeList)
-                                   : Container()
-                                ],
-                              ),
-                            ),
-                            _itemDescription(colorSelectedProductList[0].description),
-                          ],
-                        ),
-                      ],
-                    );
+                              _itemDescription(colorSelectedProductList[0].description),
+                            ],
+                          ),
+                        ],
+                      );
+                    }
+                    else {
+                      return Container();
+                    }
                   }
-                  else {
-                    return Container();
-                  }
-                }
+                ),
               ),
-              
             ],
           ),
         ),

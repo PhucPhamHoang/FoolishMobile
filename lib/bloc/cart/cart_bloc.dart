@@ -25,8 +25,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         List<CartItem> response = await _cartRepository.showFullCart(event.page, event.limit);
 
-        cartItemList = _removeDuplicates([...cartItemList,...response]);
-        currentPage = event.page;
+        if(event.page != currentPage) {
+          cartItemList = _removeDuplicates([...cartItemList,...response]);
+          currentPage = event.page;
+        }
+        else {
+          cartItemList = response;
+        }
 
         emit(AllCartListLoadedState(cartItemList));
       }
@@ -51,6 +56,45 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
         totalCartItemQuantity = quantity;
         emit(TotalCartItemQuantityLoadedState(quantity));
+      }
+      catch(e) {
+        print(e.toString());
+        emit(CartErrorState(e.toString()));
+      }
+    });
+
+    on<OnAddCartItemState>((event, emit) async {
+      emit(CartLoadingState());
+
+      try {
+        String response = await _cartRepository.add(event.productId, event.color, event.size, event.quantity);
+        emit(CartAddedState(response));
+      }
+      catch(e) {
+        print(e.toString());
+        emit(CartErrorState(e.toString()));
+      }
+    });
+
+    on<OnRemoveCartItemState>((event, emit) async {
+      emit(CartLoadingState());
+
+      try {
+        String response = await _cartRepository.remove(event.cartIdList);
+        emit(CartRemovedState(response));
+      }
+      catch(e) {
+        print(e.toString());
+        emit(CartErrorState(e.toString()));
+      }
+    });
+
+    on<OnUpdateCartState>((event, emit) async {
+      emit(CartLoadingState());
+
+      try {
+        String response = await _cartRepository.update(event.cartItemList);
+        emit(CartRemovedState(response));
       }
       catch(e) {
         print(e.toString());

@@ -37,6 +37,11 @@ class LoadingService {
     );
   }
 
+  void reloadCartPage() {
+    BlocProvider.of<CartBloc>(context).add(const OnLoadAllCartListState(1, 10));
+    BlocProvider.of<CartBloc>(context).add(OnLoadTotalCartItemQuantityState());
+  }
+
   void selectCategory(Category category) {
     BlocProvider.of<ProductBloc>(context).add(
         OnLoadFilterProductListEvent(

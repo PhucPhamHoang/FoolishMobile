@@ -79,16 +79,32 @@ class CartRepository {
   }
 
   Future<dynamic> update(List<Cart> cartItemList) {
-    Map<String, dynamic> cartMap = cartItemList.fold({}, (Map<String, dynamic> map, Cart cart) {
-      return cart.toJson();
-    });
-
-    print('@@@');
-    print(cartMap);
-
     return sendPostAndGetMessage(
         '/update',
-        cartMap
+        {
+          "objectList": cartItemList
+        }
+    );
+  }
+
+  Future<dynamic> add(int productId, String color, String size, int quantity) {
+    return sendPostAndGetMessage(
+      '/add',
+      {
+        'productId': productId,
+        'color': color,
+        'size': size,
+        'quantity': quantity,
+      }
+    );
+  }
+
+  Future<dynamic> remove(List<int> cartIdList) {
+    return sendPostAndGetMessage(
+      '/remove',
+        {
+          "integerArray": cartIdList
+        }
     );
   }
 }

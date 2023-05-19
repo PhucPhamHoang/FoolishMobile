@@ -2,15 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashionstore/data/entity/CartItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/cart/cart_bloc.dart';
 import '../../util/render/ValueRender.dart';
 
 class CartItemComponent extends StatefulWidget {
-  const CartItemComponent({super.key, required this.cartItem, required this.onTap, required this.onClear});
+  const CartItemComponent({super.key, required this.cartItem, required this.onTap,});
 
   final CartItem cartItem;
   final void Function() onTap;
-  final void Function() onClear;
 
   @override
   State<StatefulWidget> createState() => _CartItemComponentState();
@@ -160,7 +161,7 @@ class _CartItemComponentState extends State<CartItemComponent> {
                 color: const Color(0xfff3f3f3),
                 child: IconButton(
                   onPressed: () {
-
+                    BlocProvider.of<CartBloc>(context).add(OnRemoveCartItemState([widget.cartItem.id]));
                   },
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,

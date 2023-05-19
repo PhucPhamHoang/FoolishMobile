@@ -1,4 +1,6 @@
+import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
+import 'package:fashionstore/bloc/productDetails/product_details_bloc.dart';
 import 'package:fashionstore/presentation/components/GradientButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +67,7 @@ class _ProductDetailsBottomNavigationBarComponentState extends State<ProductDeta
             onPress: () {
               String color = BlocProvider.of<ProductAddToCartBloc>(context).color;
               String productName = BlocProvider.of<ProductAddToCartBloc>(context).productName;
+              int productId = BlocProvider.of<ProductDetailsBloc>(context).selectedProductDetails.first.productId;
               String size = BlocProvider.of<ProductAddToCartBloc>(context).size;
               int quantity = BlocProvider.of<ProductAddToCartBloc>(context).quantity;
 
@@ -74,7 +77,11 @@ class _ProductDetailsBottomNavigationBarComponentState extends State<ProductDeta
                     needCenterMessage: false,
                     '',
                     ValueRender.getAddToCartPopupContent(productName, color, size, quantity)
-                );
+                ).then((value) {
+                  if(value == true) {
+                    BlocProvider.of<CartBloc>(context).add(OnAddCartItemState(productId, color, size, quantity));
+                  }
+                });
               }
               else {
                 UiRender.showDialog(context, '', 'Please check color, quantity and size again!');

@@ -32,6 +32,33 @@ class TotalCartItemQuantityLoadedState extends CartState {
   List<Object> get props => [totalQuantity];
 }
 
+class CartAddedState extends CartState {
+  final String message;
+
+  const CartAddedState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CartRemovedState extends CartState {
+  final String message;
+
+  const CartRemovedState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CartUpdatedState extends CartState {
+  final String message;
+
+  const CartUpdatedState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class CartErrorState extends CartState {
   final String message;
 
