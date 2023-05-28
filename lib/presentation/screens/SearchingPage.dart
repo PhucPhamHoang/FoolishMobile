@@ -81,7 +81,7 @@ class _SearchingPageState extends State<SearchingPage> {
                   color: Colors.white,
                   child: ListView.builder(
                       shrinkWrap: true,
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: productList.length,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       itemBuilder: (context, index) {
@@ -124,20 +124,13 @@ class _SearchingPageState extends State<SearchingPage> {
         ),
         child: Row(
           children: [
-            CachedNetworkImage(
-              imageUrl: product.image1,
-              imageBuilder: (context, imageProvider)
-              => Container(
-                height: 80,
-                width: 75,
-                margin: const EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(image: NetworkImage(product.image1))
-                ),
-              ),
-              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            UiRender.buildCachedNetworkImage(
+              context,
+              product.image1,
+              height: 80,
+              width: 75,
+              margin: const EdgeInsets.only(right: 8),
+              borderRadius: BorderRadius.circular(8),
             ),
             Expanded(
               child: Text(

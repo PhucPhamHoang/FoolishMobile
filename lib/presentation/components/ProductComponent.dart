@@ -36,19 +36,9 @@ class _ProductComponentState extends State<ProductComponent> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.product.image1,
-                    imageBuilder: (context, imageProvider)
-                    => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  child: UiRender.buildCachedNetworkImage(
+                    context,
+                    widget.product.image1,
                   ),
                 ),
                 Expanded(

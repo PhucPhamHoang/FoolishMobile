@@ -52,7 +52,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         },
         color: Colors.orange,
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           controller: _scrollController,
           child: Column(
             children: [
@@ -114,7 +114,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   children: [
                                     _ratingStarsAndProductStatus(colorSelectedProductList),
                                     _productNameAndPrice(colorSelectedProductList),
-                                    _productColors(productColorImageUrlList, productColorList, selectedProductDetails),
+                                    _productColors(productColorImageUrlList, productColorList, selectedProductDetails, colorSelectedProductList),
                                     productSizeList.first.toLowerCase() != 'none'
                                      ? _productSizes(productSizeList)
                                      : Container()
@@ -266,7 +266,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget _productColors(List<String> productColorImageUrlList, List<String> productColorList, List<Product> selectedProductDetails) {
+  Widget _productColors(List<String> productColorImageUrlList, List<String> productColorList, List<Product> selectedProductDetails, List<Product> colorSelectedProductList) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -283,40 +283,32 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: List<Widget>.generate(
-                productColorImageUrlList.length,
-                    (index) {
-                  return CachedNetworkImage(
-                    imageUrl: productColorImageUrlList[index],
-                    imageBuilder: (context, imageProvider)
-                    => GestureDetector(
-                      onTap: () {
-                        BlocProvider.of<ProductAddToCartBloc>(context).add(
-                            OnSelectProductAddToCartEvent(
-                                color: productColorList[index]
-                            )
-                        );
+                productColorImageUrlList.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      BlocProvider.of<ProductAddToCartBloc>(context).add(
+                          OnSelectProductAddToCartEvent(
+                              color: productColorList[index]
+                          )
+                      );
 
-                        setState(() {
-                          selectedColor = productColorList[index];
-                          selectedSize = '';
-                          selectedImageUrlList = ValueRender.getProductImageUrlListByColor(selectedColor, selectedProductDetails);
-                        });
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        margin: const EdgeInsets.only(right: 11, top: 14),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      setState(() {
+                        selectedColor = productColorList[index];
+                        selectedSize = '';
+                        selectedImageUrlList = ValueRender.getProductImageUrlListByColor(selectedColor, selectedProductDetails);
+                      });
+                    },
+                    child: UiRender.buildCachedNetworkImage(
+                      context,
+                      productColorImageUrlList[index],
+                      height: 50,
+                      width: 50,
+                      margin: const EdgeInsets.only(right: 11, top: 14),
+                      borderRadius: BorderRadius.circular(8),
+                      border: productColorList[index] == colorSelectedProductList.first.color
+                          ? Border.all(color: Colors.orange)
+                          : null,
                     ),
-                    placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   );
                 }
             )
@@ -421,20 +413,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget _imageComponent(String imageUrl) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 3/5,
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        imageBuilder: (context, imageProvider)
-          => Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
-      ),
+      child: UiRender.buildCachedNetworkImage(
+        context,
+        imageUrl,
+      )
     );
   }
 }

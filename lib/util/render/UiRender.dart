@@ -263,4 +263,42 @@ class UiRender {
 
     return result ?? false;
   }
+
+  static Widget buildCachedNetworkImage(
+    BuildContext context,
+    String url, {
+      double? width,
+      double? height,
+      EdgeInsets margin = EdgeInsets.zero,
+      EdgeInsets padding = EdgeInsets.zero,
+      BorderRadiusGeometry? borderRadius,
+      BoxFit fit = BoxFit.cover,
+      Alignment alignment = Alignment.center,
+      Widget? content,
+      BoxBorder? border,
+    }
+  ) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      imageBuilder: (context, imageProvider)
+      => Container(
+        alignment: alignment,
+        margin: margin,
+        padding: padding,
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          border: border,
+          borderRadius: borderRadius,
+          image: DecorationImage(
+              image: imageProvider,
+              fit: fit
+          )
+        ),
+        child: content
+      ),
+      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
+  }
 }

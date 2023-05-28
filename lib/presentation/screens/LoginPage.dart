@@ -329,9 +329,6 @@ class _LoginPageState extends State<LoginPage> {
             checkColor: Colors.orange,
             value: isRememberPassword,
             onChanged: (value) {
-              print('@@@');
-              print(value);
-
               setState(() {
                 if(value == true &&
                    (_userNameTextEditingController.text != '' &&

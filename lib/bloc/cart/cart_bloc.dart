@@ -94,7 +94,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       try {
         String response = await _cartRepository.update(event.cartItemList);
-        emit(CartRemovedState(response));
+        emit(CartUpdatedState(response));
       }
       catch(e) {
         print(e.toString());

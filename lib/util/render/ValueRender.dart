@@ -103,6 +103,6 @@ class ValueRender {
       result += getDiscountPrice(cartItem.sellingPrice, cartItem.discount) * cartItem.quantity;
     }
 
-    return result;
+    return double.parse(result.toStringAsFixed(2));
   }
 }

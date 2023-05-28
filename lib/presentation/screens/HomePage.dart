@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
         color: Colors.orange,
         key: _refreshIndicatorKey,
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -118,33 +118,23 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         LoadingService(context).selectCategory(category);
       },
-      child: CachedNetworkImage(
-        imageUrl: ValueRender.getGoogleDriveImageUrl(category.image),
-        imageBuilder: (context, imageProvider)
-        => Container(
-          alignment: Alignment.center,
-          width: 90,
-          margin: const EdgeInsets.only(right: 13),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(ValueRender.getGoogleDriveImageUrl(category.image))
-              )
-          ),
-          child: Text(
-            category.name,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontFamily: 'Work Sans',
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Colors.white
-            ),
+      child: UiRender.buildCachedNetworkImage(
+        context,
+        ValueRender.getGoogleDriveImageUrl(category.image),
+        width: 90,
+        height: 90,
+        margin: const EdgeInsets.only(right: 13),
+        borderRadius: BorderRadius.circular(8),
+        content: Text(
+          category.name,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'Work Sans',
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Colors.white
           ),
         ),
-        placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
   }
@@ -211,6 +201,7 @@ class _HomePageState extends State<HomePage> {
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
                 itemCount: categoryList.length,
                 itemBuilder: (context, index) {
                   return _categoryComponent(categoryList[index]);

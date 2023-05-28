@@ -85,22 +85,13 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
                 fontSize: 22,
               ),
             ),
-            CachedNetworkImage(
-              imageUrl: ValueRender.getGoogleDriveImageUrl(category.image),
-              imageBuilder: (context, imageProvider)
-              => Container(
-                height: 90,
-                width: 90,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
+            UiRender.buildCachedNetworkImage(
+              context,
+              ValueRender.getGoogleDriveImageUrl(category.image),
+              height: 90,
+              width: 90,
+              borderRadius: BorderRadius.circular(8)
+            )
           ],
         ),
       ),

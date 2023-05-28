@@ -1,12 +1,15 @@
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
+import 'package:fashionstore/bloc/productDetails/product_details_bloc.dart';
 import 'package:fashionstore/data/entity/CartItem.dart';
 import 'package:fashionstore/presentation/components/CartItemComponent.dart';
+import 'package:fashionstore/presentation/components/CartItemDetails.dart';
 import 'package:fashionstore/util/render/UiRender.dart';
 import 'package:fashionstore/util/service/LoadingService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/entity/Product.dart';
 import '../../data/enum/NavigationNameEnum.dart';
 import '../../data/static/GlobalVariable.dart';
 import '../../util/render/ValueRender.dart';
@@ -25,6 +28,7 @@ class _CartPageState extends State<CartPage> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
 
   @override
   void initState() {
@@ -61,7 +65,9 @@ class _CartPageState extends State<CartPage> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: _scrollController.position.maxScrollExtent > 0
+                  ? const BouncingScrollPhysics()
+                  : const AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
@@ -127,17 +133,17 @@ class _CartPageState extends State<CartPage> {
     return BlocConsumer<CartBloc, CartState>(
       listener: (context, cartState) {
         if(cartState is CartRemovedState) {
-          UiRender.showConfirmDialog(context, '', cartState.message);
+          UiRender.showDialog(context, '', cartState.message);
           LoadingService(context).reloadCartPage();
         }
 
         if(cartState is CartUpdatedState) {
-          UiRender.showConfirmDialog(context, '', cartState.message);
+          UiRender.showDialog(context, '', cartState.message);
           LoadingService(context).reloadCartPage();
         }
 
         if(cartState is CartErrorState) {
-          UiRender.showConfirmDialog(context, '', cartState.message);
+          UiRender.showDialog(context, '', cartState.message);
         }
       },
       builder: (context, cartState) {
@@ -149,10 +155,6 @@ class _CartPageState extends State<CartPage> {
 
         if(cartState is AllCartListLoadedState) {
           cartItemList = List.from(cartState.cartItemList);
-
-          print('@@@');
-          print(cartItemList.last.name);
-          print(cartItemList.last.quantity);
         }
 
         return ListView.builder(
@@ -163,7 +165,17 @@ class _CartPageState extends State<CartPage> {
             return CartItemComponent(
               cartItem: cartItemList[index],
               onTap: () {
+                setState(() {
+                  BlocProvider.of<ProductDetailsBloc>(context).add(OnSelectProductEvent(cartItemList[index].productId));
 
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return CartItemDetails(selectedCartItem: cartItemList[index]);
+                    }
+                  );
+                });
               },
             );
           }

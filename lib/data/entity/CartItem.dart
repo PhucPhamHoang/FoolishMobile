@@ -5,19 +5,19 @@ part 'CartItem.g.dart';
 @JsonSerializable()
 class CartItem {
   @JsonKey(name: 'id')
-  final int id;
-  final int customerId;
-  final int productManagementId;
-  final int productId;
-  final int quantity;
-  final String buyingStatus;
-  final String color;
-  final String size;
-  final String name;
-  final String brand;
-  final String image1 ;
-  final double sellingPrice;
-  final double discount;
+  int id;
+  int customerId;
+  int productManagementId;
+  int productId;
+  int quantity;
+  String buyingStatus;
+  String color;
+  String size;
+  String name;
+  String brand;
+  String image1 ;
+  double sellingPrice;
+  double discount;
 
   CartItem(
       this.id,
@@ -37,6 +37,24 @@ class CartItem {
   factory CartItem.fromJson(Map<String, dynamic> json) => _$CartItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$CartItemToJson(this);
+
+  factory CartItem.clone(CartItem source) {
+    return CartItem(
+        source.id,
+        source.customerId,
+        source.productManagementId,
+        source.productId,
+        source.quantity,
+        source.buyingStatus,
+        source.color,
+        source.size,
+        source.name,
+        source.brand,
+        source.image1,
+        source.sellingPrice,
+        source.discount
+    );
+  }
 
   @override
   String toString() {

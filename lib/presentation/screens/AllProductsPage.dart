@@ -7,8 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../bloc/products/product_bloc.dart';
 import '../../data/entity/Category.dart';
 import '../../data/entity/Product.dart';
@@ -30,7 +30,8 @@ class _AllProductsPageState extends State<AllProductsPage> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-
+  final ItemScrollController _itemScrollController = ItemScrollController();
+  int selectedCategoryIndex = 0;
 
   void _scrollListener() {
     if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
@@ -50,9 +51,22 @@ class _AllProductsPageState extends State<AllProductsPage> {
 
     _scrollController.addListener(_scrollListener);
 
-    if(widget.isFromCategoryPage == false) {
-      BlocProvider.of<ProductBloc>(context).add(const OnLoadAllProductListEvent(1, 8));
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(widget.isFromCategoryPage == false) {
+        BlocProvider.of<ProductBloc>(context).add(const OnLoadAllProductListEvent(1, 8));
+      }
+      else {
+        selectedCategoryIndex = BlocProvider.of<CategoryBloc>(context).categoryList.indexOf(
+            BlocProvider.of<CategoryBloc>(context).categoryList.where(
+                    (element) => element.name == BlocProvider.of<CategoryBloc>(context).selectedCategoryName
+            ).first
+        );
+
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _itemScrollController.scrollTo(index: selectedCategoryIndex, duration: const Duration(milliseconds: 1000));
+        });
+      }
+    });
 
     super.initState();
   }
@@ -71,9 +85,6 @@ class _AllProductsPageState extends State<AllProductsPage> {
       textEditingController: _textEditingController,
       pageName: 'Clothings',
       hintSearchBarText: 'What product are you looking for?',
-      onSearch: (text) {
-
-      },
       body: RefreshIndicator(
         onRefresh: () async {
 
@@ -162,14 +173,15 @@ class _AllProductsPageState extends State<AllProductsPage> {
           height: 25,
           margin: const EdgeInsets.only(bottom: 20, top: 15),
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          child: ScrollablePositionedList.builder(
+            itemScrollController: _itemScrollController,
             shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
             itemCount: categoryList.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (BuildContext context, int index) {
               return _categoryItem(categoryList[index].name);
-            }
+            },
           ),
         );
       }
