@@ -16,6 +16,7 @@ class User {
   String? city;
   String? country;
   String? avatar;
+  String? email;
 
   User(
       this.id,
@@ -28,7 +29,8 @@ class User {
       this.address,
       this.city,
       this.country,
-      this.avatar);
+      this.avatar,
+      this.email);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
@@ -36,6 +38,6 @@ class User {
 
   @override
   String toString() {
-    return 'User{id: $id, accountId: $accountId, userName: $userName, password: $password, status: $status, name: $name, phoneNumber: $phoneNumber, address: $address, city: $city, country: $country, avatar: $avatar}';
+    return 'User{id: $id, accountId: $accountId, userName: $userName, password: $password, status: $status, name: $name, phoneNumber: $phoneNumber, address: $address, city: $city, country: $country, avatar: $avatar, email: $email}';
   }
 }

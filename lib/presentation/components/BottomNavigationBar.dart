@@ -3,6 +3,7 @@ import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
 import 'package:fashionstore/presentation/screens/AllCategoriesPage.dart';
 import 'package:fashionstore/presentation/screens/CartPage.dart';
 import 'package:fashionstore/presentation/screens/HomePage.dart';
+import 'package:fashionstore/presentation/screens/ProfilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -94,8 +95,15 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
                   'assets/icon/account_icon.png',
                   'Profile',
                   onTap: () {
-                    GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
-                    //pop to page
+                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.PROFILE.name) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ProfilePage()),
+                          (Route<dynamic> route) => false
+                      );
+
+                      GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
+                    }
                   }
               ),
             ],

@@ -65,8 +65,10 @@ class _CartPageState extends State<CartPage> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
-                physics: _scrollController.position.maxScrollExtent > 0
-                  ? const BouncingScrollPhysics()
+                physics:  _scrollController.hasClients
+                  ? _scrollController.position.maxScrollExtent > 0
+                    ? const BouncingScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics()
                   : const AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),

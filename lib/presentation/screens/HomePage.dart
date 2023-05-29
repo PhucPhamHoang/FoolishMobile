@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
       forceCanNotBack: true,
       hintSearchBarText: 'What product are you looking for?',
       textEditingController: _textEditingController,
-
       body: RefreshIndicator(
         onRefresh: () async {
           LoadingService(context).reloadHomePage();
