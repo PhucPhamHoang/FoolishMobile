@@ -1,12 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/productSearching/product_searching_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:fashionstore/data/entity/Product.dart';
+import 'package:fashionstore/data/enum/NavigationNameEnum.dart';
+import 'package:fashionstore/data/static/GlobalVariable.dart';
+import 'package:fashionstore/presentation/screens/LoginPage.dart';
+import 'package:fashionstore/presentation/screens/ProfilePage.dart';
 import 'package:fashionstore/util/render/UiRender.dart';
+import 'package:fashionstore/util/render/ValueRender.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_side_sheet/modal_side_sheet.dart';
+import 'package:side_sheet/side_sheet.dart';
 
 import '../screens/SearchingPage.dart';
 
@@ -41,6 +49,40 @@ class AppBarComponent extends StatefulWidget {
 }
 
 class _AppBarComponentState extends State<AppBarComponent> {
+  List<Widget> _dropdownMenuList = [];
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _dropdownMenuList.add(_dropdownItem('My Account', () {}));
+      _dropdownMenuList.add(_dropdownItem(
+          'My profile', () {
+            GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
+
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+                (Route<dynamic> route) => false
+            );
+          })
+      );
+      _dropdownMenuList.add(_dropdownItem('Purchase history', () {}));
+      _dropdownMenuList.add(_dropdownItem(
+          'Log out', () {
+            BlocProvider.of<AuthenticationBloc>(context).add(OnLogoutAuthenticationEvent());
+
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+                (Route<dynamic> route) => false
+            );
+          })
+      );
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _appbarContent();
@@ -54,7 +96,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
         children: [
           Positioned(
             child: AppBar(
-              toolbarHeight: 80,
+              toolbarHeight: 90,
               flexibleSpace: Container(
                 decoration: BoxDecoration(
                   gradient: UiRender.generalLinearGradient(),
@@ -79,14 +121,62 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       }
                     },
                   )
-                : null,
-              //leading:
+                : IconButton(
+                  onPressed: () {
+                    SideSheet.left(
+                      context: context,
+                      body: SingleChildScrollView(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+
+                            }
+                        ),
+                      )
+                    );
+                  },
+                  icon: const ImageIcon(
+                    AssetImage('assets/icon/option_icon.png'),
+                    size: 27,
+                  )
+                ),
+              actions: [
+                GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            alignment: Alignment.topRight,
+                            insetPadding: EdgeInsets.only(top: 67, left: MediaQuery.of(context).size.width / 3),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _dropdownMenuList.length,
+                              itemBuilder: (context, index) {
+                                return _dropdownMenuList[index];
+                              }
+                            ),
+                          );
+                        }
+                      );
+                    },
+                    child: UiRender.buildCachedNetworkImage(
+                      context,
+                      ValueRender.getGoogleDriveImageUrl(BlocProvider.of<AuthenticationBloc>(context).currentUser?.avatar ?? ''),
+                      width: 40,
+                      height: 40,
+                      borderRadius: BorderRadius.circular(100),
+                      margin: const EdgeInsets.symmetric(vertical: 25, horizontal: 10)
+                    )
+                ),
+              ],
               title: _buildTitle(),
               centerTitle: true,
             ),
           ),
           Positioned(
-            bottom: -20,
+            bottom: -25,
             right: 20,
             left: 20,
             child: widget.isSearchable == false
@@ -271,5 +361,25 @@ class _AppBarComponentState extends State<AppBarComponent> {
             )
           ],
         );
+  }
+
+  Widget _dropdownItem(String name, void Function() action) {
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: Text(
+          name,
+          maxLines: 2,
+          style: const TextStyle(
+            fontFamily: 'Work Sans',
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xff464646)
+          ),
+        ),
+      ),
+    );
   }
 }

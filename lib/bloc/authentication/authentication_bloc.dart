@@ -14,6 +14,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   User? currentUser;
   String registerMessage = '';
+  String logoutMessage = '';
 
   AuthenticationBloc(this._authenticationRepository) : super(AuthenticationInitial()) {
     on<OnLoginAuthenticationEvent>((event, emit) async {
@@ -54,6 +55,25 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       }
       catch(e) {
         emit(AuthenticationErrorState(e.toString()));
+      }
+    });
+
+    on<OnUpdateNewAvatarAuthenticationEvent>((event, emit) {
+      currentUser?.avatar = event.newFileId;
+      emit(AuthenticationAvatarUpdatedState(event.newFileId));
+    });
+
+    on<OnLogoutAuthenticationEvent>((event, emit) async {
+      emit(AuthenticationLoadingState());
+
+      String response = await _authenticationRepository.logout();
+
+      if(response == 'Logout successfully') {
+        logoutMessage = response;
+        emit(AuthenticationLoggedOutState(response));
+      }
+      else {
+        emit(AuthenticationErrorState(response));
       }
     });
   }

@@ -7,6 +7,7 @@ import 'package:fashionstore/presentation/screens/ProfilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../bloc/categories/category_bloc.dart';
 import '../../data/static/GlobalVariable.dart';
@@ -23,7 +24,94 @@ class BottomNavigationBarComponent extends StatefulWidget {
 }
 
 class _BottomNavigationBarComponentState extends State<BottomNavigationBarComponent> {
-  
+  final ItemScrollController _itemScrollController = ItemScrollController();
+  int _selectedNavIndex = 0;
+  final List<String> _navNameList = [
+    NavigationNameEnum.HOME.name,
+    NavigationNameEnum.CATEGORIES.name,
+    NavigationNameEnum.CLOTHINGS.name,
+    NavigationNameEnum.PROFILE.name
+  ];
+  late List<Widget> _navList;
+
+
+  @override
+  void initState() {
+    _navList = [
+      _navBarButton(
+          'assets/icon/home_icon.png',
+          'Home',
+          onTap: () {
+            if(GlobalVariable.currentNavBarPage != NavigationNameEnum.HOME.name) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                      (Route<dynamic> route) => false
+              );
+
+              GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
+            }
+          }
+      ),
+      _navBarButton(
+          'assets/icon/category_icon.png',
+          'Categories',
+          onTap: () {
+            if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CATEGORIES.name) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AllCategoriesPage()),
+                      (Route<dynamic> route) => false
+              );
+
+              GlobalVariable.currentNavBarPage = NavigationNameEnum.CATEGORIES.name;
+            }
+          }
+      ),
+      _navBarButton(
+          'assets/icon/clothing_icon.png',
+          'Clothings',
+          onTap: () {
+            if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CLOTHINGS.name) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AllProductsPage()),
+                      (Route<dynamic> route) => false
+              );
+
+              GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHINGS.name;
+              BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
+            }
+          }
+      ),
+      _navBarButton(
+          'assets/icon/account_icon.png',
+          'Profile',
+          onTap: () {
+            if(GlobalVariable.currentNavBarPage != NavigationNameEnum.PROFILE.name) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                      (Route<dynamic> route) => false
+              );
+
+              GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
+            }
+          }
+      ),
+    ];
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _selectedNavIndex = _navNameList.indexOf(GlobalVariable.currentNavBarPage);
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _itemScrollController.scrollTo(index: _selectedNavIndex, duration: const Duration(milliseconds: 1000));
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +119,8 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
       clipBehavior: Clip.none,
       children: [
         Container(
-          height: 75,
+          height: 70,
+          alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.only(left: 18, right: 18),
           decoration: const BoxDecoration(
@@ -41,72 +130,18 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
             ),
             color: Colors.white,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _navBarButton(
-                'assets/icon/home_icon.png',
-                'Home',
-                onTap: () {
-                  if(GlobalVariable.currentNavBarPage != NavigationNameEnum.HOME.name) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                      (Route<dynamic> route) => false
-                    );
-
-                    GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
-                  }
-                }
-              ),
-              _navBarButton(
-                  'assets/icon/category_icon.png',
-                  'Categories',
-                  onTap: () {
-                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CATEGORIES.name) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AllCategoriesPage()),
-                        (Route<dynamic> route) => false
-                      );
-
-                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CATEGORIES.name;
-                    }
-                  }
-              ),
-              _navBarButton(
-                  'assets/icon/clothing_icon.png',
-                  'Clothings',
-                  onTap: () {
-                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CLOTHINGS.name) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AllProductsPage()),
-                        (Route<dynamic> route) => false
-                      );
-
-                      GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHINGS.name;
-                      BlocProvider.of<CategoryBloc>(context).add(const OnSelectedCategoryEvent('All'));
-                    }
-                  }
-              ),
-              _navBarButton(
-                  'assets/icon/account_icon.png',
-                  'Profile',
-                  onTap: () {
-                    if(GlobalVariable.currentNavBarPage != NavigationNameEnum.PROFILE.name) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ProfilePage()),
-                          (Route<dynamic> route) => false
-                      );
-
-                      GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
-                    }
-                  }
-              ),
-            ],
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 140,
+            child: ScrollablePositionedList.builder(
+              itemScrollController: _itemScrollController,
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: _navNameList.length,
+              itemBuilder: (context, index) {
+                return _navList[index];
+              }
+            ),
           ),
         ),
         Positioned(

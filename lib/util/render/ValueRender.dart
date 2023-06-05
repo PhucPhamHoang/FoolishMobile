@@ -11,6 +11,13 @@ class ValueRender {
     return 'https://drive.google.com/uc?export=view&id=$imageId';
   }
 
+  static String getFileIdFromGoogleDriveViewUrl(String url) {
+    return url.substring(
+      url.indexOf('/d/') + 3,
+      url.indexOf('/view')
+    );
+  }
+
   static double getDiscountPrice(double orgPrice, double discount) {
     return orgPrice - (orgPrice * (discount / 100));
   }

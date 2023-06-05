@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +56,15 @@ class _SearchingPageState extends State<SearchingPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: BlocListener<TranslatorBloc, TranslatorState>(
           listener: (context, translateState) {
+            if(translateState is TranslatorLoadingState) {
+              UiRender.showLoaderDialog(context);
+            }
+
             if(translateState is TranslatorLoadedState) {
+              Navigator.pop(context);
+
               BlocProvider.of<ProductSearchingBloc>(context).add(OnSearchProductEvent(translateState.content, 1, 10));
+
               setState(() {
                 _searchingController.text = translateState.content;
               });

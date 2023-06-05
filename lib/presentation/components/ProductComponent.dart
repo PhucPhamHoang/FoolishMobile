@@ -27,7 +27,7 @@ class _ProductComponentState extends State<ProductComponent> {
       child: Container(
         width: (MediaQuery.of(context).size.width / 2) - 34,
         constraints: const BoxConstraints(
-          maxHeight: 500,
+          maxHeight: 600,
         ),
         child: Stack(
           children: [
@@ -35,14 +35,14 @@ class _ProductComponentState extends State<ProductComponent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 7,
                   child: UiRender.buildCachedNetworkImage(
                     context,
                     widget.product.image1,
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 4,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

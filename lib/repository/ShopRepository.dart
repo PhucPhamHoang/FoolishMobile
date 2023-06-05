@@ -50,7 +50,7 @@ class ShopRepository {
     try{
       ResponseDto response = await NetworkService.getDataFromPostRequest(
           '$baseUrl$url',
-          paramBody
+          param: paramBody
       );
 
       if(json.decode(jsonEncode(response.result)) == 'success') {

@@ -14,6 +14,14 @@ class OnLoginAuthenticationEvent extends AuthenticationEvent {
   const OnLoginAuthenticationEvent(this.userName, this.password);
 }
 
+class OnUpdateNewAvatarAuthenticationEvent extends AuthenticationEvent {
+  final String newFileId;
+
+  const OnUpdateNewAvatarAuthenticationEvent(this.newFileId);
+}
+
+class OnLogoutAuthenticationEvent extends AuthenticationEvent {}
+
 class OnRegisterAuthenticationEvent extends AuthenticationEvent {
   final String userName;
   final String password;

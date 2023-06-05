@@ -33,7 +33,7 @@ class TranslatorRepository {
     try{
       ResponseDto response = await NetworkService.getDataFromPostRequest(
           '$baseUrl$url',
-          paramBody
+          param: paramBody
       );
 
       message = response.content;

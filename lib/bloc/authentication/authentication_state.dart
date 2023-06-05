@@ -23,6 +23,15 @@ class AuthenticationLoggedInState extends AuthenticationState {
   List<Object> get props => [currentUser];
 }
 
+class AuthenticationLoggedOutState extends AuthenticationState {
+  final String message;
+
+  const AuthenticationLoggedOutState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class AuthenticationRegisteredState extends AuthenticationState {
   final String message;
 
@@ -30,6 +39,15 @@ class AuthenticationRegisteredState extends AuthenticationState {
 
   @override
   List<Object> get props => [message];
+}
+
+class AuthenticationAvatarUpdatedState extends AuthenticationState {
+  final String fileId;
+
+  const AuthenticationAvatarUpdatedState(this.fileId);
+
+  @override
+  List<Object> get props => [fileId];
 }
 
 class AuthenticationErrorState extends AuthenticationState {

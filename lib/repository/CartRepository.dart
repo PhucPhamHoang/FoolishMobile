@@ -12,7 +12,7 @@ class CartRepository {
     try {
       ResponseDto response = await NetworkService.getDataFromPostRequest(
           '$baseUrl$url',
-          paramBody
+          param: paramBody
       );
 
       if (json.decode(jsonEncode(response.result)) == 'success') {
@@ -36,7 +36,7 @@ class CartRepository {
     try {
       ResponseDto response = await NetworkService.getDataFromPostRequest(
           '$baseUrl$url',
-          paramBody
+          param: paramBody
       );
 
       message = response.content;

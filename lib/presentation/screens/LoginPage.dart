@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white30,
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 35, 20, 25),
         child: Container(
           height: MediaQuery.of(context).size.height - 60,
@@ -70,9 +70,10 @@ class _LoginPageState extends State<LoginPage> {
                     }
 
                     if(authenState is AuthenticationLoggedInState) {
-                      Navigator.pushReplacement(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => const HomePage()),
+                        (Route<dynamic> route) => false,
                       );
                     }
 
@@ -81,111 +82,113 @@ class _LoginPageState extends State<LoginPage> {
                       UiRender.showDialog(context, '', authenState.message);
                     }
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/image/login_image.png',
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 5,
-                        fit: BoxFit.cover,
-                      ),
-                      const Text(
-                        'Welcome to',
-                        style: TextStyle(
-                            fontFamily: 'Trebuchet MS',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 21,
-                            height: 4,
-                            color: Colors.black
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/image/login_image.png',
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 5,
+                          fit: BoxFit.cover,
                         ),
-                      ),
-                      const Text(
-                        'Foolish',
-                        style: TextStyle(
-                            fontFamily: 'Trebuchet MS',
-                            fontWeight: FontWeight.w900,
-                            fontSize: 25,
-                            height: 1.5,
-                            color: Colors.orange
+                        const Text(
+                          'Welcome to',
+                          style: TextStyle(
+                              fontFamily: 'Trebuchet MS',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 21,
+                              height: 4,
+                              color: Colors.black
+                          ),
                         ),
-                      ),
-                      _textField('User Name', false, _userNameTextEditingController),
-                      _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordHiddened),
-                      const SizedBox(height: 10,),
-                      _radioTextButton('Remember password'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GradientElevatedButton(
-                              borderRadiusIndex: 25,
-                              borderColor: isLogin ? Colors.transparent : Colors.black,
-                              text: 'Login',
-                              textWeight: FontWeight.w400,
-                              buttonWidth: 125,
-                              buttonHeight: 45,
-                              beginColor: isLogin ? Colors.black : Colors.white,
-                              endColor: isLogin ? const Color(0xff727272) : Colors.white,
-                              textColor: isLogin ? Colors.white : Colors.black,
-                              onPress: () {
-                                setState(() {
-                                  if(isLogin == false) {
-                                    isLogin = true;
-                                  }
-                                  else {
-                                    if(_userNameTextEditingController.text != '' &&
-                                       _passwordTextEditingController.text != '') {
-                                      BlocProvider.of<AuthenticationBloc>(context).add(
-                                          OnLoginAuthenticationEvent(
-                                              _userNameTextEditingController.text,
-                                              _passwordTextEditingController.text
-                                          )
-                                      );
+                        const Text(
+                          'Foolish',
+                          style: TextStyle(
+                              fontFamily: 'Trebuchet MS',
+                              fontWeight: FontWeight.w900,
+                              fontSize: 25,
+                              height: 1.5,
+                              color: Colors.orange
+                          ),
+                        ),
+                        _textField('User Name', false, _userNameTextEditingController),
+                        _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordHiddened),
+                        const SizedBox(height: 10,),
+                        _radioTextButton('Remember password'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GradientElevatedButton(
+                                borderRadiusIndex: 25,
+                                borderColor: isLogin ? Colors.transparent : Colors.black,
+                                text: 'Login',
+                                textWeight: FontWeight.w400,
+                                buttonWidth: 125,
+                                buttonHeight: 45,
+                                beginColor: isLogin ? Colors.black : Colors.white,
+                                endColor: isLogin ? const Color(0xff727272) : Colors.white,
+                                textColor: isLogin ? Colors.white : Colors.black,
+                                onPress: () {
+                                  setState(() {
+                                    if(isLogin == false) {
+                                      isLogin = true;
                                     }
                                     else {
-                                      UiRender.showDialog(context, '', 'User Name or Password is empty, please fill in all the boxes !!');
+                                      if(_userNameTextEditingController.text != '' &&
+                                         _passwordTextEditingController.text != '') {
+                                        BlocProvider.of<AuthenticationBloc>(context).add(
+                                            OnLoginAuthenticationEvent(
+                                                _userNameTextEditingController.text,
+                                                _passwordTextEditingController.text
+                                            )
+                                        );
+                                      }
+                                      else {
+                                        UiRender.showDialog(context, '', 'User Name or Password is empty, please fill in all the boxes !!');
+                                      }
                                     }
-                                  }
-                                });
-                              }
-                          ),
-                          GradientElevatedButton(
-                              borderRadiusIndex: 25,
-                              borderColor: !isLogin ? Colors.transparent : Colors.black,
-                              text: 'Register',
-                              textWeight: FontWeight.w400,
-                              buttonWidth: 125,
-                              buttonHeight: 45,
-                              beginColor: !isLogin ? Colors.black : Colors.white,
-                              endColor: !isLogin ? const Color(0xff727272) : Colors.white,
-                              textColor: !isLogin ? Colors.white : Colors.black,
-                              onPress: () {
-                                setState(() {
-                                  if(isLogin == true) {
-                                    _userNameTextEditingController.clear();
-                                    _passwordTextEditingController.clear();
-                                    isPasswordHiddened = true;
-                                    isLogin = false;
-                                  }
-                                });
-                              }
-                          )
-                        ],
-                      ),
-                      TextButton(
-                          onPressed: () {
-
-                          },
-                          child: const Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                fontFamily: 'Trebuchet MS',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400
+                                  });
+                                }
                             ),
-                          )
-                      )
-                    ],
+                            GradientElevatedButton(
+                                borderRadiusIndex: 25,
+                                borderColor: !isLogin ? Colors.transparent : Colors.black,
+                                text: 'Register',
+                                textWeight: FontWeight.w400,
+                                buttonWidth: 125,
+                                buttonHeight: 45,
+                                beginColor: !isLogin ? Colors.black : Colors.white,
+                                endColor: !isLogin ? const Color(0xff727272) : Colors.white,
+                                textColor: !isLogin ? Colors.white : Colors.black,
+                                onPress: () {
+                                  setState(() {
+                                    if(isLogin == true) {
+                                      _userNameTextEditingController.clear();
+                                      _passwordTextEditingController.clear();
+                                      isPasswordHiddened = true;
+                                      isLogin = false;
+                                    }
+                                  });
+                                }
+                            )
+                          ],
+                        ),
+                        TextButton(
+                            onPressed: () {
+
+                            },
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                  fontFamily: 'Trebuchet MS',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            )
+                        )
+                      ],
+                    ),
                   )
               )
             : BlocListener<AuthenticationBloc, AuthenticationState>(
@@ -212,33 +215,42 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Welcome new customer of',
-                        style: TextStyle(
-                            fontFamily: 'Trebuchet MS',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 21,
-                            height: 4,
-                            color: Colors.black
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 2/3,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Welcome new customer of',
+                                style: TextStyle(
+                                    fontFamily: 'Trebuchet MS',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 21,
+                                    height: 4,
+                                    color: Colors.black
+                                ),
+                              ),
+                              const Text(
+                                'Foolish',
+                                style: TextStyle(
+                                    fontFamily: 'Trebuchet MS',
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 25,
+                                    height: 1.5,
+                                    color: Colors.orange
+                                ),
+                              ),
+                              _textField('Full Name', false, _fullNameTextEditingController),
+                              _textField('Email', false, _emailTextEditingController),
+                              _textField('Phone Number', false, _phoneNumberTextEditingController),
+                              _textField('User Name', false, _userNameTextEditingController),
+                              _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordHiddened),
+                              _textField('Confirm Password', true, _confirmPasswordTextEditingController, isShowed: isConfirmPasswordHiddened),
+                              const SizedBox(height: 10,),
+                            ],
+                          ),
                         ),
                       ),
-                      const Text(
-                        'Foolish',
-                        style: TextStyle(
-                            fontFamily: 'Trebuchet MS',
-                            fontWeight: FontWeight.w900,
-                            fontSize: 25,
-                            height: 1.5,
-                            color: Colors.orange
-                        ),
-                      ),
-                      _textField('Full Name', false, _fullNameTextEditingController),
-                      _textField('Email', false, _emailTextEditingController),
-                      _textField('Phone Number', false, _phoneNumberTextEditingController),
-                      _textField('User Name', false, _userNameTextEditingController),
-                      _textField('Password', true, _passwordTextEditingController, isShowed: isPasswordHiddened),
-                      _textField('Confirm Password', true, _confirmPasswordTextEditingController, isShowed: isConfirmPasswordHiddened),
-                      const SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

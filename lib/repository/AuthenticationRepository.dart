@@ -12,7 +12,7 @@ class AuthenticationRepository {
     try{
       ResponseDto response = await NetworkService.getDataFromPostRequest(
           '$baseUrl$url',
-          paramBody
+          param: paramBody
       );
 
       message = response.content;
@@ -30,7 +30,7 @@ class AuthenticationRepository {
     try{
       ResponseDto response = await NetworkService.getDataFromPostRequest(
           '$baseUrl$url',
-          paramBody
+          param: paramBody
       );
 
       if(json.decode(jsonEncode(response.result)) == 'success') {
@@ -47,6 +47,22 @@ class AuthenticationRepository {
     }
   }
 
+  Future<String> getMessage(String url) async {
+    String message = '';
+
+    try {
+      ResponseDto response = await NetworkService.getDataFromGetRequest('$baseUrl$url');
+
+      message = response.content.toString();
+    }
+    catch (e, stackTrace) {
+      print('Caught exception: $e\n$stackTrace');
+    }
+
+    return message;
+  }
+
+
   Future<dynamic> login(String userName, String password) async {
     return sendPostAndGetObject(
         '/login',
@@ -55,6 +71,10 @@ class AuthenticationRepository {
           'password': password
         }
     );
+  }
+
+  Future<String> logout() async {
+    return getMessage('/logout');
   }
 
   Future<String> register(String userName, String password, String name, String email, String phoneNumber) async {

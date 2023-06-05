@@ -21,15 +21,17 @@ class NetworkService {
     dio.interceptors.add(CookieManager(cookieJar));
 
     try{
-      final Response response = await dio.get(
-        domain + url,
-      );
+      final Response response = await dio.get(domain + url);
       print(domain + url);
 
       if (response.statusCode == 200) {
-        print(response.headers);
-        print(response.statusCode);
-        print(response.data);
+        if(url.contains('/logout')) {
+          cookieJar.deleteAll();
+        }
+
+        print('header: ${response.headers}');
+        print('statusCode: ${response.statusCode}');
+        print('data: ${response.data}');
         print('\n');
         print('\n---------------------------------END-------------------------------------\n');
         print('\n');
@@ -38,41 +40,42 @@ class NetworkService {
         return responseModel;
       }
       else {
-        print(response.headers);
-        print(response.statusCode);
-        print(response.data);
+        print('header: ${response.headers}');
+        print('statusCode: ${response.statusCode}');
+        print('data: ${response.data}');
         print('\n');
         print('\n---------------------------------END-------------------------------------\n');
         print('\n');
         throw Exception('Failed to fetch data');
       }
     }
-    catch(e) {
+    catch(e, stackTrace) {
+      print('Caught exception: $e\n$stackTrace');
       throw Exception(e);
     }
   }
 
 
-  static Future<ResponseDto> getDataFromPostRequest(String url, Map<String, dynamic> param) async {
+  static Future<ResponseDto> getDataFromPostRequest(String url, {Map<String, dynamic>? param, FormData? formDataParam}) async {
     dio.interceptors.add(CookieManager(cookieJar));
 
     try{
       final Response response = await dio.post(
         domain + url,
-        data: param,
+        data: formDataParam ?? param,
       );
       print('$domain$url | ${json.encode(param)}');
 
       if (response.statusCode == 200) {
         if(url.contains('/login')) {
           List<Cookie> cookies = [];
-          cookies.add(Cookie.fromSetCookieValue(response.headers.map['set-cookie']![0]));
+          cookies.add(Cookie.fromSetCookieValue(response.headers.map['set-cookie']?[0] ?? ''));
           cookieJar.saveFromResponse(Uri.parse('http://localhost:8080/login'), cookies);
         }
 
-        print(response.headers);
-        print(response.statusCode);
-        print(response.data);
+        print('header: ${response.headers}');
+        print('statusCode: ${response.statusCode}');
+        print('data: ${response.data}');
         print('\n');
         print('\n---------------------------------END-------------------------------------\n');
         print('\n');
@@ -81,16 +84,17 @@ class NetworkService {
         return responseModel;
       }
       else {
-        print(response.headers);
-        print(response.statusCode);
-        print(response.data);
+        print('header: ${response.headers}');
+        print('statusCode: ${response.statusCode}');
+        print('data: ${response.data}');
         print('\n');
         print('\n---------------------------------END-------------------------------------\n');
         print('\n');
         throw Exception('Failed to fetch data');
       }
     }
-    catch(e) {
+    catch(e, stackTrace) {
+      print('Caught exception: $e\n$stackTrace');
       throw Exception(e);
     }
   }

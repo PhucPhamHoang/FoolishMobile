@@ -3,10 +3,12 @@ import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
+import 'package:fashionstore/bloc/uploadFile/upload_file_bloc.dart';
 import 'package:fashionstore/presentation/screens/LoginPage.dart';
 import 'package:fashionstore/repository/AuthenticationRepository.dart';
 import 'package:fashionstore/repository/CartRepository.dart';
 import 'package:fashionstore/repository/CategoryRepository.dart';
+import 'package:fashionstore/repository/GoogleDriveRepository.dart';
 import 'package:fashionstore/repository/ShopRepository.dart';
 import 'package:fashionstore/repository/TranslatorRepository.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,9 @@ void main() {
         ),
         RepositoryProvider<TranslatorRepository>(
             create: (context) => TranslatorRepository()
+        ),
+        RepositoryProvider<GoogleDriveRepository>(
+            create: (context) => GoogleDriveRepository()
         ),
       ],
       child: MultiBlocProvider(
@@ -74,6 +79,11 @@ void main() {
           BlocProvider<TranslatorBloc>(
               create: (context) => TranslatorBloc(
                   RepositoryProvider.of<TranslatorRepository>(context)
+              )
+          ),
+          BlocProvider<UploadFileBloc>(
+              create: (context) => UploadFileBloc(
+                  RepositoryProvider.of<GoogleDriveRepository>(context)
               )
           ),
         ],
