@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../data/dto/ResponseDto.dart';
-import '../data/entity/Cart.dart';
+import '../data/entity/CartItemInfo.dart';
 import '../data/entity/CartItem.dart';
 import '../util/network/NetworkService.dart';
 
@@ -78,7 +78,7 @@ class CartRepository {
     );
   }
 
-  Future<dynamic> update(List<Cart> cartItemList) {
+  Future<dynamic> update(List<CartItemInfo> cartItemList) {
     return sendPostAndGetMessage(
         '/update',
         {

@@ -19,9 +19,10 @@ class OnLoadAllCartListState extends CartEvent {
 class OnLoadTotalCartItemQuantityState extends CartEvent {}
 
 class OnUpdateCartState extends CartEvent {
-  final List<Cart> cartItemList;
+  final List<CartItemInfo> cartItemList;
+  final bool needReload;
 
-  const OnUpdateCartState(this.cartItemList);
+  const OnUpdateCartState(this.cartItemList, {required this.needReload});
 }
 
 class OnRemoveCartItemState extends CartEvent {

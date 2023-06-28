@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/entity/Cart.dart';
+import '../../data/entity/CartItemInfo.dart';
 import '../../data/entity/CartItem.dart';
 import '../../repository/CartRepository.dart';
 
@@ -90,15 +90,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<OnUpdateCartState>((event, emit) async {
-      emit(CartLoadingState());
+      if(event.needReload == true) {
+        emit(CartLoadingState());
 
-      try {
-        String response = await _cartRepository.update(event.cartItemList);
-        emit(CartUpdatedState(response));
+        try {
+          String response = await _cartRepository.update(event.cartItemList);
+          emit(CartUpdatedState(response));
+        }
+        catch(e) {
+          print(e.toString());
+          emit(CartErrorState(e.toString()));
+        }
       }
-      catch(e) {
-        print(e.toString());
-        emit(CartErrorState(e.toString()));
+      else {
+        try {
+          String response = await _cartRepository.update(event.cartItemList);
+          emit(CartSelectedState());
+        }
+        catch(e) {
+          print(e.toString());
+          emit(CartErrorState(e.toString()));
+        }
       }
     });
   }

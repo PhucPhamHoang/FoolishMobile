@@ -23,12 +23,19 @@ class CartPage extends StatefulWidget {
   State<StatefulWidget> createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  late AnimationController _bottomSheetAnimation;
 
+
+  @override
+  void dispose() {
+    _bottomSheetAnimation.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -39,6 +46,12 @@ class _CartPageState extends State<CartPage> {
     });
 
     super.initState();
+  }
+
+  void initAnimationController() {
+    _bottomSheetAnimation = BottomSheet.createAnimationController(this);
+    _bottomSheetAnimation.duration = const Duration(seconds: 1);
+    _bottomSheetAnimation.reverseDuration = const Duration(seconds: 1);
   }
 
   @override
@@ -71,7 +84,7 @@ class _CartPageState extends State<CartPage> {
                     : const AlwaysScrollableScrollPhysics()
                   : const AlwaysScrollableScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
                       _cartItemList(),
@@ -80,6 +93,7 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
             ),
+
           ],
         ),
       ),
@@ -108,7 +122,14 @@ class _CartPageState extends State<CartPage> {
                 List<CartItem> cartItemList = BlocProvider.of<CartBloc>(context).cartItemList;
 
                 if(cartState is CartLoadingState) {
-                  return UiRender.loadingCircle();
+                  return const SizedBox(
+                    height: 10,
+                    width: 10,
+                    child: CircularProgressIndicator(
+                      color: Colors.orange,
+                      strokeWidth: 2,
+                    ),
+                  );
                 }
 
                 if(cartState is AllCartListLoadedState) {
@@ -170,7 +191,10 @@ class _CartPageState extends State<CartPage> {
                 setState(() {
                   BlocProvider.of<ProductDetailsBloc>(context).add(OnSelectProductEvent(cartItemList[index].productId));
 
+                  initAnimationController();
+
                   showModalBottomSheet(
+                    transitionAnimationController: _bottomSheetAnimation,
                     isScrollControlled: true,
                     context: context,
                     builder: (context) {

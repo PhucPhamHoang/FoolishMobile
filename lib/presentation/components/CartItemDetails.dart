@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/productDetails/product_details_bloc.dart';
-import '../../data/entity/Cart.dart';
+import '../../data/entity/CartItemInfo.dart';
 import '../../data/entity/Product.dart';
 import '../../util/render/UiRender.dart';
 import '../../util/render/ValueRender.dart';
@@ -278,14 +278,15 @@ class _CartItemDetailsState extends State<CartItemDetails> {
 
                           BlocProvider.of<CartBloc>(context).add(
                               OnUpdateCartState([
-                                Cart(
+                                CartItemInfo(
                                     editedCartItem.productId,
                                     editedCartItem.id,
                                     editedCartItem.quantity,
                                     editedCartItem.color,
-                                    editedCartItem.size
+                                    editedCartItem.size,
+                                    editedCartItem.selectStatus
                                 )
-                              ])
+                              ], needReload: true)
                           );
 
                           Navigator.pop(context);

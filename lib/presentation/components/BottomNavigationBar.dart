@@ -103,11 +103,13 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
 
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _selectedNavIndex = _navNameList.indexOf(GlobalVariable.currentNavBarPage);
+      if(GlobalVariable.currentNavBarPage != NavigationNameEnum.CART.name) {
+        _selectedNavIndex = _navNameList.indexOf(GlobalVariable.currentNavBarPage);
 
-      Future.delayed(const Duration(milliseconds: 500), () {
-        _itemScrollController.scrollTo(index: _selectedNavIndex, duration: const Duration(milliseconds: 1000));
-      });
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _itemScrollController.scrollTo(index: _selectedNavIndex, duration: const Duration(milliseconds: 1000));
+        });
+      }
     });
 
     super.initState();
@@ -139,7 +141,11 @@ class _BottomNavigationBarComponentState extends State<BottomNavigationBarCompon
               scrollDirection: Axis.horizontal,
               itemCount: _navNameList.length,
               itemBuilder: (context, index) {
-                return _navList[index];
+                if(index > 0) {
+                  return _navList[index];
+                }
+
+                return Container();
               }
             ),
           ),

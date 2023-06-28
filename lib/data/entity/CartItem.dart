@@ -10,6 +10,7 @@ class CartItem {
   int productManagementId;
   int productId;
   int quantity;
+  int selectStatus;
   String buyingStatus;
   String color;
   String size;
@@ -26,6 +27,7 @@ class CartItem {
       this.productId,
       this.quantity,
       this.buyingStatus,
+      this.selectStatus,
       this.color,
       this.size,
       this.name,
@@ -46,6 +48,7 @@ class CartItem {
         source.productId,
         source.quantity,
         source.buyingStatus,
+        source.selectStatus,
         source.color,
         source.size,
         source.name,
@@ -58,6 +61,15 @@ class CartItem {
 
   @override
   String toString() {
-    return 'CartItem{id: $id, customerId: $customerId, productManagementId: $productManagementId, productId: $productId, quantity: $quantity, buyingStatus: $buyingStatus, color: $color, size: $size, name: $name, brand: $brand, image1: $image1, sellingPrice: $sellingPrice, discount: $discount}';
+    return 'CartItem{id: $id, customerId: $customerId, productManagementId: $productManagementId, productId: $productId, quantity: $quantity, selectedStatus: $selectStatus, buyingStatus: $buyingStatus, color: $color, size: $size, name: $name, brand: $brand, image1: $image1, sellingPrice: $sellingPrice, discount: $discount}';
+  }
+
+  bool isSelected() {
+    if(selectStatus == 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 }

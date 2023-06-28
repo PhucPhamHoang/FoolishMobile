@@ -59,6 +59,11 @@ class CartUpdatedState extends CartState {
   List<Object> get props => [message];
 }
 
+class CartSelectedState extends CartState {
+  @override
+  List<Object> get props => [];
+}
+
 class CartErrorState extends CartState {
   final String message;
 
