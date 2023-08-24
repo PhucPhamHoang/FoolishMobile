@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../data/entity/Product.dart';
-import '../../data/enum/ProductListTypeEnum.dart';
-import '../../repository/ShopRepository.dart';
+import '../../data/entity/product.dart';
+import '../../data/enum/product_list_type_enum.dart';
+import '../../repository/shop_repository.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
@@ -23,24 +22,23 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   ProductBloc(this._shopRepository) : super(ProductInitial()) {
     on<OnLoadAllProductListEvent>((event, emit) async {
-      try{
-        List<Product> response = await _shopRepository.getAllProducts(event.page, event.limit);
+      try {
+        List<Product> response =
+            await _shopRepository.getAllProducts(event.page, event.limit);
 
-        if(response.isNotEmpty) {
+        if (response.isNotEmpty) {
           emit(ProductLoadingState());
-          response = _removeDuplicates([...allProductList,...response]);
+          response = _removeDuplicates([...allProductList, ...response]);
 
           currentAllProductListPage = event.page;
           allProductList = response;
 
           emit(ProductAllListLoadedState(response));
-        }
-        else {
+        } else {
           emit(ProductAllListLoadedState(allProductList ?? []));
         }
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductErrorState(e.toString()));
       }
     });
@@ -48,19 +46,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<OnLoadHotDiscountProductListEvent>((event, emit) async {
       emit(ProductLoadingState());
 
-      try{
-        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.HOT_DISCOUNT.name);
+      try {
+        dynamic response = await _shopRepository
+            .getProductList(ProductListTypeEnum.HOT_DISCOUNT.name);
 
-        if(response is List<Product>) {
+        if (response is List<Product>) {
           hotDiscountProductList = response;
           emit(ProductHotDiscountListLoadedState(response));
-        }
-        else {
+        } else {
           emit(ProductErrorState(response.toString()));
         }
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductErrorState(e.toString()));
       }
     });
@@ -68,19 +65,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<OnLoadNewArrivalProductListEvent>((event, emit) async {
       emit(ProductLoadingState());
 
-      try{
-        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.NEW_ARRIVAL.name);
+      try {
+        dynamic response = await _shopRepository
+            .getProductList(ProductListTypeEnum.NEW_ARRIVAL.name);
 
-        if(response is List<Product>) {
+        if (response is List<Product>) {
           newArrivalProductList = response;
           emit(ProductNewArrivalListLoadedState(response));
-        }
-        else {
+        } else {
           emit(ProductErrorState(response.toString()));
         }
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductErrorState(e.toString()));
       }
     });
@@ -88,19 +84,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<OnLoadTopBestSellerProductListEvent>((event, emit) async {
       emit(ProductLoadingState());
 
-      try{
-        dynamic response = await _shopRepository.getProductList(ProductListTypeEnum.TOP_BEST_SELLERS.name);
+      try {
+        dynamic response = await _shopRepository
+            .getProductList(ProductListTypeEnum.TOP_BEST_SELLERS.name);
 
-        if(response is List<Product>) {
+        if (response is List<Product>) {
           top8BestSellerProductList = response;
           emit(ProductTopBestSellerListLoadedState(response));
-        }
-        else {
+        } else {
           emit(ProductErrorState(response.toString()));
         }
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductErrorState(e.toString()));
       }
     });
@@ -115,21 +110,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<OnLoadFilterProductListEvent>((event, emit) async {
       emit(ProductLoadingState());
 
-      try{
+      try {
         List<Product> response = await _shopRepository.getFilteredProducts(
-          event.page,
-          event.limit,
-          brand: event.brand,
-          maxPrice: event.minPrice,
-          minPrice: event.minPrice,
-          categories: event.categoryList
-        );
+            event.page, event.limit,
+            brand: event.brand,
+            maxPrice: event.minPrice,
+            minPrice: event.minPrice,
+            categories: event.categoryList);
 
         filteredProductList = response;
         emit(ProductFilteredListLoadedState(response));
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductErrorState(e.toString()));
       }
     });
@@ -137,7 +129,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   List<Product> _removeDuplicates(List<Product> list) {
     Set<int> set = {};
-    List<Product> uniqueList = list.where((element) => set.add(element.id)).toList();
+    List<Product> uniqueList =
+        list.where((element) => set.add(element.id)).toList();
 
     return uniqueList;
   }

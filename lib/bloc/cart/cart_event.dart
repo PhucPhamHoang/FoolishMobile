@@ -7,35 +7,45 @@ abstract class CartEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class OnClearCartState extends CartEvent{}
+class OnClearCartEvent extends CartEvent{}
 
-class OnLoadAllCartListState extends CartEvent {
+class OnLoadAllCartListEvent extends CartEvent {
   final int page;
   final int limit;
 
-  const OnLoadAllCartListState(this.page, this.limit);
+  const OnLoadAllCartListEvent(this.page, this.limit);
 }
 
-class OnLoadTotalCartItemQuantityState extends CartEvent {}
+class OnLoadTotalCartItemQuantityEvent extends CartEvent {}
 
-class OnUpdateCartState extends CartEvent {
+class OnUpdateCartEvent extends CartEvent {
   final List<CartItemInfo> cartItemList;
   final bool needReload;
 
-  const OnUpdateCartState(this.cartItemList, {required this.needReload});
+  const OnUpdateCartEvent(this.cartItemList, {required this.needReload});
 }
 
-class OnRemoveCartItemState extends CartEvent {
+class OnFilterCartEvent extends CartEvent {
+  final String? name;
+  final List<String>? status;
+  final String? brand;
+  final int? page;
+  final int? limit;
+
+  const OnFilterCartEvent({this.name, this.status, this.brand, this.page, this.limit});
+}
+
+class OnRemoveCartItemEvent extends CartEvent {
   final List<int> cartIdList;
 
-  const OnRemoveCartItemState(this.cartIdList);
+  const OnRemoveCartItemEvent(this.cartIdList);
 }
 
-class OnAddCartItemState extends CartEvent {
+class OnAddCartItemEvent extends CartEvent {
   final int productId;
   final String color;
   final String size;
   final int quantity;
 
-  const OnAddCartItemState(this.productId, this.color, this.size, this.quantity);
+  const OnAddCartItemEvent(this.productId, this.color, this.size, this.quantity);
 }

@@ -1,16 +1,15 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../data/entity/Product.dart';
-import '../../repository/ShopRepository.dart';
-import '../products/product_bloc.dart';
+import '../../data/entity/product.dart';
+import '../../repository/shop_repository.dart';
 
 part 'product_details_event.dart';
 part 'product_details_state.dart';
 
-class ProductDetailsBloc extends Bloc<ProductDetailsEvent, ProductDetailsState> {
+class ProductDetailsBloc
+    extends Bloc<ProductDetailsEvent, ProductDetailsState> {
   final ShopRepository _shopRepository;
   List<Product> selectedProductDetails = [];
 
@@ -21,12 +20,12 @@ class ProductDetailsBloc extends Bloc<ProductDetailsEvent, ProductDetailsState> 
       emit(ProductDetailsLoadingState());
 
       try {
-        List<Product> response = await _shopRepository.getProductDetails(event.productId);
+        List<Product> response =
+            await _shopRepository.getProductDetails(event.productId);
         selectedProductDetails = response;
         emit(ProductDetailsLoadedState(response));
-      }
-      catch(e) {
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductDetailsErrorState(e.toString()));
       }
     });

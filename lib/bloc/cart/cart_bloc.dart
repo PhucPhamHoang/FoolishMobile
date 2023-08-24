@@ -1,11 +1,11 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fashionstore/data/enum/cart_enum.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../data/entity/CartItemInfo.dart';
-import '../../data/entity/CartItem.dart';
-import '../../repository/CartRepository.dart';
+import '../../data/entity/cart_item.dart';
+import '../../data/entity/cart_item_info.dart';
+import '../../repository/cart_repository.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -19,35 +19,34 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   List<int> removalCartIdList = [];
 
   CartBloc(this._cartRepository) : super(CartInitial()) {
-    on<OnLoadAllCartListState>((event, emit) async {
+    on<OnLoadAllCartListEvent>((event, emit) async {
       emit(CartLoadingState());
 
       try {
-        List<CartItem> response = await _cartRepository.showFullCart(event.page, event.limit);
+        List<CartItem> response =
+            await _cartRepository.showFullCart(event.page, event.limit);
 
-        if(event.page != currentPage) {
-          cartItemList = _removeDuplicates([...cartItemList,...response]);
+        if (event.page != currentPage) {
+          cartItemList = _removeDuplicates([...cartItemList, ...response]);
           currentPage = event.page;
-        }
-        else {
+        } else {
           cartItemList = response;
         }
 
         emit(AllCartListLoadedState(cartItemList));
-      }
-      catch(e) {
-        print(e.toString());
+      } catch (e) {
+        debugPrint(e.toString());
         emit(CartErrorState(e.toString()));
       }
     });
 
-    on<OnClearCartState>((event, emit) {
+    on<OnClearCartEvent>((event, emit) {
       cartItemList = [];
       removalCartIdList = [];
       totalCartItemQuantity = 0;
     });
 
-    on<OnLoadTotalCartItemQuantityState>((event, emit) async {
+    on<OnLoadTotalCartItemQuantityEvent>((event, emit) async {
       emit(CartLoadingState());
 
       try {
@@ -56,68 +55,93 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
         totalCartItemQuantity = quantity;
         emit(TotalCartItemQuantityLoadedState(quantity));
-      }
-      catch(e) {
-        print(e.toString());
+      } catch (e) {
+        debugPrint(e.toString());
         emit(CartErrorState(e.toString()));
       }
     });
 
-    on<OnAddCartItemState>((event, emit) async {
+    on<OnAddCartItemEvent>((event, emit) async {
       emit(CartLoadingState());
 
       try {
-        String response = await _cartRepository.add(event.productId, event.color, event.size, event.quantity);
+        String response = await _cartRepository.add(
+            event.productId, event.color, event.size, event.quantity);
         emit(CartAddedState(response));
-      }
-      catch(e) {
-        print(e.toString());
+      } catch (e) {
+        debugPrint(e.toString());
         emit(CartErrorState(e.toString()));
       }
     });
 
-    on<OnRemoveCartItemState>((event, emit) async {
+    on<OnRemoveCartItemEvent>((event, emit) async {
       emit(CartLoadingState());
 
       try {
         String response = await _cartRepository.remove(event.cartIdList);
         emit(CartRemovedState(response));
-      }
-      catch(e) {
-        print(e.toString());
+      } catch (e) {
+        debugPrint(e.toString());
         emit(CartErrorState(e.toString()));
       }
     });
 
-    on<OnUpdateCartState>((event, emit) async {
-      if(event.needReload == true) {
+    on<OnUpdateCartEvent>((event, emit) async {
+      if (event.needReload == true) {
         emit(CartLoadingState());
 
         try {
           String response = await _cartRepository.update(event.cartItemList);
           emit(CartUpdatedState(response));
-        }
-        catch(e) {
-          print(e.toString());
+        } catch (e) {
+          debugPrint(e.toString());
           emit(CartErrorState(e.toString()));
         }
-      }
-      else {
+      } else {
         try {
           String response = await _cartRepository.update(event.cartItemList);
           emit(CartSelectedState());
-        }
-        catch(e) {
-          print(e.toString());
+        } catch (e) {
+          debugPrint(e.toString());
           emit(CartErrorState(e.toString()));
         }
+      }
+    });
+
+    on<OnFilterCartEvent>((event, emit) async {
+      emit(CartLoadingState());
+
+      try {
+        List<CartItem> response = await _cartRepository.filterCartItems(
+            event.name, event.status, event.brand, event.page, event.limit);
+
+        if (event.page != null) {
+          if (event.page != currentPage) {
+            cartItemList = _removeDuplicates([...cartItemList, ...response]);
+            currentPage = event.page ?? currentPage;
+          }
+        } else {
+          cartItemList = response;
+        }
+
+        if (event.name == null &&
+            event.brand == null &&
+            event.status == [CartEnum.SELECTED.name]) {
+          emit(CartFilteredToCheckoutState(cartItemList));
+        } else {
+          emit(CartFilteredState(cartItemList));
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+        emit(CartErrorState(e.toString()));
       }
     });
   }
 
   List<CartItem> _removeDuplicates(List<CartItem> list) {
     Set<int> set = {};
-    List<CartItem> uniqueList = list.where((element) => set.add(element.id)).toList();
+    List<CartItem> uniqueList =
+        list.where((element) => set.add(element.id)).toList();
 
     return uniqueList;
   }

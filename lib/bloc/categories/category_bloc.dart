@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../data/entity/Category.dart';
-import '../../repository/CategoryRepository.dart';
+import '../../data/entity/category.dart';
+import '../../repository/category_repository.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';
@@ -20,19 +19,17 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       emit(CategoryLoadingState());
       categoryList = [];
 
-      try{
+      try {
         dynamic response = await _categoryRepository.getAllCategories();
 
-        if(response is List<Category>) {
+        if (response is List<Category>) {
           categoryList = response;
           emit(CategoryLoadedState(response));
-        }
-        else {
+        } else {
           emit(CategoryErrorState(response.toString()));
         }
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(CategoryErrorState(e.toString()));
       }
     });

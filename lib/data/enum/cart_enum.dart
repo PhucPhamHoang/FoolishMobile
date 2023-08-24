@@ -1,0 +1,6 @@
+enum CartEnum {
+  BOUGHT,
+  NOT_BOUGHT_YET,
+  SELECTED,
+  DISCOUNT,
+}

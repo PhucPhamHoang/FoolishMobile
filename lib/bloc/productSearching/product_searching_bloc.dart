@@ -1,44 +1,41 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../data/entity/Product.dart';
-import '../../repository/ShopRepository.dart';
+import '../../data/entity/product.dart';
+import '../../repository/shop_repository.dart';
 
 part 'product_searching_event.dart';
 part 'product_searching_state.dart';
 
-class ProductSearchingBloc extends Bloc<ProductSearchingEvent, ProductSearchingState> {
+class ProductSearchingBloc
+    extends Bloc<ProductSearchingEvent, ProductSearchingState> {
   final ShopRepository _shopRepository;
 
   List<Product> searchingProductList = [];
   int currentSearchingProductListPage = 1;
 
-
-  ProductSearchingBloc(this._shopRepository) : super(ProductSearchingInitial()) {
+  ProductSearchingBloc(this._shopRepository)
+      : super(ProductSearchingInitial()) {
     on<OnSearchProductEvent>((event, emit) async {
       emit(ProductSearchingLoadingState());
       searchingProductList = [];
 
-      try{
+      try {
         dynamic response = await _shopRepository.searchProduct(
             event.productName,
             page: event.page,
-            limit: event.limit
-        );
+            limit: event.limit);
 
-        if(response is List<Product>) {
+        if (response is List<Product>) {
           searchingProductList = response;
           currentSearchingProductListPage = event.page;
           emit(ProductSearchingListLoadedState(response));
-        }
-        else {
+        } else {
           emit(ProductSearchingErrorState(response.toString()));
         }
-      }
-      catch(e){
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(ProductSearchingErrorState(e.toString()));
       }
     });

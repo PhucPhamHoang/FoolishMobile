@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../repository/GoogleDriveRepository.dart';
+import '../../repository/google_drive_repository.dart';
 
 part 'upload_file_event.dart';
 part 'upload_file_state.dart';
@@ -19,21 +20,18 @@ class UploadFileBloc extends Bloc<UploadFileEvent, UploadFileState> {
 
       try {
         String response = await _googleDriveRepository.uploadFileToGoogleDrive(
-          event.uploadFile,
-          isCustomer: event.isCustomer
-        );
+            event.uploadFile,
+            isCustomer: event.isCustomer);
 
         ggDriveFileUrl = response;
 
-        if(response.contains('https://drive.google')) {
+        if (response.contains('https://drive.google')) {
           emit(UploadFileUploadedState(response));
-        }
-        else {
+        } else {
           emit(UploadFileErrorState(response));
         }
-      }
-      catch (e) {
-        print(e);
+      } catch (e) {
+        debugPrint(e.toString());
         emit(UploadFileErrorState(e.toString()));
       }
     });
