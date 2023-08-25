@@ -41,36 +41,26 @@ class NetworkService {
 
       debugPrint(domain + url);
 
-      if (response.statusCode == 200) {
-        if (url.contains('/logout')) {
-          LocalStorageService.removeLocalStorageData(
-            LocalStorageKeyEnum.SAVED_JWT.name,
-          );
-          cookieJar.deleteAll();
-        }
-
-        debugPrint('header: ${response.headers}');
-        debugPrint('statusCode: ${response.statusCode}');
-        debugPrint('request: ${param ?? formDataParam.toString() ?? 'null'}');
-        debugPrint('response: ${response.data}');
-        debugPrint('\n');
-        debugPrint(
-            '\n---------------------------------END-------------------------------------\n');
-        debugPrint('\n');
-        Map<String, dynamic> jsonMap = response.data;
-        final ApiResponse responseModel = ApiResponse.fromJson(jsonMap);
-
-        return responseModel;
-      } else {
-        debugPrint('header: ${response.headers}');
-        debugPrint('statusCode: ${response.statusCode}');
-        debugPrint('data: ${response.data}');
-        debugPrint('\n');
-        debugPrint(
-            '\n---------------------------------END-------------------------------------\n');
-        debugPrint('\n');
-        throw Exception('Failed to fetch data');
+      if (url.contains('/logout')) {
+        LocalStorageService.removeLocalStorageData(
+          LocalStorageKeyEnum.SAVED_JWT.name,
+        );
+        cookieJar.deleteAll();
       }
+
+      debugPrint('header: ${response.headers}');
+      debugPrint('statusCode: ${response.statusCode}');
+      debugPrint('request: ${param ?? formDataParam.toString() ?? 'null'}');
+      debugPrint('response: ${response.data}');
+      debugPrint('\n');
+      debugPrint(
+          '\n---------------------------------END-------------------------------------\n');
+      debugPrint('\n');
+
+      Map<String, dynamic> jsonMap = response.data;
+      final ApiResponse responseModel = ApiResponse.fromJson(jsonMap);
+
+      return responseModel;
     } catch (e, stackTrace) {
       debugPrint(domain + url);
       debugPrint('Caught exception: $e\n$stackTrace');
