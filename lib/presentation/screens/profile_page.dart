@@ -23,15 +23,15 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _textEditingController = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _countryController = TextEditingController();
-  ScrollController _scrollController = ScrollController();
-  GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   bool isPasswordHiddened = true;
 
@@ -109,9 +109,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
 
                 if (currentUser != null) {
-                  _fullNameController.text = currentUser.name ?? '';
+                  _fullNameController.text = currentUser.name;
                   _emailController.text = currentUser.email ?? '';
-                  _userNameController.text = currentUser.userName ?? '';
+                  _userNameController.text = currentUser.userName;
                   _phoneNumberController.text = currentUser.phoneNumber ?? '';
                   _addressController.text = currentUser.address ?? '';
                   _cityController.text = currentUser.city ?? '';
@@ -129,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             _avatar(),
                             const SizedBox(height: 35),
                             Text(
-                              currentUser.name ?? 'UNKNOWN',
+                              currentUser.name,
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 20,

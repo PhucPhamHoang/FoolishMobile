@@ -54,33 +54,34 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: widget.scaffoldKey,
-        appBar: widget.needAppBar == true
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(110),
-                child: AppBarComponent(
-                  title: widget.title,
-                  needSearchBar: widget.needSearchBar,
-                  isSearchable: widget.isSearchable,
-                  pageName: widget.pageName,
-                  isChat: widget.isChat,
-                  forceCanNotBack: widget.forceCanNotBack,
-                  onBack: widget.onBack,
+      key: widget.scaffoldKey,
+      appBar: widget.needAppBar == true
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(110),
+              child: AppBarComponent(
+                title: widget.title,
+                needSearchBar: widget.needSearchBar,
+                isSearchable: widget.isSearchable,
+                pageName: widget.pageName,
+                isChat: widget.isChat,
+                forceCanNotBack: widget.forceCanNotBack,
+                onBack: widget.onBack,
+                textEditingController: widget.textEditingController,
+                translatorEditingController: widget.translatorEditingController,
+                onSearch: widget.onSearch,
+                hintSearchBarText: widget.hintSearchBarText,
+              ),
+            )
+          : null,
+      backgroundColor: const Color(0xfff3f3f3),
+      body: widget.body,
+      bottomNavigationBar: widget.needBottomNavBar == true
+          ? widget.needProductDetailsBottomNavBar == false
+              ? const BottomNavigationBarComponent()
+              : ProductDetailsBottomNavigationBarComponent(
                   textEditingController: widget.textEditingController,
-                  translatorEditingController:
-                      widget.translatorEditingController,
-                  onSearch: widget.onSearch,
-                  hintSearchBarText: widget.hintSearchBarText,
-                ),
-              )
-            : null,
-        backgroundColor: const Color(0xfff3f3f3),
-        body: widget.body,
-        bottomNavigationBar: widget.needBottomNavBar == true
-            ? widget.needProductDetailsBottomNavBar == false
-                ? const BottomNavigationBarComponent()
-                : ProductDetailsBottomNavigationBarComponent(
-                    textEditingController: widget.textEditingController)
-            : null);
+                )
+          : null,
+    );
   }
 }

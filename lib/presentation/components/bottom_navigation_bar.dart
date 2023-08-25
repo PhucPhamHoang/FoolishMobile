@@ -4,7 +4,6 @@ import 'package:fashionstore/presentation/screens/all_categories_page.dart';
 import 'package:fashionstore/presentation/screens/cart_page.dart';
 import 'package:fashionstore/presentation/screens/home_page.dart';
 import 'package:fashionstore/presentation/screens/profile_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -38,52 +37,72 @@ class _BottomNavigationBarComponentState
   @override
   void initState() {
     _navList = [
-      _navBarButton('assets/icon/home_icon.png', 'Home', onTap: () {
-        if (GlobalVariable.currentNavBarPage != NavigationNameEnum.HOME.name) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
-              (Route<dynamic> route) => false);
+      _navBarButton(
+        'assets/icon/home_icon.png',
+        'Home',
+        onTap: () {
+          if (GlobalVariable.currentNavBarPage !=
+              NavigationNameEnum.HOME.name) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+                (Route<dynamic> route) => false);
 
-          GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
-        }
-      }),
-      _navBarButton('assets/icon/category_icon.png', 'Categories', onTap: () {
-        if (GlobalVariable.currentNavBarPage !=
-            NavigationNameEnum.CATEGORIES.name) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const AllCategoriesPage()),
-              (Route<dynamic> route) => false);
+            GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
+          }
+        },
+      ),
+      _navBarButton(
+        'assets/icon/category_icon.png',
+        'Categories',
+        onTap: () {
+          if (GlobalVariable.currentNavBarPage !=
+              NavigationNameEnum.CATEGORIES.name) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AllCategoriesPage()),
+                (Route<dynamic> route) => false);
 
-          GlobalVariable.currentNavBarPage = NavigationNameEnum.CATEGORIES.name;
-        }
-      }),
-      _navBarButton('assets/icon/clothing_icon.png', 'Clothings', onTap: () {
-        if (GlobalVariable.currentNavBarPage !=
-            NavigationNameEnum.CLOTHINGS.name) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const AllProductsPage()),
-              (Route<dynamic> route) => false);
+            GlobalVariable.currentNavBarPage =
+                NavigationNameEnum.CATEGORIES.name;
+          }
+        },
+      ),
+      _navBarButton(
+        'assets/icon/clothing_icon.png',
+        'Clothings',
+        onTap: () {
+          if (GlobalVariable.currentNavBarPage !=
+              NavigationNameEnum.CLOTHINGS.name) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AllProductsPage()),
+                (Route<dynamic> route) => false);
 
-          GlobalVariable.currentNavBarPage = NavigationNameEnum.CLOTHINGS.name;
-          BlocProvider.of<CategoryBloc>(context)
-              .add(const OnSelectedCategoryEvent('All'));
-        }
-      }),
-      _navBarButton('assets/icon/account_icon.png', 'Profile', onTap: () {
-        if (GlobalVariable.currentNavBarPage !=
-            NavigationNameEnum.PROFILE.name) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()),
-              (Route<dynamic> route) => false);
+            GlobalVariable.currentNavBarPage =
+                NavigationNameEnum.CLOTHINGS.name;
+            BlocProvider.of<CategoryBloc>(context)
+                .add(const OnSelectedCategoryEvent('All'));
+          }
+        },
+      ),
+      _navBarButton(
+        'assets/icon/account_icon.png',
+        'Profile',
+        onTap: () {
+          if (GlobalVariable.currentNavBarPage !=
+              NavigationNameEnum.PROFILE.name) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+                (Route<dynamic> route) => false);
 
-          GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
-        }
-      }),
+            GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
+          }
+        },
+      ),
     ];
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -126,11 +145,7 @@ class _BottomNavigationBarComponentState
               scrollDirection: Axis.horizontal,
               itemCount: _navNameList.length,
               itemBuilder: (context, index) {
-                if (index > 0) {
-                  return _navList[index];
-                }
-
-                return Container();
+                return _navList[index];
               }),
         ),
       ),

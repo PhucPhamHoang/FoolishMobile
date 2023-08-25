@@ -14,10 +14,10 @@ class Product {
   String size;
   String color;
   int availableQuantity;
-  String image1;
-  String image2;
-  String image3;
-  String image4;
+  String? image1;
+  String? image2;
+  String? image3;
+  String? image4;
   String description;
   double overallRating;
 

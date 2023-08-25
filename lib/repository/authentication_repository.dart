@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:fashionstore/data/enum/local_storage_key_enum.dart';
 import 'package:fashionstore/data/static/api_authen_type.dart';
+import 'package:fashionstore/utils/local_storage/local_storage_service.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -17,7 +19,7 @@ class AuthenticationRepository {
     String message = '';
 
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(isAuthen: isAuthen, type: type, url: url),
           param: paramBody);
 
@@ -35,11 +37,18 @@ class AuthenticationRepository {
       {bool isAuthen = false}) async {
     Map<String, dynamic> jsonMap;
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
-          ValueRender.getUrl(isAuthen: isAuthen, type: type, url: url),
-          param: paramBody);
+      ApiResponse response = await NetworkService.getDataFromApi(
+        ValueRender.getUrl(isAuthen: isAuthen, type: type, url: url),
+        param: paramBody,
+      );
 
       if (json.decode(jsonEncode(response.result)) == 'success') {
+        String jwt = response.message!;
+        LocalStorageService.setLocalStorageData(
+          LocalStorageKeyEnum.SAVED_JWT.name,
+          jwt,
+        );
+
         jsonMap = json.decode(jsonEncode(response.content));
 
         return User.fromJson(jsonMap);
@@ -55,7 +64,7 @@ class AuthenticationRepository {
     String message = '';
 
     try {
-      ApiResponse response = await NetworkService.getDataFromGetRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(isAuthen: isAuthen, type: type, url: url));
 
       message = response.content.toString();

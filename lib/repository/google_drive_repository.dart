@@ -17,7 +17,7 @@ class GoogleDriveRepository {
     String message = '';
 
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(
             type: type,
             url: url,

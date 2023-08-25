@@ -13,7 +13,7 @@ class ShopRepository {
   Future<dynamic> getList(String url, {bool isAuthen = false}) async {
     try {
       ApiResponse response =
-          await NetworkService.getDataFromGetRequest(ValueRender.getUrl(
+          await NetworkService.getDataFromApi(ValueRender.getUrl(
         isAuthen: isAuthen,
         type: type,
         url: url,
@@ -38,7 +38,7 @@ class ShopRepository {
     Map<String, dynamic> jsonMap;
 
     try {
-      ApiResponse response = await NetworkService.getDataFromGetRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(isAuthen: isAuthen, type: type, url: url));
 
       if (json.decode(jsonEncode(response.result)) == 'success') {
@@ -55,7 +55,7 @@ class ShopRepository {
   Future<dynamic> sendPostAndGetList(String url, Map<String, dynamic> paramBody,
       {bool isAuthen = false}) async {
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(isAuthen: isAuthen, type: type, url: url),
           param: paramBody);
 
@@ -84,9 +84,6 @@ class ShopRepository {
         break;
       case 'HOT_DISCOUNT':
         url = '/hotDiscountProducts';
-        break;
-      case 'ALL':
-        url = '/allProoducts';
         break;
     }
 

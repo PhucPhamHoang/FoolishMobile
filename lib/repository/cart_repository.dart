@@ -14,7 +14,7 @@ class CartRepository {
   Future<dynamic> sendPostAndGetList(String url, Map<String, dynamic> paramBody,
       {bool isAuthen = false}) async {
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(
             type: type,
             url: url,
@@ -41,7 +41,7 @@ class CartRepository {
     String message = '';
 
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(type: type, url: url, isAuthen: true),
           param: paramBody);
 
@@ -58,7 +58,7 @@ class CartRepository {
 
     try {
       ApiResponse response =
-          await NetworkService.getDataFromGetRequest(ValueRender.getUrl(
+          await NetworkService.getDataFromApi(ValueRender.getUrl(
         type: type,
         url: url,
         isAuthen: isAuthen,

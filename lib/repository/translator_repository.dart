@@ -12,7 +12,7 @@ class TranslatorRepository {
 
   Future<dynamic> getList(String url, {bool isAuthen = false}) async {
     try {
-      ApiResponse response = await NetworkService.getDataFromGetRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(type: type, url: url, isAuthen: isAuthen));
 
       if (json.decode(jsonEncode(response.result)) == 'success') {
@@ -38,7 +38,7 @@ class TranslatorRepository {
     String message = '';
 
     try {
-      ApiResponse response = await NetworkService.getDataFromPostRequest(
+      ApiResponse response = await NetworkService.getDataFromApi(
           ValueRender.getUrl(type: type, url: url, isAuthen: isAuthen),
           param: paramBody);
 

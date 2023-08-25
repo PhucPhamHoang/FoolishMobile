@@ -132,7 +132,7 @@ class _SearchingPageState extends State<SearchingPage> {
           children: [
             UiRender.buildCachedNetworkImage(
               context,
-              product.image1,
+              product.image1 ?? '',
               height: 80,
               width: 75,
               margin: const EdgeInsets.only(right: 8),

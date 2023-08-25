@@ -33,9 +33,9 @@ class _InitialLoadingState extends State<InitialLoadingPage> {
             UiRender.showDialog(context, '', authenState.message);
           }
         },
-        child: Stack(
+        child: const Stack(
           clipBehavior: Clip.none,
-          children: const [
+          children: [
             SizedBox(
               height: 130,
               width: 130,

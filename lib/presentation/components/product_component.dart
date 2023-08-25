@@ -32,7 +32,7 @@ class _ProductComponentState extends State<ProductComponent> {
                 flex: 7,
                 child: UiRender.buildCachedNetworkImage(
                   context,
-                  widget.product.image1,
+                  widget.product.image1 ?? '',
                 ),
               ),
               Expanded(

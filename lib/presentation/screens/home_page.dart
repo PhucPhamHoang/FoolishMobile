@@ -152,8 +152,8 @@ class _HomePageState extends State<HomePage> {
           canViewAll
               ? TextButton(
                   onPressed: action,
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children: [
                       Text(
                         'View All',
                         style: TextStyle(
@@ -249,7 +249,7 @@ class _HomePageState extends State<HomePage> {
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: productList.length ?? 0,
+          itemCount: productList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 0.65,
             crossAxisCount: 2,

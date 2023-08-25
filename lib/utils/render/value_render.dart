@@ -49,10 +49,10 @@ class ValueRender {
 
     for (int i = 0; i < productList.length; i++) {
       if (i == 0) {
-        imgUrl = productList[i].image1;
+        imgUrl = productList[i].image1!;
         result.add(imgUrl);
       } else if (productList[i].image1 != productList[i - 1].image1) {
-        imgUrl = productList[i].image1;
+        imgUrl = productList[i].image1!;
         result.add(imgUrl);
       }
     }
@@ -61,15 +61,20 @@ class ValueRender {
   }
 
   static List<String> getProductImageUrlListByColor(
-      String color, List<Product> productList) {
+    String color,
+    List<Product> productList,
+  ) {
     List<Product> coloredSelectedProductList =
         productList.where((element) => element.color == color).toList();
-    return [
-      coloredSelectedProductList[0].image1,
-      coloredSelectedProductList[0].image2,
-      coloredSelectedProductList[0].image3,
-      coloredSelectedProductList[0].image4
+
+    List<String> imageUrlList = [
+      coloredSelectedProductList[0].image1 ?? '',
+      coloredSelectedProductList[0].image2 ?? '',
+      coloredSelectedProductList[0].image3 ?? '',
+      coloredSelectedProductList[0].image4 ?? '',
     ];
+
+    return imageUrlList.where((element) => element.isNotEmpty).toList();
   }
 
   // get list of products size using product color

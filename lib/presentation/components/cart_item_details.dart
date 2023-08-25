@@ -64,7 +64,7 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                   selectedProductDetails);
 
           if (selectedProductDetails.isNotEmpty &&
-              selectedProductDetails.length > 0) {
+              selectedProductDetails.isNotEmpty) {
             return Container(
               padding: EdgeInsets.fromLTRB(
                   30, 35, 30, MediaQuery.of(context).viewInsets.bottom + 20),
@@ -78,10 +78,11 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                       UiRender.buildCachedNetworkImage(
                         context,
                         selectedProductDetails
-                            .where((element) =>
-                                element.color == editedCartItem.color)
-                            .first
-                            .image1,
+                                .where((element) =>
+                                    element.color == editedCartItem.color)
+                                .first
+                                .image1 ??
+                            '',
                         margin: const EdgeInsets.only(right: 10),
                         width: 81,
                         height: 93,

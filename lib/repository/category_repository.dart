@@ -12,7 +12,7 @@ class CategoryRepository {
   Future<dynamic> getList(String url, {bool isAuthen = false}) async {
     try {
       ApiResponse response =
-          await NetworkService.getDataFromGetRequest(ValueRender.getUrl(
+          await NetworkService.getDataFromApi(ValueRender.getUrl(
         type: type,
         url: url,
         isAuthen: isAuthen,

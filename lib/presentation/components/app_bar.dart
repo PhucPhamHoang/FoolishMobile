@@ -45,7 +45,7 @@ class AppBarComponent extends StatefulWidget {
 }
 
 class _AppBarComponentState extends State<AppBarComponent> {
-  List<Widget> _dropdownMenuList = [];
+  final List<Widget> _dropdownMenuList = [];
 
   @override
   void initState() {
@@ -118,7 +118,9 @@ class _AppBarComponentState extends State<AppBarComponent> {
                           body: SingleChildScrollView(
                             child: ListView.builder(
                                 shrinkWrap: true,
-                                itemBuilder: (context, index) {}),
+                                itemBuilder: (context, index) {
+                                  return null;
+                                }),
                           ));
                     },
                     icon: const ImageIcon(

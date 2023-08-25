@@ -44,7 +44,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         },
         child: SingleChildScrollView(
           controller: _scrollController,
-          child: Column(
+          child: const Column(
             children: [],
           ),
         ),

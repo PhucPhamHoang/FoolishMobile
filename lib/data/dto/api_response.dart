@@ -6,8 +6,9 @@ part 'api_response.g.dart';
 class ApiResponse {
   final String result;
   final dynamic content;
+  final String? message;
 
-  ApiResponse(this.result, this.content);
+  ApiResponse(this.result, this.content, this.message);
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) =>
       _$ApiResponseFromJson(json);
@@ -16,6 +17,6 @@ class ApiResponse {
 
   @override
   String toString() {
-    return 'ApiResponse{result: $result, content: $content}';
+    return 'ApiResponse{result: $result, content: $content, message: $message}';
   }
 }
