@@ -44,6 +44,7 @@ class AuthenticationRepository {
 
       if (json.decode(jsonEncode(response.result)) == 'success') {
         String jwt = response.message!;
+
         LocalStorageService.setLocalStorageData(
           LocalStorageKeyEnum.SAVED_JWT.name,
           jwt,

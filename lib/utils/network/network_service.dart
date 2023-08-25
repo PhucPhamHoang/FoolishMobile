@@ -25,6 +25,13 @@ class NetworkService {
     dio.interceptors.add(CookieManager(cookieJar));
 
     try {
+      if (url.contains('/authen')) {
+        String jwtFromStorage = await LocalStorageService.getLocalStorageData(
+            LocalStorageKeyEnum.SAVED_JWT.name) as String;
+
+        dio.options.headers['Authorization'] = 'Bearer $jwtFromStorage';
+      }
+
       final Response response = (param == null && formDataParam == null)
           ? await dio.get(domain + url)
           : await dio.post(
@@ -42,14 +49,10 @@ class NetworkService {
           cookieJar.deleteAll();
         }
 
-        if (url.contains('/authen')) {
-          dio.options.headers['Authorization'] =
-              'Bearer ${LocalStorageService.getLocalStorageData(LocalStorageKeyEnum.SAVED_JWT.name)}';
-        }
-
         debugPrint('header: ${response.headers}');
         debugPrint('statusCode: ${response.statusCode}');
-        debugPrint('data: ${response.data}');
+        debugPrint('request: ${param ?? formDataParam.toString() ?? 'null'}');
+        debugPrint('response: ${response.data}');
         debugPrint('\n');
         debugPrint(
             '\n---------------------------------END-------------------------------------\n');
