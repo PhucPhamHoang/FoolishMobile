@@ -15,6 +15,8 @@ class AuthenticationBloc
   User? currentUser;
   String registerMessage = '';
   String logoutMessage = '';
+  String tmpSavedUserName = '';
+  String tmpSavedPassword = '';
 
   AuthenticationBloc(this._authenticationRepository)
       : super(AuthenticationInitial()) {

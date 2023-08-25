@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/presentation/layout/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import '../../bloc/cart/cart_bloc.dart';
 import '../../data/entity/cart_item.dart';
 import '../../utils/service/loading_service.dart';
 
+@RoutePage()
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
 

@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/productDetails/product_details_bloc.dart';
 import 'package:fashionstore/data/entity/cart_item.dart';
@@ -16,6 +17,7 @@ import '../../utils/render/value_render.dart';
 import '../components/gradient_button.dart';
 import '../layout/layout.dart';
 
+@RoutePage()
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
 

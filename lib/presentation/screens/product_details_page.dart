@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
@@ -11,6 +12,7 @@ import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../data/entity/product.dart';
 import '../../utils/render/value_render.dart';
 
+@RoutePage()
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key});
 

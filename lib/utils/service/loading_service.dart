@@ -15,7 +15,7 @@ class LoadingService {
 
   LoadingService(this.context);
 
-  void reloadHomePage() {
+  void reloadIndexPage() {
     BlocProvider.of<CategoryBloc>(context).add(OnLoadCategoryEvent());
     BlocProvider.of<ProductBloc>(context)
         .add(const OnLoadNewArrivalProductListEvent());

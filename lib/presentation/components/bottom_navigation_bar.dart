@@ -2,7 +2,7 @@ import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
 import 'package:fashionstore/presentation/screens/all_categories_page.dart';
 import 'package:fashionstore/presentation/screens/cart_page.dart';
-import 'package:fashionstore/presentation/screens/home_page.dart';
+import 'package:fashionstore/presentation/screens/index_page.dart';
 import 'package:fashionstore/presentation/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,7 +45,7 @@ class _BottomNavigationBarComponentState
               NavigationNameEnum.HOME.name) {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
+                MaterialPageRoute(builder: (context) => const IndexPage()),
                 (Route<dynamic> route) => false);
 
             GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;

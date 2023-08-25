@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/data/entity/category.dart';
 import 'package:fashionstore/utils/service/loading_service.dart';
@@ -10,6 +11,7 @@ import '../../utils/render/ui_render.dart';
 import '../../utils/render/value_render.dart';
 import '../layout/layout.dart';
 
+@RoutePage()
 class AllCategoriesPage extends StatefulWidget {
   const AllCategoriesPage({super.key});
 

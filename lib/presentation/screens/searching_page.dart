@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import '../../utils/service/loading_service.dart';
 import '../layout/layout.dart';
 import 'product_details_page.dart';
 
+@RoutePage()
 class SearchingPage extends StatefulWidget {
   const SearchingPage({super.key});
 

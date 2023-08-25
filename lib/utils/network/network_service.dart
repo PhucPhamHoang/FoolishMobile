@@ -7,7 +7,7 @@ import 'package:fashionstore/utils/local_storage/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class NetworkService {
-  static String domain = 'https://192.168.1.22:8080';
+  static String domain = 'https://192.168.1.10:8080';
 
   const NetworkService._();
 

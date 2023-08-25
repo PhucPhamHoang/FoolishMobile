@@ -1,7 +1,7 @@
+import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/data/enum/local_storage_key_enum.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
-import 'package:fashionstore/presentation/screens/home_page.dart';
 import 'package:fashionstore/presentation/screens/initial_loading_page.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/local_storage/local_storage_service.dart';
 
+@RoutePage()
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -74,157 +75,135 @@ class _LoginPageState extends State<LoginPage> {
               borderRadius: BorderRadius.circular(30),
             ),
             child: isLogin
-                ? BlocListener<AuthenticationBloc, AuthenticationState>(
-                    listener: (context, authenState) {
-                      if (authenState is AuthenticationLoadingState) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const InitialLoadingPage()),
-                          (Route<dynamic> route) => false,
-                        );
-                      }
-
-                      if (authenState is AuthenticationLoggedInState) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()),
-                          (Route<dynamic> route) => false,
-                        );
-                      }
-
-                      if (authenState is AuthenticationErrorState) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
-                          (Route<dynamic> route) => false,
-                        );
-                        UiRender.showDialog(context, '', authenState.message);
-                      }
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/image/login_image.png',
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 5,
-                            fit: BoxFit.cover,
-                          ),
-                          const Text(
-                            'Welcome to',
-                            style: TextStyle(
-                                fontFamily: 'Trebuchet MS',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 21,
-                                height: 4,
-                                color: Colors.black),
-                          ),
-                          const Text(
-                            'Foolish',
-                            style: TextStyle(
-                                fontFamily: 'Trebuchet MS',
-                                fontWeight: FontWeight.w900,
-                                fontSize: 25,
-                                height: 1.5,
-                                color: Colors.orange),
-                          ),
-                          _textField('User Name', false,
-                              _userNameTextEditingController),
-                          _textField(
-                              'Password', true, _passwordTextEditingController,
-                              isShowed: isPasswordHiden),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          _radioTextButton('Remember password'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GradientElevatedButton(
-                                  borderRadiusIndex: 25,
-                                  borderColor: isLogin
-                                      ? Colors.transparent
-                                      : Colors.black,
-                                  text: 'Login',
-                                  textWeight: FontWeight.w400,
-                                  buttonWidth: 125,
-                                  buttonHeight: 45,
-                                  beginColor:
-                                      isLogin ? Colors.black : Colors.white,
-                                  endColor: isLogin
-                                      ? const Color(0xff727272)
-                                      : Colors.white,
-                                  textColor:
-                                      isLogin ? Colors.white : Colors.black,
-                                  onPress: () {
-                                    setState(() {
-                                      if (isLogin == false) {
-                                        isLogin = true;
-                                      } else {
-                                        if (_userNameTextEditingController
-                                                    .text !=
-                                                '' &&
+                ? SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/image/login_image.png',
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 5,
+                          fit: BoxFit.cover,
+                        ),
+                        const Text(
+                          'Welcome to',
+                          style: TextStyle(
+                              fontFamily: 'Trebuchet MS',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 21,
+                              height: 4,
+                              color: Colors.black),
+                        ),
+                        const Text(
+                          'Foolish',
+                          style: TextStyle(
+                              fontFamily: 'Trebuchet MS',
+                              fontWeight: FontWeight.w900,
+                              fontSize: 25,
+                              height: 1.5,
+                              color: Colors.orange),
+                        ),
+                        _textField(
+                            'User Name', false, _userNameTextEditingController),
+                        _textField(
+                            'Password', true, _passwordTextEditingController,
+                            isShowed: isPasswordHiden),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _radioTextButton('Remember password'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GradientElevatedButton(
+                                borderRadiusIndex: 25,
+                                borderColor:
+                                    isLogin ? Colors.transparent : Colors.black,
+                                text: 'Login',
+                                textWeight: FontWeight.w400,
+                                buttonWidth: 125,
+                                buttonHeight: 45,
+                                beginColor:
+                                    isLogin ? Colors.black : Colors.white,
+                                endColor: isLogin
+                                    ? const Color(0xff727272)
+                                    : Colors.white,
+                                textColor:
+                                    isLogin ? Colors.white : Colors.black,
+                                onPress: () {
+                                  setState(() {
+                                    if (isLogin == false) {
+                                      isLogin = true;
+                                    } else {
+                                      if (_userNameTextEditingController
+                                              .text.isNotEmpty &&
+                                          _passwordTextEditingController
+                                              .text.isNotEmpty) {
+                                        LocalStorageService.setLocalStorageData(
+                                            LocalStorageKeyEnum
+                                                .SAVED_USER_NAME.name,
+                                            _userNameTextEditingController
+                                                .text);
+                                        LocalStorageService.setLocalStorageData(
+                                            LocalStorageKeyEnum
+                                                .SAVED_PASSWORD.name,
                                             _passwordTextEditingController
-                                                    .text !=
-                                                '') {
-                                          BlocProvider.of<AuthenticationBloc>(
-                                                  context)
-                                              .add(OnLoginAuthenticationEvent(
-                                                  _userNameTextEditingController
-                                                      .text,
-                                                  _passwordTextEditingController
-                                                      .text));
-                                        } else {
-                                          UiRender.showDialog(context, '',
-                                              'User Name or Password is empty, please fill in all the boxes !!');
-                                        }
+                                                .text);
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const InitialLoadingPage(),
+                                          ),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      } else {
+                                        UiRender.showDialog(context, '',
+                                            'User Name or Password is empty, please fill in all the boxes !!');
                                       }
-                                    });
-                                  }),
-                              GradientElevatedButton(
-                                  borderRadiusIndex: 25,
-                                  borderColor: !isLogin
-                                      ? Colors.transparent
-                                      : Colors.black,
-                                  text: 'Register',
-                                  textWeight: FontWeight.w400,
-                                  buttonWidth: 125,
-                                  buttonHeight: 45,
-                                  beginColor:
-                                      !isLogin ? Colors.black : Colors.white,
-                                  endColor: !isLogin
-                                      ? const Color(0xff727272)
-                                      : Colors.white,
-                                  textColor:
-                                      !isLogin ? Colors.white : Colors.black,
-                                  onPress: () {
-                                    setState(() {
-                                      if (isLogin == true) {
-                                        _userNameTextEditingController.clear();
-                                        _passwordTextEditingController.clear();
-                                        isPasswordHiden = true;
-                                        isLogin = false;
-                                      }
-                                    });
-                                  })
-                            ],
-                          ),
-                          TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                'Forgot Password?',
-                                style: TextStyle(
-                                    fontFamily: 'Trebuchet MS',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400),
-                              ))
-                        ],
-                      ),
-                    ))
+                                    }
+                                  });
+                                }),
+                            GradientElevatedButton(
+                                borderRadiusIndex: 25,
+                                borderColor: !isLogin
+                                    ? Colors.transparent
+                                    : Colors.black,
+                                text: 'Register',
+                                textWeight: FontWeight.w400,
+                                buttonWidth: 125,
+                                buttonHeight: 45,
+                                beginColor:
+                                    !isLogin ? Colors.black : Colors.white,
+                                endColor: !isLogin
+                                    ? const Color(0xff727272)
+                                    : Colors.white,
+                                textColor:
+                                    !isLogin ? Colors.white : Colors.black,
+                                onPress: () {
+                                  setState(() {
+                                    if (isLogin == true) {
+                                      _userNameTextEditingController.clear();
+                                      _passwordTextEditingController.clear();
+                                      isPasswordHiden = true;
+                                      isLogin = false;
+                                    }
+                                  });
+                                })
+                          ],
+                        ),
+                        TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                  fontFamily: 'Trebuchet MS',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ))
+                      ],
+                    ),
+                  )
                 : BlocListener<AuthenticationBloc, AuthenticationState>(
                     listener: (context, authenState) {
                       if (authenState is AuthenticationLoadingState) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/uploadFile/upload_file_bloc.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
@@ -14,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../data/entity/user.dart';
 import '../layout/layout.dart';
 
+@RoutePage()
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
