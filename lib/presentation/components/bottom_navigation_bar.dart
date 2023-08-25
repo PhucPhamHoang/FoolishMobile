@@ -1,9 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
+import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
-import 'package:fashionstore/presentation/screens/all_categories_page.dart';
-import 'package:fashionstore/presentation/screens/cart_page.dart';
-import 'package:fashionstore/presentation/screens/index_page.dart';
-import 'package:fashionstore/presentation/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -11,7 +9,6 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../bloc/categories/category_bloc.dart';
 import '../../data/static/global_variables.dart';
 import '../../utils/render/ui_render.dart';
-import '../screens/all_products_page.dart';
 
 class BottomNavigationBarComponent extends StatefulWidget {
   const BottomNavigationBarComponent({
@@ -43,10 +40,7 @@ class _BottomNavigationBarComponentState
         onTap: () {
           if (GlobalVariable.currentNavBarPage !=
               NavigationNameEnum.HOME.name) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const IndexPage()),
-                (Route<dynamic> route) => false);
+            context.router.replaceNamed(AppRouterPath.index);
 
             GlobalVariable.currentNavBarPage = NavigationNameEnum.HOME.name;
           }
@@ -58,11 +52,7 @@ class _BottomNavigationBarComponentState
         onTap: () {
           if (GlobalVariable.currentNavBarPage !=
               NavigationNameEnum.CATEGORIES.name) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AllCategoriesPage()),
-                (Route<dynamic> route) => false);
+            context.router.replaceNamed(AppRouterPath.allCategories);
 
             GlobalVariable.currentNavBarPage =
                 NavigationNameEnum.CATEGORIES.name;
@@ -75,11 +65,7 @@ class _BottomNavigationBarComponentState
         onTap: () {
           if (GlobalVariable.currentNavBarPage !=
               NavigationNameEnum.CLOTHINGS.name) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AllProductsPage()),
-                (Route<dynamic> route) => false);
+            context.router.replaceNamed(AppRouterPath.allProducts);
 
             GlobalVariable.currentNavBarPage =
                 NavigationNameEnum.CLOTHINGS.name;
@@ -94,10 +80,7 @@ class _BottomNavigationBarComponentState
         onTap: () {
           if (GlobalVariable.currentNavBarPage !=
               NavigationNameEnum.PROFILE.name) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()),
-                (Route<dynamic> route) => false);
+            context.router.replaceNamed(AppRouterPath.profile);
 
             GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
           }
@@ -155,10 +138,7 @@ class _BottomNavigationBarComponentState
           child: _cartButton(onTap: () {
             if (GlobalVariable.currentNavBarPage !=
                 NavigationNameEnum.CART.name) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CartPage()),
-                  (Route<dynamic> route) => false);
+              context.router.replaceNamed(AppRouterPath.cart);
 
               GlobalVariable.currentNavBarPage = NavigationNameEnum.CART.name;
             }

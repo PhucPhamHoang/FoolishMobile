@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
+import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,7 +10,6 @@ import '../../bloc/categories/category_bloc.dart';
 import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../data/entity/category.dart';
 import '../../data/entity/product.dart';
-import '../../presentation/screens/all_products_page.dart';
 
 class LoadingService {
   final BuildContext context;
@@ -50,12 +51,6 @@ class LoadingService {
     BlocProvider.of<CategoryBloc>(context)
         .add(OnSelectedCategoryEvent(category.name));
 
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const AllProductsPage(
-                  isFromCategoryPage: true,
-                )),
-        (Route<dynamic> route) => false);
+    context.router.replaceNamed(AppRouterPath.allProducts);
   }
 }

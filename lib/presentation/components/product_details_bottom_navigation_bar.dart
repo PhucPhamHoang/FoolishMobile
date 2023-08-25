@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/productAddToCartSelection/product_add_to_cart_bloc.dart';
 import 'package:fashionstore/bloc/productDetails/product_details_bloc.dart';
@@ -50,7 +51,7 @@ class _ProductDetailsBottomNavigationBarComponentState
             onPressed: () {
               BlocProvider.of<ProductAddToCartBloc>(context)
                   .add(OnClearProductAddToCartEvent());
-              Navigator.of(context).pop();
+              context.router.pop();
             },
           ),
           GradientElevatedButton(

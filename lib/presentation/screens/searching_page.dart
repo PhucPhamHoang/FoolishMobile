@@ -1,5 +1,6 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
+import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,7 +9,6 @@ import '../../data/entity/product.dart';
 import '../../utils/render/ui_render.dart';
 import '../../utils/service/loading_service.dart';
 import '../layout/layout.dart';
-import 'product_details_page.dart';
 
 @RoutePage()
 class SearchingPage extends StatefulWidget {
@@ -65,7 +65,7 @@ class _SearchingPageState extends State<SearchingPage> {
               }
 
               if (translateState is TranslatorLoadedState) {
-                Navigator.pop(context);
+                context.router.pop();
 
                 BlocProvider.of<ProductSearchingBloc>(context)
                     .add(OnSearchProductEvent(translateState.content, 1, 10));
@@ -117,10 +117,7 @@ class _SearchingPageState extends State<SearchingPage> {
       onTap: () {
         LoadingService(context).selectToViewProduct(product);
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ProductDetailsPage()));
+        context.router.pushNamed(AppRouterPath.productDetails);
       },
       child: Container(
         height: 90,

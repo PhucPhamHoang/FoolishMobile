@@ -1,16 +1,16 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/bloc/productDetails/product_details_bloc.dart';
 import 'package:fashionstore/data/entity/cart_item.dart';
 import 'package:fashionstore/data/enum/cart_enum.dart';
 import 'package:fashionstore/presentation/components/cart_item_component.dart';
 import 'package:fashionstore/presentation/components/cart_item_details.dart';
-import 'package:fashionstore/presentation/screens/checkout_page.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:fashionstore/utils/service/loading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../config/app_router/app_router_path.dart';
 import '../../data/enum/navigation_name_enum.dart';
 import '../../data/static/global_variables.dart';
 import '../../utils/render/value_render.dart';
@@ -75,10 +75,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
           listener: (context, cartState) {
             if (cartState is CartFilteredToCheckoutState) {
               if (cartState.cartItemList.isNotEmpty) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CheckoutPage()));
+                context.router.pushNamed(AppRouterPath.checkout);
               }
             }
           },

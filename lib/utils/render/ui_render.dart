@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:fashionstore/data/entity/translator_language.dart';
@@ -44,7 +45,7 @@ class UiRender {
             // The "Yes" button
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.of(context).pop(true);
+                context.router.pop();
               },
               isDefaultAction: true,
               child: Text(
@@ -57,7 +58,7 @@ class UiRender {
             // The "No" button
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.of(context).pop(false);
+                context.router.pop(false);
               },
               isDestructiveAction: true,
               child: const Text('Cancel'),
@@ -82,7 +83,7 @@ class UiRender {
           actions: [
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.of(context).pop(true);
+                context.router.pop(true);
               },
               isDefaultAction: true,
               child: const Text(
@@ -235,7 +236,7 @@ class UiRender {
             // The "Yes" button
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.of(context).pop(true);
+                context.router.pop(true);
               },
               isDefaultAction: true,
               child: const Text(
@@ -248,7 +249,7 @@ class UiRender {
             // The "No" button
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.of(context).pop(false);
+                context.router.pop(true);
               },
               isDestructiveAction: true,
               child: const Text('Cancel'),

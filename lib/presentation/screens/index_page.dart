@@ -1,4 +1,4 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/bloc/products/product_bloc.dart';
 import 'package:fashionstore/data/entity/category.dart';
@@ -7,18 +7,16 @@ import 'package:fashionstore/data/static/global_variables.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
 import 'package:fashionstore/presentation/components/product_component.dart';
 import 'package:fashionstore/presentation/layout/layout.dart';
-import 'package:fashionstore/presentation/screens/all_products_page.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:fashionstore/utils/service/loading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/productSearching/product_searching_bloc.dart';
+import '../../config/app_router/app_router_path.dart';
 import '../../data/entity/product.dart';
 import '../../data/enum/navigation_name_enum.dart';
 import '../../utils/render/ui_render.dart';
-import 'all_categories_page.dart';
-import 'product_details_page.dart';
 
 @RoutePage()
 class IndexPage extends StatefulWidget {
@@ -66,11 +64,7 @@ class _IndexPageState extends State<IndexPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _header('Categories', true, action: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AllCategoriesPage()),
-                      (Route<dynamic> route) => false);
+                  context.router.replaceNamed(AppRouterPath.allCategories);
 
                   GlobalVariable.currentNavBarPage =
                       NavigationNameEnum.CATEGORIES.name;
@@ -90,11 +84,7 @@ class _IndexPageState extends State<IndexPage> {
                       endColor: const Color(0xff8D8D8C),
                       textColor: Colors.white,
                       onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AllProductsPage()),
-                        );
+                        context.router.pushNamed(AppRouterPath.allProducts);
 
                         BlocProvider.of<CategoryBloc>(context)
                             .add(const OnSelectedCategoryEvent('All'));
@@ -264,10 +254,7 @@ class _IndexPageState extends State<IndexPage> {
               onClick: () {
                 LoadingService(context).selectToViewProduct(productList[index]);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProductDetailsPage()));
+                context.router.pushNamed(AppRouterPath.productDetails);
               },
             );
           },

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/uploadFile/upload_file_bloc.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
 
                 if (uploadFileState is UploadFileUploadedState) {
-                  Navigator.pop(context);
+                  context.router.pop();
 
                   UiRender.showDialog(
                           context, '', 'Uploaded image successfully!')

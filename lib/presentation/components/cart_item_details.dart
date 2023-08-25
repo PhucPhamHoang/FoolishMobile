@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/data/entity/cart_item.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
@@ -296,7 +297,7 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                                 editedCartItem.selectStatus)
                           ], needReload: true));
 
-                          Navigator.pop(context);
+                          context.router.pop();
                         });
                       },
                     ),

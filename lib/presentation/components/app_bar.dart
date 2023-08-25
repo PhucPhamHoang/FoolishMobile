@@ -1,16 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
+import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
 import 'package:fashionstore/data/static/global_variables.dart';
-import 'package:fashionstore/presentation/screens/login_page.dart';
-import 'package:fashionstore/presentation/screens/profile_page.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:side_sheet/side_sheet.dart';
-
-import '../screens/searching_page.dart';
 
 class AppBarComponent extends StatefulWidget {
   const AppBarComponent({
@@ -54,20 +52,14 @@ class _AppBarComponentState extends State<AppBarComponent> {
       _dropdownMenuList.add(_dropdownItem('My profile', () {
         GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
 
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfilePage()),
-            (Route<dynamic> route) => false);
+        context.router.replaceNamed(AppRouterPath.profile);
       }));
       _dropdownMenuList.add(_dropdownItem('Purchase history', () {}));
       _dropdownMenuList.add(_dropdownItem('Log out', () {
         BlocProvider.of<AuthenticationBloc>(context)
             .add(OnLogoutAuthenticationEvent());
 
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-            (Route<dynamic> route) => false);
+        context.router.replaceNamed(AppRouterPath.login);
       }));
     });
 
@@ -96,7 +88,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
             titleSpacing: 0,
             leadingWidth: 48,
             automaticallyImplyLeading: false,
-            leading: Navigator.of(context).canPop() &&
+            leading: AutoRouter.of(context).canPop() &&
                     widget.forceCanNotBack == false
                 ? IconButton(
                     icon: const Icon(
@@ -107,7 +99,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       if (widget.onBack != null) {
                         widget.onBack!();
                       } else {
-                        Navigator.of(context).pop();
+                        context.router.pop();
                       }
                     },
                   )
@@ -173,10 +165,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
                 ? widget.isSearchable == false
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SearchingPage()));
+                          context.router.pushNamed(AppRouterPath.searching);
                         },
                         child: Container(
                             padding: const EdgeInsets.only(right: 30, left: 20),

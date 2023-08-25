@@ -1,8 +1,8 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
+import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:fashionstore/data/enum/local_storage_key_enum.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
-import 'package:fashionstore/presentation/screens/initial_loading_page.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,14 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                                                 .SAVED_PASSWORD.name,
                                             _passwordTextEditingController
                                                 .text);
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const InitialLoadingPage(),
-                                          ),
-                                          (Route<dynamic> route) => false,
-                                        );
+                                        context.router.replaceNamed(
+                                            AppRouterPath.initialLoading);
                                       } else {
                                         UiRender.showDialog(context, '',
                                             'User Name or Password is empty, please fill in all the boxes !!');
@@ -211,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
 
                       if (authenState is AuthenticationRegisteredState) {
-                        Navigator.pop(context);
+                        context.router.pop();
                         UiRender.showDialog(context, '', authenState.message)
                             .then((value) {
                           UiRender.showDialog(context, '',
@@ -223,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
 
                       if (authenState is AuthenticationErrorState) {
-                        Navigator.pop(context);
+                        context.router.pop();
                         UiRender.showDialog(context, '', authenState.message);
                       }
                     },
