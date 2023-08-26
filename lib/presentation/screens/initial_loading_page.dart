@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/authentication/authentication_bloc.dart';
 import 'package:fashionstore/config/app_router/app_router_path.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,30 +52,31 @@ class _InitialLoadingState extends State<InitialLoadingPage> {
                   context.router.replaceNamed(AppRouterPath.login);
                 }
               },
-              child: const Stack(
+              child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   SizedBox(
-                    height: 130,
-                    width: 130,
+                    height: 130.height,
+                    width: 130.width,
                     child: CircularProgressIndicator(
                       color: Colors.orangeAccent,
-                      strokeWidth: 6,
+                      strokeWidth: 6.width,
                     ),
                   ),
                   Positioned(
-                    top: 42,
-                    left: 24,
+                    top: 42.height,
+                    left: 24.width,
                     child: Text(
                       'Foolish',
                       style: TextStyle(
-                          fontFamily: 'Trebuchet MS',
-                          fontWeight: FontWeight.w900,
-                          fontSize: 25,
-                          height: 1.5,
-                          color: Color(0xffff8401)),
+                        fontFamily: 'Trebuchet MS',
+                        fontWeight: FontWeight.w900,
+                        fontSize: 25.size,
+                        height: 1.5.height,
+                        color: const Color(0xffff8401),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

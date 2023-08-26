@@ -2,8 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../bloc/categories/category_bloc.dart';
@@ -95,8 +97,9 @@ class _BottomNavigationBarComponentState
 
         Future.delayed(const Duration(milliseconds: 500), () {
           _itemScrollController.scrollTo(
-              index: _selectedNavIndex,
-              duration: const Duration(milliseconds: 1000));
+            index: _selectedNavIndex,
+            duration: const Duration(milliseconds: 1000),
+          );
         });
       }
     });
@@ -106,22 +109,24 @@ class _BottomNavigationBarComponentState
 
   @override
   Widget build(BuildContext context) {
-    return Stack(clipBehavior: Clip.none, children: [
-      Container(
-        height: 70,
-        alignment: Alignment.centerLeft,
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.only(left: 18, right: 18),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 70.height,
+          alignment: Alignment.centerLeft,
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.only(left: 18.width, right: 18.width),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.radius),
+              topRight: Radius.circular(24.radius),
+            ),
+            color: Colors.white,
           ),
-          color: Colors.white,
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width - 140,
-          child: ScrollablePositionedList.builder(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 140.width,
+            child: ScrollablePositionedList.builder(
               itemScrollController: _itemScrollController,
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
@@ -129,21 +134,26 @@ class _BottomNavigationBarComponentState
               itemCount: _navNameList.length,
               itemBuilder: (context, index) {
                 return _navList[index];
-              }),
+              },
+            ),
+          ),
         ),
-      ),
-      Positioned(
-          top: -15,
+        Positioned(
+          top: -15.height,
           right: 0,
-          child: _cartButton(onTap: () {
-            if (GlobalVariable.currentNavBarPage !=
-                NavigationNameEnum.CART.name) {
-              context.router.replaceNamed(AppRouterPath.cart);
+          child: _cartButton(
+            onTap: () {
+              if (GlobalVariable.currentNavBarPage !=
+                  NavigationNameEnum.CART.name) {
+                context.router.replaceNamed(AppRouterPath.cart);
 
-              GlobalVariable.currentNavBarPage = NavigationNameEnum.CART.name;
-            }
-          })),
-    ]);
+                GlobalVariable.currentNavBarPage = NavigationNameEnum.CART.name;
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _navBarButton(String iconUrl, String name,
@@ -151,27 +161,30 @@ class _BottomNavigationBarComponentState
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(right: 25),
+        margin: EdgeInsets.only(right: 25.width),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(iconUrl,
-                height: 20,
-                width: 20,
-                fit: BoxFit.fill,
-                color: GlobalVariable.currentNavBarPage != name.toUpperCase()
-                    ? const Color(0xffa4a4a4)
-                    : Colors.orange),
+            Image.asset(
+              iconUrl,
+              height: 20.height,
+              width: 20.width,
+              fit: BoxFit.fill,
+              color: GlobalVariable.currentNavBarPage != name.toUpperCase()
+                  ? const Color(0xffa4a4a4)
+                  : Colors.orange,
+            ),
             Text(
               name,
               style: TextStyle(
-                  fontFamily: 'Work Sans',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                  color: GlobalVariable.currentNavBarPage != name.toUpperCase()
-                      ? const Color(0xffa4a4a4)
-                      : Colors.orange),
+                fontFamily: 'Work Sans',
+                fontWeight: FontWeight.w600,
+                fontSize: 12.size,
+                color: GlobalVariable.currentNavBarPage != name.toUpperCase()
+                    ? const Color(0xffa4a4a4)
+                    : Colors.orange,
+              ),
             ),
           ],
         ),
@@ -191,9 +204,9 @@ class _BottomNavigationBarComponentState
               GlobalVariable.currentNavBarPage == NavigationNameEnum.CART.name
                   ? Colors.orange
                   : null,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40),
-            bottomLeft: Radius.circular(40),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40.radius),
+            bottomLeft: Radius.circular(40.radius),
           ),
           gradient:
               GlobalVariable.currentNavBarPage == NavigationNameEnum.CART.name
@@ -205,43 +218,45 @@ class _BottomNavigationBarComponentState
           children: [
             Image.asset(
               'assets/icon/cart_icon.png',
-              width: 30,
-              height: 30,
+              width: 30.width,
+              height: 30.height,
               color: Colors.white,
               fit: BoxFit.cover,
             ),
-            const SizedBox(
-              width: 4,
-            ),
+            4.horizontalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'My Cart',
                   style: TextStyle(
-                      fontFamily: 'Work Sans',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.white),
+                    fontFamily: 'Work Sans',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12.size,
+                    color: Colors.white,
+                  ),
                 ),
-                BlocBuilder<CartBloc, CartState>(builder: (context, cartState) {
-                  int totalItems =
-                      BlocProvider.of<CartBloc>(context).totalCartItemQuantity;
-                  if (cartState is TotalCartItemQuantityLoadedState) {
-                    totalItems = cartState.totalQuantity;
-                  }
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, cartState) {
+                    int totalItems = BlocProvider.of<CartBloc>(context)
+                        .totalCartItemQuantity;
+                    if (cartState is TotalCartItemQuantityLoadedState) {
+                      totalItems = cartState.totalQuantity;
+                    }
 
-                  return Text(
-                    '$totalItems items',
-                    style: const TextStyle(
+                    return Text(
+                      '$totalItems items',
+                      style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontFamily: 'Work Sans',
                         fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        color: Colors.white),
-                  );
-                })
+                        fontSize: 12.size,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                )
               ],
             )
           ],

@@ -1,4 +1,6 @@
 import 'package:fashionstore/data/entity/cart_item.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
+import 'package:fashionstore/utils/extension/string%20_extension.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +37,8 @@ class _CartItemComponentState extends State<CartItemComponent> {
     return Row(
       children: [
         SizedBox(
-          height: 15,
-          width: 15,
+          height: 15.height,
+          width: 15.width,
           child: Checkbox(
               activeColor: Colors.orange,
               checkColor: Colors.white,
@@ -70,12 +72,12 @@ class _CartItemComponentState extends State<CartItemComponent> {
             clipBehavior: Clip.none,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width - 50,
-                height: 100,
-                margin: const EdgeInsets.fromLTRB(8, 12, 0, 12),
-                padding: const EdgeInsets.all(10),
+                width: MediaQuery.of(context).size.width - 50.width,
+                height: 100.height,
+                margin: EdgeInsets.fromLTRB(8.width, 12.height, 0, 12.height),
+                padding: EdgeInsets.all(10.size),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.radius),
                   border: Border.all(color: const Color(0xff868686)),
                 ),
                 child: Row(
@@ -83,10 +85,10 @@ class _CartItemComponentState extends State<CartItemComponent> {
                     UiRender.buildCachedNetworkImage(
                       context,
                       widget.cartItem.image1,
-                      margin: const EdgeInsets.only(right: 10),
-                      width: 100,
-                      height: 80,
-                      borderRadius: BorderRadius.circular(8),
+                      margin: EdgeInsets.only(right: 10.width),
+                      width: 100.width,
+                      height: 80.height,
+                      borderRadius: BorderRadius.circular(8.radius),
                     ),
                     Expanded(
                       child: Column(
@@ -106,24 +108,25 @@ class _CartItemComponentState extends State<CartItemComponent> {
                                             ? ' - Size: ${widget.cartItem.size.toUpperCase()} '
                                             : ''),
                                     maxLines: 2,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
-                                      color: Color(0xff626262),
+                                      color: const Color(0xff626262),
                                       fontFamily: 'Work Sans',
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 16,
+                                      fontSize: 16.size,
                                     ),
                                   ),
                                 ),
                                 Text(
                                   widget.cartItem.brand.toUpperCase(),
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Color(0xff868686),
-                                      fontFamily: 'Work Sans',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                      height: 1.5),
+                                  style: TextStyle(
+                                    color: const Color(0xff868686),
+                                    fontFamily: 'Work Sans',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13.size,
+                                    height: 1.5.height,
+                                  ),
                                 ),
                               ],
                             ),
@@ -136,46 +139,54 @@ class _CartItemComponentState extends State<CartItemComponent> {
                                 widget.cartItem.discount > 0
                                     ? RichText(
                                         text: TextSpan(
-                                            text:
-                                                '\$${ValueRender.getDiscountPrice(widget.cartItem.sellingPrice, widget.cartItem.discount)}  ',
-                                            style: const TextStyle(
-                                                fontFamily: 'Sen',
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 14,
-                                                color: Colors.red,
-                                                height: 1.5),
-                                            children: [
-                                            TextSpan(
-                                              text:
-                                                  '\$${widget.cartItem.sellingPrice.toString()}',
-                                              style: const TextStyle(
-                                                  fontFamily: 'Sen',
-                                                  decoration: TextDecoration
-                                                      .lineThrough,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 9,
-                                                  color: Color(0xffacacac)),
-                                            )
-                                          ]))
-                                    : Text(
-                                        '\$ ${widget.cartItem.sellingPrice}',
-                                        style: const TextStyle(
+                                          text: ValueRender.getDiscountPrice(
+                                            widget.cartItem.sellingPrice,
+                                            widget.cartItem.discount,
+                                          ).format.dollar,
+                                          style: TextStyle(
                                             fontFamily: 'Sen',
                                             fontWeight: FontWeight.w700,
-                                            fontSize: 14,
+                                            fontSize: 14.size,
                                             color: Colors.red,
-                                            height: 1.5),
+                                            height: 1.5.height,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: widget.cartItem.sellingPrice
+                                                  .format.dollar,
+                                              style: TextStyle(
+                                                fontFamily: 'Sen',
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 9.size,
+                                                color: const Color(0xffacacac),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Text(
+                                        widget.cartItem.sellingPrice.format
+                                            .dollar,
+                                        style: TextStyle(
+                                          fontFamily: 'Sen',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14.size,
+                                          color: Colors.red,
+                                          height: 1.5.height,
+                                        ),
                                       ),
                                 Text(
                                   'Quantity: ${widget.cartItem.quantity}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
-                                    color: Color(0xff626262),
+                                    color: const Color(0xff626262),
                                     fontFamily: 'Work Sans',
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 14,
+                                    fontSize: 14.size,
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           )
@@ -186,14 +197,17 @@ class _CartItemComponentState extends State<CartItemComponent> {
                 ),
               ),
               Positioned(
-                  top: -8,
-                  right: -20,
+                  top: -8.height,
+                  right: -20.width,
                   child: Container(
                     color: const Color(0xfff3f3f3),
                     child: IconButton(
                       onPressed: () {
-                        BlocProvider.of<CartBloc>(context)
-                            .add(OnRemoveCartItemEvent([widget.cartItem.id]));
+                        BlocProvider.of<CartBloc>(context).add(
+                          OnRemoveCartItemEvent(
+                            [widget.cartItem.id],
+                          ),
+                        );
                       },
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,

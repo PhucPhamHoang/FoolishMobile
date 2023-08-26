@@ -3,8 +3,11 @@ import 'package:fashionstore/bloc/cart/cart_bloc.dart';
 import 'package:fashionstore/data/entity/cart_item.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
 import 'package:fashionstore/presentation/components/icon_button.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
+import 'package:fashionstore/utils/extension/string%20_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../bloc/productDetails/product_details_bloc.dart';
 import '../../data/entity/cart_item_info.dart';
@@ -68,7 +71,11 @@ class _CartItemDetailsState extends State<CartItemDetails> {
               selectedProductDetails.isNotEmpty) {
             return Container(
               padding: EdgeInsets.fromLTRB(
-                  30, 35, 30, MediaQuery.of(context).viewInsets.bottom + 20),
+                30.width,
+                35.height,
+                30.width,
+                MediaQuery.of(context).viewInsets.bottom + 20.height,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,10 +91,10 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                                 .first
                                 .image1 ??
                             '',
-                        margin: const EdgeInsets.only(right: 10),
-                        width: 81,
-                        height: 93,
-                        borderRadius: BorderRadius.circular(8),
+                        margin: EdgeInsets.only(right: 10.width),
+                        width: 81.width,
+                        height: 93.height,
+                        borderRadius: BorderRadius.circular(8.radius),
                       ),
                       Expanded(
                         child: Column(
@@ -101,11 +108,11 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                                 editedCartItem.name,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Color(0xff626262),
+                                style: TextStyle(
+                                  color: const Color(0xff626262),
                                   fontFamily: 'Work Sans',
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                  fontSize: 16.size,
                                 ),
                               ),
                             ),
@@ -114,159 +121,178 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                               child: Text(
                                 editedCartItem.brand.toUpperCase(),
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Color(0xff868686),
-                                    fontFamily: 'Work Sans',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                    height: 1.5),
+                                style: TextStyle(
+                                  color: const Color(0xff868686),
+                                  fontFamily: 'Work Sans',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13.size,
+                                  height: 1.5.height,
+                                ),
                               ),
                             ),
                             Flexible(
-                                fit: FlexFit.loose,
-                                flex: 1,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: editedCartItem.discount > 0
-                                          ? RichText(
-                                              text: TextSpan(
-                                                  text:
-                                                      '\$${ValueRender.getDiscountPrice(editedCartItem.sellingPrice, editedCartItem.discount)}  ',
-                                                  style: const TextStyle(
-                                                      fontFamily: 'Sen',
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14,
-                                                      color: Colors.red,
-                                                      height: 1.5),
-                                                  children: [
-                                                  TextSpan(
-                                                    text:
-                                                        '\$${editedCartItem.sellingPrice.toString()}',
-                                                    style: const TextStyle(
-                                                        fontFamily: 'Sen',
-                                                        decoration:
-                                                            TextDecoration
-                                                                .lineThrough,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 9,
-                                                        color:
-                                                            Color(0xffacacac)),
-                                                  )
-                                                ]))
-                                          : Text(
-                                              '\$ ${editedCartItem.sellingPrice}',
-                                              style: const TextStyle(
-                                                  fontFamily: 'Sen',
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 14,
-                                                  color: Colors.red,
-                                                  height: 1.5),
+                              fit: FlexFit.loose,
+                              flex: 1,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: editedCartItem.discount > 0
+                                        ? RichText(
+                                            text: TextSpan(
+                                              text:
+                                                  ValueRender.getDiscountPrice(
+                                                editedCartItem.sellingPrice,
+                                                editedCartItem.discount,
+                                              ).format.dollar,
+                                              style: TextStyle(
+                                                fontFamily: 'Sen',
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14.size,
+                                                color: Colors.red,
+                                                height: 1.5.height,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: editedCartItem
+                                                      .sellingPrice
+                                                      .format
+                                                      .dollar,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Sen',
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 9.size,
+                                                    color: const Color(
+                                                      0xffacacac,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                    ),
-                                    Expanded(
-                                        child: _cartItemQuantityEditComponent())
-                                  ],
-                                )),
+                                          )
+                                        : Text(
+                                            editedCartItem
+                                                .sellingPrice.format.dollar,
+                                            style: TextStyle(
+                                              fontFamily: 'Sen',
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 14.size,
+                                              color: Colors.red,
+                                              height: 1.5.height,
+                                            ),
+                                          ),
+                                  ),
+                                  Expanded(
+                                    child: _cartItemQuantityEditComponent(),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 25),
-                  const Text(
+                  25.verticalSpace,
+                  Text(
                     'Colors',
                     style: TextStyle(
                         fontFamily: 'Work Sans',
                         fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Color(0xff979797)),
+                        fontSize: 15.size,
+                        color: const Color(0xff979797)),
                   ),
                   Container(
-                      margin: const EdgeInsets.only(top: 5),
-                      height: 48,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: productColorImageUrlList.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  editedCartItem.color =
-                                      productColorList[index];
-                                });
-                              },
-                              child: UiRender.buildCachedNetworkImage(
-                                context,
-                                productColorImageUrlList[index],
-                                height: 48,
-                                width: 48,
-                                borderRadius: BorderRadius.circular(8),
-                                margin: const EdgeInsets.only(right: 10),
-                                border: productColorList[index] ==
-                                        editedCartItem.color
+                    margin: EdgeInsets.only(top: 5.height),
+                    height: 48.height,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: productColorImageUrlList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              editedCartItem.color = productColorList[index];
+                            });
+                          },
+                          child: UiRender.buildCachedNetworkImage(
+                            context,
+                            productColorImageUrlList[index],
+                            height: 48.height,
+                            width: 48.width,
+                            borderRadius: BorderRadius.circular(8),
+                            margin: const EdgeInsets.only(right: 10),
+                            border:
+                                productColorList[index] == editedCartItem.color
                                     ? Border.all(color: Colors.orange)
                                     : null,
-                              ),
-                            );
-                          })),
-                  const SizedBox(height: 25),
-                  const Text(
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  25.verticalSpace,
+                  Text(
                     'Sizes',
                     style: TextStyle(
-                        fontFamily: 'Work Sans',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Color(0xff979797)),
+                      fontFamily: 'Work Sans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15.size,
+                      color: const Color(0xff979797),
+                    ),
                   ),
                   Container(
-                      margin: const EdgeInsets.only(bottom: 30, top: 5),
-                      height: 48,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: productSizeList.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    editedCartItem.size =
-                                        productSizeList[index];
-                                  });
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  alignment: Alignment.center,
-                                  height: 48,
-                                  width: 48,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      gradient: editedCartItem.size ==
-                                              productSizeList[index]
-                                          ? UiRender.generalLinearGradient()
-                                          : null,
-                                      border: Border.all(
-                                          color: const Color(0xffc4c4c4))),
-                                  child: Text(
-                                    productSizeList[index].toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Work Sans',
-                                        color: editedCartItem.size ==
-                                                productSizeList[index]
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                ));
-                          })),
+                    margin: EdgeInsets.only(bottom: 30.height, top: 5.height),
+                    height: 48.height,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: productSizeList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              editedCartItem.size = productSizeList[index];
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.width),
+                            alignment: Alignment.center,
+                            height: 48.height,
+                            width: 48.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.radius),
+                              gradient:
+                                  editedCartItem.size == productSizeList[index]
+                                      ? UiRender.generalLinearGradient()
+                                      : null,
+                              border: Border.all(
+                                color: const Color(0xffc4c4c4),
+                              ),
+                            ),
+                            child: Text(
+                              productSizeList[index].toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 14.size,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Work Sans',
+                                color: editedCartItem.size ==
+                                        productSizeList[index]
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                   Center(
                     child: GradientElevatedButton(
                       text: 'UPDATE',
@@ -275,27 +301,32 @@ class _CartItemDetailsState extends State<CartItemDetails> {
                       endColor: const Color(0xff000000),
                       beginColor: const Color(0xff8D8D8C),
                       textColor: Colors.white,
-                      buttonHeight: 35,
-                      buttonWidth: 150,
+                      buttonHeight: 35.height,
+                      buttonWidth: 150.width,
                       textWeight: FontWeight.w600,
-                      textSize: 16,
-                      borderRadiusIndex: 10,
+                      textSize: 16.size,
+                      borderRadiusIndex: 10.radius,
                       buttonMargin: EdgeInsets.zero,
                       onPress: () {
                         setState(() {
                           editedCartItem.quantity =
                               int.parse(quantityController.text);
 
-                          BlocProvider.of<CartBloc>(context)
-                              .add(OnUpdateCartEvent([
-                            CartItemInfo(
-                                editedCartItem.productId,
-                                editedCartItem.id,
-                                editedCartItem.quantity,
-                                editedCartItem.color,
-                                editedCartItem.size,
-                                editedCartItem.selectStatus)
-                          ], needReload: true));
+                          BlocProvider.of<CartBloc>(context).add(
+                            OnUpdateCartEvent(
+                              [
+                                CartItemInfo(
+                                  editedCartItem.productId,
+                                  editedCartItem.id,
+                                  editedCartItem.quantity,
+                                  editedCartItem.color,
+                                  editedCartItem.size,
+                                  editedCartItem.selectStatus,
+                                )
+                              ],
+                              needReload: true,
+                            ),
+                          );
 
                           context.router.pop();
                         });
@@ -330,16 +361,16 @@ class _CartItemDetailsState extends State<CartItemDetails> {
               }
             });
           },
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(50.radius),
           backgroundColor: const Color(0xffc4c4c4),
           splashColor: Colors.white,
-          iconSize: 10,
+          iconSize: 10.size,
         ),
         Container(
-          width: 35,
-          height: 25,
+          width: 35.width,
+          height: 25.height,
           color: Colors.white,
-          margin: const EdgeInsets.symmetric(horizontal: 3),
+          margin: EdgeInsets.symmetric(horizontal: 3.width),
           child: TextField(
             showCursor: true,
             autofocus: true,
@@ -363,11 +394,12 @@ class _CartItemDetailsState extends State<CartItemDetails> {
             enableInteractiveSelection: false,
             controller: quantityController,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontFamily: 'Work Sans',
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: Color(0xff626262)),
+            style: TextStyle(
+              fontFamily: 'Work Sans',
+              fontWeight: FontWeight.w500,
+              fontSize: 15.size,
+              color: const Color(0xff626262),
+            ),
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
@@ -383,10 +415,10 @@ class _CartItemDetailsState extends State<CartItemDetails> {
               }
             });
           },
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(50.radius),
           backgroundColor: const Color(0xffc4c4c4),
           splashColor: Colors.white,
-          iconSize: 10,
+          iconSize: 10.size,
         ),
       ],
     );

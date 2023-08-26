@@ -4,6 +4,7 @@ import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:fashionstore/config/app_router/app_router_path.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
 import 'package:fashionstore/data/static/global_variables.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:flutter/material.dart';
@@ -51,14 +52,13 @@ class _AppBarComponentState extends State<AppBarComponent> {
       _dropdownMenuList.add(_dropdownItem('My Account', () {}));
       _dropdownMenuList.add(_dropdownItem('My profile', () {
         GlobalVariable.currentNavBarPage = NavigationNameEnum.PROFILE.name;
-
         context.router.replaceNamed(AppRouterPath.profile);
       }));
       _dropdownMenuList.add(_dropdownItem('Purchase history', () {}));
       _dropdownMenuList.add(_dropdownItem('Log out', () {
-        BlocProvider.of<AuthenticationBloc>(context)
-            .add(OnLogoutAuthenticationEvent());
-
+        BlocProvider.of<AuthenticationBloc>(context).add(
+          OnLogoutAuthenticationEvent(),
+        );
         context.router.replaceNamed(AppRouterPath.login);
       }));
     });
@@ -74,53 +74,56 @@ class _AppBarComponentState extends State<AppBarComponent> {
   Widget _appbarContent() {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      child: Stack(clipBehavior: Clip.none, children: [
-        Positioned(
-          child: AppBar(
-            toolbarHeight: 90,
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                gradient: UiRender.generalLinearGradient(),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            child: AppBar(
+              toolbarHeight: 90.height,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: UiRender.generalLinearGradient(),
+                ),
               ),
-            ),
-            elevation: 0,
-            bottomOpacity: 0,
-            titleSpacing: 0,
-            leadingWidth: 48,
-            automaticallyImplyLeading: false,
-            leading: AutoRouter.of(context).canPop() &&
-                    widget.forceCanNotBack == false
-                ? IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.white,
+              elevation: 0,
+              bottomOpacity: 0,
+              titleSpacing: 0,
+              leadingWidth: 48,
+              automaticallyImplyLeading: false,
+              leading: AutoRouter.of(context).canPop() &&
+                      widget.forceCanNotBack == false
+                  ? IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        if (widget.onBack != null) {
+                          widget.onBack!();
+                        } else {
+                          context.router.pop();
+                        }
+                      },
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        SideSheet.left(
+                            context: context,
+                            body: SingleChildScrollView(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return null;
+                                  }),
+                            ));
+                      },
+                      icon: ImageIcon(
+                        const AssetImage('assets/icon/option_icon.png'),
+                        size: 27.size,
+                      ),
                     ),
-                    onPressed: () {
-                      if (widget.onBack != null) {
-                        widget.onBack!();
-                      } else {
-                        context.router.pop();
-                      }
-                    },
-                  )
-                : IconButton(
-                    onPressed: () {
-                      SideSheet.left(
-                          context: context,
-                          body: SingleChildScrollView(
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return null;
-                                }),
-                          ));
-                    },
-                    icon: const ImageIcon(
-                      AssetImage('assets/icon/option_icon.png'),
-                      size: 27,
-                    )),
-            actions: [
-              GestureDetector(
+              actions: [
+                GestureDetector(
                   onTap: () {
                     showDialog(
                         context: context,
@@ -129,7 +132,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
                           return Dialog(
                             alignment: Alignment.topRight,
                             insetPadding: EdgeInsets.only(
-                                top: 67,
+                                top: 67.height,
                                 left: MediaQuery.of(context).size.width / 3),
                             child: ListView.builder(
                                 shrinkWrap: true,
@@ -141,36 +144,44 @@ class _AppBarComponentState extends State<AppBarComponent> {
                         });
                   },
                   child: UiRender.buildCachedNetworkImage(
-                      context,
-                      ValueRender.getGoogleDriveImageUrl(
-                          BlocProvider.of<AuthenticationBloc>(context)
-                                  .currentUser
-                                  ?.avatar ??
-                              ''),
-                      width: 40,
-                      height: 40,
-                      borderRadius: BorderRadius.circular(100),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 25, horizontal: 10))),
-            ],
-            title: _buildTitle(),
-            centerTitle: true,
+                    context,
+                    ValueRender.getGoogleDriveImageUrl(
+                      BlocProvider.of<AuthenticationBloc>(context)
+                              .currentUser
+                              ?.avatar ??
+                          '',
+                    ),
+                    width: 40.width,
+                    height: 40.height,
+                    borderRadius: BorderRadius.circular(100),
+                    margin: EdgeInsets.symmetric(
+                      vertical: 25.height,
+                      horizontal: 10.width,
+                    ),
+                  ),
+                ),
+              ],
+              title: _buildTitle(),
+              centerTitle: true,
+            ),
           ),
-        ),
-        Positioned(
-            bottom: -25,
-            right: 20,
-            left: 20,
-            child: widget.needSearchBar == true
-                ? widget.isSearchable == false
-                    ? GestureDetector(
-                        onTap: () {
-                          context.router.pushNamed(AppRouterPath.searching);
-                        },
-                        child: Container(
-                            padding: const EdgeInsets.only(right: 30, left: 20),
-                            height: 44,
-                            width: MediaQuery.of(context).size.width - 40,
+          Positioned(
+              bottom: -25.height,
+              right: 20.width,
+              left: 20.width,
+              child: widget.needSearchBar == true
+                  ? widget.isSearchable == false
+                      ? GestureDetector(
+                          onTap: () {
+                            context.router.pushNamed(AppRouterPath.searching);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              right: 30.width,
+                              left: 20.width,
+                            ),
+                            height: 44.height,
+                            width: MediaQuery.of(context).size.width - 40.width,
                             decoration: BoxDecoration(
                                 boxShadow: const [
                                   BoxShadow(
@@ -187,51 +198,60 @@ class _AppBarComponentState extends State<AppBarComponent> {
                               children: [
                                 Text(
                                   widget.hintSearchBarText ?? '',
-                                  style: const TextStyle(
-                                      fontFamily: 'Sen',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Color(0xffacacac)),
+                                  style: TextStyle(
+                                    fontFamily: 'Sen',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.size,
+                                    color: const Color(0xffacacac),
+                                  ),
                                 ),
                                 const ImageIcon(
                                   AssetImage('assets/icon/translator_icon.png'),
                                   color: Colors.grey,
                                 ),
                               ],
-                            )),
-                      )
-                    : Container(
-                        padding: const EdgeInsets.only(right: 20, left: 20),
-                        height: 44,
-                        width: MediaQuery.of(context).size.width - 40,
-                        decoration: BoxDecoration(
+                            ),
+                          ),
+                        )
+                      : Container(
+                          padding: EdgeInsets.only(
+                            right: 20.width,
+                            left: 20.width,
+                          ),
+                          height: 44.height,
+                          width: MediaQuery.of(context).size.width - 40.width,
+                          decoration: BoxDecoration(
                             boxShadow: const [
                               BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(0, 1),
-                                  blurRadius: 4.0,
-                                  spreadRadius: 1.0,
-                                  blurStyle: BlurStyle.outer),
+                                color: Colors.grey,
+                                offset: Offset(0, 1),
+                                blurRadius: 4.0,
+                                spreadRadius: 1.0,
+                                blurStyle: BlurStyle.outer,
+                              ),
                             ],
-                            borderRadius: BorderRadius.circular(40),
-                            color: Colors.white),
-                        child: TextField(
-                          controller: widget.textEditingController,
-                          onChanged: widget.onSearch,
-                          onSubmitted: widget.onSearch,
-                          decoration: InputDecoration(
+                            borderRadius: BorderRadius.circular(40.radius),
+                            color: Colors.white,
+                          ),
+                          child: TextField(
+                            controller: widget.textEditingController,
+                            onChanged: widget.onSearch,
+                            onSubmitted: widget.onSearch,
+                            decoration: InputDecoration(
                               suffixIcon: IconButton(
                                 tooltip: "Translator",
                                 onPressed: () {
-                                  BlocProvider.of<TranslatorBloc>(context)
-                                      .add(OnLoadLanguageListTranslatorEvent());
+                                  BlocProvider.of<TranslatorBloc>(context).add(
+                                    OnLoadLanguageListTranslatorEvent(),
+                                  );
 
-                                  UiRender.showSingleTextFieldDialog(context,
-                                          widget.translatorEditingController,
-                                          title: 'Translator',
-                                          hintText: "Search...",
-                                          isTranslator: true)
-                                      .then((value) {
+                                  UiRender.showSingleTextFieldDialog(
+                                    context,
+                                    widget.translatorEditingController,
+                                    title: 'Translator',
+                                    hintText: "Search...",
+                                    isTranslator: true,
+                                  ).then((value) {
                                     if (value == true) {
                                       if (widget.translatorEditingController
                                                   ?.text !=
@@ -242,15 +262,18 @@ class _AppBarComponentState extends State<AppBarComponent> {
                                                   ?.languageCode !=
                                               null) {
                                         BlocProvider.of<TranslatorBloc>(context)
-                                            .add(OnTranslateEvent(
-                                                widget.translatorEditingController
-                                                        ?.text ??
-                                                    '',
-                                                BlocProvider.of<TranslatorBloc>(
-                                                            context)
-                                                        .selectedLanguage
-                                                        ?.languageCode ??
-                                                    ''));
+                                            .add(
+                                          OnTranslateEvent(
+                                            widget.translatorEditingController
+                                                    ?.text ??
+                                                '',
+                                            BlocProvider.of<TranslatorBloc>(
+                                                        context)
+                                                    .selectedLanguage
+                                                    ?.languageCode ??
+                                                '',
+                                          ),
+                                        );
                                       }
                                       widget.translatorEditingController
                                           ?.clear();
@@ -264,69 +287,82 @@ class _AppBarComponentState extends State<AppBarComponent> {
                               ),
                               border: InputBorder.none,
                               hintText: widget.hintSearchBarText,
-                              hintStyle: const TextStyle(
-                                  fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Color(0xffacacac))),
-                        ),
-                      )
-                : Container()),
-      ]),
+                              hintStyle: TextStyle(
+                                fontFamily: 'Sen',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.size,
+                                color: const Color(0xffacacac),
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container()),
+        ],
+      ),
     );
   }
 
   Widget _buildTitle() {
     return widget.pageName == ''
         ? RichText(
-            text: const TextSpan(children: [
-            TextSpan(
-                text: 'Foolish ',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xffFF7A00),
-                  fontSize: 20,
-                )),
-            TextSpan(
-                text: 'Store',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xffFFffff),
-                  fontSize: 20,
-                )),
-          ]))
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Foolish ',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xffFF7A00),
+                    fontSize: 20.size,
+                  ),
+                ),
+                TextSpan(
+                  text: 'Store',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xffFFffff),
+                    fontSize: 20.size,
+                  ),
+                ),
+              ],
+            ),
+          )
         : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               RichText(
-                  text: const TextSpan(children: [
-                TextSpan(
-                    text: 'Foolish ',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xffFF7A00),
-                      fontSize: 12,
-                    )),
-                TextSpan(
-                    text: 'Store',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontSize: 12,
-                    )),
-              ])),
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Foolish ',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xffFF7A00),
+                        fontSize: 12.size,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Store',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 12.size,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Text(
                 widget.pageName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 18.size,
                 ),
               )
             ],
@@ -337,16 +373,20 @@ class _AppBarComponentState extends State<AppBarComponent> {
     return GestureDetector(
       onTap: action,
       child: Container(
-        width: 100,
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        width: 100.width,
+        padding: EdgeInsets.symmetric(
+          vertical: 20.height,
+          horizontal: 20.width,
+        ),
         child: Text(
           name,
           maxLines: 2,
-          style: const TextStyle(
-              fontFamily: 'Work Sans',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Color(0xff464646)),
+          style: TextStyle(
+            fontFamily: 'Work Sans',
+            fontSize: 14.size,
+            fontWeight: FontWeight.w400,
+            color: const Color(0xff464646),
+          ),
         ),
       ),
     );

@@ -5,6 +5,8 @@ import 'package:fashionstore/data/entity/cart_item.dart';
 import 'package:fashionstore/data/enum/cart_enum.dart';
 import 'package:fashionstore/presentation/components/cart_item_component.dart';
 import 'package:fashionstore/presentation/components/cart_item_details.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
+import 'package:fashionstore/utils/extension/string%20_extension.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:fashionstore/utils/service/loading_service.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +94,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                           : const AlwaysScrollableScrollPhysics()
                       : const AlwaysScrollableScrollPhysics(),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10.width),
                     child: Column(
                       children: [
                         _cartItemList(),
@@ -103,20 +105,21 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
               ),
               Center(
                 child: GradientElevatedButton(
-                    buttonMargin: const EdgeInsets.symmetric(vertical: 5),
-                    borderRadiusIndex: 20,
+                    buttonMargin: EdgeInsets.symmetric(vertical: 5.height),
+                    borderRadiusIndex: 20.radius,
                     borderColor: Colors.transparent,
                     text: 'Check out',
                     textWeight: FontWeight.w600,
-                    buttonWidth: 200,
-                    buttonHeight: 45,
+                    buttonWidth: 200.width,
+                    buttonHeight: 45.height,
                     beginColor: Colors.black,
                     endColor: const Color(0xff727272),
                     textColor: Colors.white,
-                    textSize: 16,
+                    textSize: 16.size,
                     onPress: () {
                       BlocProvider.of<CartBloc>(context).add(
-                          OnFilterCartEvent(status: [CartEnum.SELECTED.name]));
+                        OnFilterCartEvent(status: [CartEnum.SELECTED.name]),
+                      );
                     }),
               ),
             ],
@@ -128,19 +131,19 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
   Widget _totalCartPriceComponent() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-      height: 50,
+      padding: EdgeInsets.symmetric(horizontal: 25.width, vertical: 15.height),
+      height: 50.height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          Text(
             'Total cart price: ',
             style: TextStyle(
               overflow: TextOverflow.ellipsis,
-              color: Color(0xff464646),
+              color: const Color(0xff464646),
               fontFamily: 'Work Sans',
               fontWeight: FontWeight.w500,
-              fontSize: 16,
+              fontSize: 16.size,
             ),
           ),
           BlocBuilder<CartBloc, CartState>(builder: (context, cartState) {
@@ -148,12 +151,12 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                 BlocProvider.of<CartBloc>(context).cartItemList;
 
             if (cartState is CartLoadingState) {
-              return const SizedBox(
-                height: 10,
-                width: 10,
+              return SizedBox(
+                height: 10.height,
+                width: 10.width,
                 child: CircularProgressIndicator(
                   color: Colors.orange,
-                  strokeWidth: 2,
+                  strokeWidth: 2.width,
                 ),
               );
             }
@@ -163,11 +166,11 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             }
 
             return Text(
-              '\$ ${ValueRender.totalCartPrice(cartItemList)}',
-              style: const TextStyle(
+              ValueRender.totalCartPrice(cartItemList).format.dollar,
+              style: TextStyle(
                 fontFamily: 'Sen',
                 fontWeight: FontWeight.w700,
-                fontSize: 16,
+                fontSize: 16.size,
                 color: Colors.orange,
               ),
             );
@@ -178,33 +181,35 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   }
 
   Widget _cartItemList() {
-    return BlocConsumer<CartBloc, CartState>(listener: (context, cartState) {
-      if (cartState is CartRemovedState) {
-        UiRender.showDialog(context, '', cartState.message);
-        LoadingService(context).reloadCartPage();
-      }
+    return BlocConsumer<CartBloc, CartState>(
+      listener: (context, cartState) {
+        if (cartState is CartRemovedState) {
+          UiRender.showDialog(context, '', cartState.message);
+          LoadingService(context).reloadCartPage();
+        }
 
-      if (cartState is CartUpdatedState) {
-        UiRender.showDialog(context, '', cartState.message);
-        LoadingService(context).reloadCartPage();
-      }
+        if (cartState is CartUpdatedState) {
+          UiRender.showDialog(context, '', cartState.message);
+          LoadingService(context).reloadCartPage();
+        }
 
-      if (cartState is CartErrorState) {
-        UiRender.showDialog(context, '', cartState.message);
-      }
-    }, builder: (context, cartState) {
-      List<CartItem> cartItemList =
-          BlocProvider.of<CartBloc>(context).cartItemList;
+        if (cartState is CartErrorState) {
+          UiRender.showDialog(context, '', cartState.message);
+        }
+      },
+      builder: (context, cartState) {
+        List<CartItem> cartItemList =
+            BlocProvider.of<CartBloc>(context).cartItemList;
 
-      if (cartState is CartLoadingState) {
-        return UiRender.loadingCircle();
-      }
+        if (cartState is CartLoadingState) {
+          return UiRender.loadingCircle();
+        }
 
-      if (cartState is AllCartListLoadedState) {
-        cartItemList = List.from(cartState.cartItemList);
-      }
+        if (cartState is AllCartListLoadedState) {
+          cartItemList = List.from(cartState.cartItemList);
+        }
 
-      return ListView.builder(
+        return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: cartItemList.length,
@@ -212,24 +217,29 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             return CartItemComponent(
               cartItem: cartItemList[index],
               onTap: () {
-                setState(() {
-                  BlocProvider.of<ProductDetailsBloc>(context)
-                      .add(OnSelectProductEvent(cartItemList[index].productId));
+                setState(
+                  () {
+                    BlocProvider.of<ProductDetailsBloc>(context).add(
+                        OnSelectProductEvent(cartItemList[index].productId));
 
-                  initAnimationController();
+                    initAnimationController();
 
-                  showModalBottomSheet(
+                    showModalBottomSheet(
                       transitionAnimationController: _bottomSheetAnimation,
                       isScrollControlled: true,
                       context: context,
                       builder: (context) {
                         return CartItemDetails(
                             selectedCartItem: cartItemList[index]);
-                      });
-                });
+                      },
+                    );
+                  },
+                );
               },
             );
-          });
-    });
+          },
+        );
+      },
+    );
   }
 }

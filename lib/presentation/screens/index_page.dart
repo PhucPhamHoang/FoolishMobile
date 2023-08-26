@@ -7,6 +7,7 @@ import 'package:fashionstore/data/static/global_variables.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
 import 'package:fashionstore/presentation/components/product_component.dart';
 import 'package:fashionstore/presentation/layout/layout.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:fashionstore/utils/service/loading_service.dart';
 import 'package:flutter/material.dart';
@@ -59,16 +60,20 @@ class _IndexPageState extends State<IndexPage> {
           physics: const BouncingScrollPhysics(),
           controller: _scrollController,
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.size),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _header('Categories', true, action: () {
-                  context.router.replaceNamed(AppRouterPath.allCategories);
+                _header(
+                  'Categories',
+                  true,
+                  action: () {
+                    context.router.replaceNamed(AppRouterPath.allCategories);
 
-                  GlobalVariable.currentNavBarPage =
-                      NavigationNameEnum.CATEGORIES.name;
-                }),
+                    GlobalVariable.currentNavBarPage =
+                        NavigationNameEnum.CATEGORIES.name;
+                  },
+                ),
                 _categoryListComponent(),
                 _header('New Arrivals', false),
                 _productList(ProductListTypeEnum.NEW_ARRIVAL.name),
@@ -79,20 +84,22 @@ class _IndexPageState extends State<IndexPage> {
                 Align(
                   alignment: Alignment.center,
                   child: GradientElevatedButton(
-                      text: 'View all products',
-                      beginColor: const Color(0xff000000),
-                      endColor: const Color(0xff8D8D8C),
-                      textColor: Colors.white,
-                      onPress: () {
-                        context.router.pushNamed(AppRouterPath.allProducts);
+                    text: 'View all products',
+                    beginColor: const Color(0xff000000),
+                    endColor: const Color(0xff8D8D8C),
+                    textColor: Colors.white,
+                    onPress: () {
+                      context.router.pushNamed(AppRouterPath.allProducts);
 
-                        BlocProvider.of<CategoryBloc>(context)
-                            .add(const OnSelectedCategoryEvent('All'));
+                      BlocProvider.of<CategoryBloc>(context).add(
+                        const OnSelectedCategoryEvent('All'),
+                      );
 
-                        GlobalVariable.currentNavBarPage =
-                            NavigationNameEnum.CLOTHINGS.name;
-                      }),
-                )
+                      GlobalVariable.currentNavBarPage =
+                          NavigationNameEnum.CLOTHINGS.name;
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -109,18 +116,19 @@ class _IndexPageState extends State<IndexPage> {
       child: UiRender.buildCachedNetworkImage(
         context,
         ValueRender.getGoogleDriveImageUrl(category.image),
-        width: 90,
-        height: 90,
-        margin: const EdgeInsets.only(right: 13),
-        borderRadius: BorderRadius.circular(8),
+        width: 90.width,
+        height: 90.height,
+        margin: EdgeInsets.only(right: 13.width),
+        borderRadius: BorderRadius.circular(8.radius),
         content: Text(
           category.name,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-              fontFamily: 'Work Sans',
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Colors.white),
+          style: TextStyle(
+            fontFamily: 'Work Sans',
+            fontSize: 15.size,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -129,37 +137,43 @@ class _IndexPageState extends State<IndexPage> {
   Widget _header(String headerContent, bool canViewAll,
       {void Function()? action}) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 10.height),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             headerContent,
-            style: const TextStyle(
-                fontFamily: 'Work Sans',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                height: 1.5),
+            style: TextStyle(
+              fontFamily: 'Work Sans',
+              fontSize: 18.size,
+              fontWeight: FontWeight.w600,
+              height: 1.5.height,
+            ),
           ),
           canViewAll
               ? TextButton(
                   onPressed: action,
-                  child: const Row(
+                  child: Row(
                     children: [
                       Text(
                         'View All',
                         style: TextStyle(
-                            fontFamily: 'Work Sans',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xffacacac)),
+                          fontFamily: 'Work Sans',
+                          fontSize: 12.size,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xffacacac),
+                        ),
                       ),
                       ImageIcon(
-                          size: 18,
-                          color: Color(0xffacacac),
-                          AssetImage('assets/icon/right_dash_arrow_icon.png'))
+                        size: 18.size,
+                        color: const Color(0xffacacac),
+                        const AssetImage(
+                          'assets/icon/right_dash_arrow_icon.png',
+                        ),
+                      ),
                     ],
-                  ))
+                  ),
+                )
               : Container()
         ],
       ),
@@ -168,31 +182,33 @@ class _IndexPageState extends State<IndexPage> {
 
   Widget _categoryListComponent() {
     return BlocBuilder<CategoryBloc, CategoryState>(
-        builder: (context, categoryState) {
-      List<Category> categoryList =
-          BlocProvider.of<CategoryBloc>(context).categoryList;
+      builder: (context, categoryState) {
+        List<Category> categoryList =
+            BlocProvider.of<CategoryBloc>(context).categoryList;
 
-      if (categoryState is CategoryLoadingState) {
-        return UiRender.loadingCircle();
-      }
+        if (categoryState is CategoryLoadingState) {
+          return UiRender.loadingCircle();
+        }
 
-      if (categoryState is CategoryLoadedState) {
-        categoryList = categoryState.categoryList;
-      }
+        if (categoryState is CategoryLoadedState) {
+          categoryList = categoryState.categoryList;
+        }
 
-      return Container(
-        height: 90,
-        margin: const EdgeInsets.only(top: 20, bottom: 35),
-        child: ListView.builder(
+        return Container(
+          height: 90.height,
+          margin: EdgeInsets.only(top: 20.height, bottom: 35.height),
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
             itemCount: categoryList.length,
             itemBuilder: (context, index) {
               return _categoryComponent(categoryList[index]);
-            }),
-      );
-    });
+            },
+          ),
+        );
+      },
+    );
   }
 
   Widget _productList(String type) {
@@ -242,11 +258,11 @@ class _IndexPageState extends State<IndexPage> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: productList.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 0.65,
             crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 25,
+            crossAxisSpacing: 20.height,
+            mainAxisSpacing: 25.width,
           ),
           itemBuilder: (context, index) {
             return ProductComponent(

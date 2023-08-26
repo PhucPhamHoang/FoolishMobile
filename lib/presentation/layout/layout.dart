@@ -1,4 +1,5 @@
 import 'package:fashionstore/presentation/components/product_details_bottom_navigation_bar.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../components/app_bar.dart';
@@ -57,7 +58,7 @@ class _LayoutState extends State<Layout> {
       key: widget.scaffoldKey,
       appBar: widget.needAppBar == true
           ? PreferredSize(
-              preferredSize: const Size.fromHeight(110),
+              preferredSize: Size.fromHeight(110.height),
               child: AppBarComponent(
                 title: widget.title,
                 needSearchBar: widget.needSearchBar,

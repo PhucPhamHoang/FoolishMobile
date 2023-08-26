@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/data/entity/category.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:fashionstore/utils/service/loading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,17 +44,19 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
       textEditingController: _textEditingController,
       hintSearchBarText: 'What category are you looking for?',
       body: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          color: Colors.orange,
-          onRefresh: () async {
-            BlocProvider.of<CategoryBloc>(context).add(OnLoadCategoryEvent());
-          },
-          child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: _categoryList(),
-              ))),
+        key: _refreshIndicatorKey,
+        color: Colors.orange,
+        onRefresh: () async {
+          BlocProvider.of<CategoryBloc>(context).add(OnLoadCategoryEvent());
+        },
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Padding(
+            padding: EdgeInsets.all(20.size),
+            child: _categoryList(),
+          ),
+        ),
+      ),
     );
   }
 
@@ -63,25 +66,31 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
         LoadingService(context).selectCategory(category);
       },
       child: Container(
-        height: 90,
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.only(left: 14),
+        height: 90.height,
+        margin: EdgeInsets.symmetric(vertical: 8.height),
+        padding: EdgeInsets.only(left: 14.width),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               category.name,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Work Sans',
                 fontWeight: FontWeight.w500,
-                fontSize: 22,
+                fontSize: 22.size,
               ),
             ),
             UiRender.buildCachedNetworkImage(
-                context, ValueRender.getGoogleDriveImageUrl(category.image),
-                height: 90, width: 90, borderRadius: BorderRadius.circular(8))
+              context,
+              ValueRender.getGoogleDriveImageUrl(category.image),
+              height: 90.height,
+              width: 90.width,
+              borderRadius: BorderRadius.circular(8.radius),
+            )
           ],
         ),
       ),
@@ -96,9 +105,7 @@ class _AllCategoriesPageState extends State<AllCategoriesPage> {
 
       if (cateState is CategoryLoadingState) {
         return UiRender.loadingCircle();
-      }
-
-      if (cateState is CategoryLoadedState) {
+      } else if (cateState is CategoryLoadedState) {
         categoryList = cateState.categoryList;
       }
 

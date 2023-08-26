@@ -6,6 +6,7 @@ import 'package:fashionstore/bloc/uploadFile/upload_file_bloc.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
 import 'package:fashionstore/data/static/global_variables.dart';
 import 'package:fashionstore/presentation/components/gradient_button.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:flutter/material.dart';
@@ -50,13 +51,13 @@ class _ProfilePageState extends State<ProfilePage> {
       hintSearchBarText: 'What product are you looking for?',
       textEditingController: _textEditingController,
       body: RefreshIndicator(
-          onRefresh: () async {},
-          color: Colors.orange,
-          key: _refreshIndicatorKey,
-          child: MultiBlocListener(
-            listeners: [
-              BlocListener<UploadFileBloc, UploadFileState>(
-                  listener: (context, uploadFileState) {
+        onRefresh: () async {},
+        color: Colors.orange,
+        key: _refreshIndicatorKey,
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<UploadFileBloc, UploadFileState>(
+              listener: (context, uploadFileState) {
                 if (uploadFileState is UploadFileUploadingState) {
                   UiRender.showLoaderDialog(context);
                 }
@@ -65,118 +66,129 @@ class _ProfilePageState extends State<ProfilePage> {
                   context.router.pop();
 
                   UiRender.showDialog(
-                          context, '', 'Uploaded image successfully!')
-                      .then((value) {
-                    BlocProvider.of<AuthenticationBloc>(context)
-                            .currentUser
-                            ?.avatar =
-                        ValueRender.getFileIdFromGoogleDriveViewUrl(
-                            uploadFileState.url);
-                  });
+                    context,
+                    '',
+                    'Uploaded image successfully!',
+                  ).then(
+                    (value) {
+                      BlocProvider.of<AuthenticationBloc>(context)
+                              .currentUser
+                              ?.avatar =
+                          ValueRender.getFileIdFromGoogleDriveViewUrl(
+                              uploadFileState.url);
+                    },
+                  );
                 }
 
                 if (uploadFileState is UploadFileErrorState) {
                   UiRender.showDialog(context, '', uploadFileState.message);
                 }
-              }),
-            ],
-            child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-              listener: (context, authenState) {
-                User? currentUser =
-                    BlocProvider.of<AuthenticationBloc>(context).currentUser;
-
-                if (authenState is AuthenticationLoggedInState) {
-                  currentUser = authenState.currentUser;
-                }
-
-                if (currentUser != null) {
-                  setState(() {
-                    _fullNameController.text = currentUser?.name ?? '';
-                    _emailController.text = currentUser?.email ?? '';
-                    _userNameController.text = currentUser?.userName ?? '';
-                    _phoneNumberController.text =
-                        currentUser?.phoneNumber ?? '';
-                    _addressController.text = currentUser?.address ?? '';
-                    _cityController.text = currentUser?.city ?? '';
-                    _countryController.text = currentUser?.country ?? '';
-                  });
-                }
-              },
-              builder: (context, authenState) {
-                User? currentUser =
-                    BlocProvider.of<AuthenticationBloc>(context).currentUser;
-
-                if (authenState is AuthenticationLoggedInState) {
-                  currentUser = authenState.currentUser;
-                }
-
-                if (currentUser != null) {
-                  _fullNameController.text = currentUser.name;
-                  _emailController.text = currentUser.email ?? '';
-                  _userNameController.text = currentUser.userName;
-                  _phoneNumberController.text = currentUser.phoneNumber ?? '';
-                  _addressController.text = currentUser.address ?? '';
-                  _cityController.text = currentUser.city ?? '';
-                  _countryController.text = currentUser.country ?? '';
-
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    controller: _scrollController,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 25),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _avatar(),
-                            const SizedBox(height: 35),
-                            Text(
-                              currentUser.name,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                  fontFamily: 'Work Sans',
-                                  color: Color(0xff464646)),
-                            ),
-                            Text(
-                              currentUser.email ?? 'UNKNOWN',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                  fontFamily: 'Work Sans',
-                                  color: Color(0xff868686),
-                                  height: 2),
-                            ),
-                            _textField('User name', _userNameController),
-                            _textField('Full name', _fullNameController),
-                            _textField('Email', _emailController),
-                            _textField('Phone number', _phoneNumberController),
-                            _textField('Address', _addressController),
-                            _textField('City', _cityController),
-                            _textField('Country', _countryController),
-                            Center(
-                              child: GradientElevatedButton(
-                                  borderRadiusIndex: 20,
-                                  textSize: 18,
-                                  borderColor: Colors.black,
-                                  text: 'Update Profile',
-                                  textWeight: FontWeight.w600,
-                                  buttonWidth: 300,
-                                  buttonHeight: 45,
-                                  beginColor: Colors.black,
-                                  endColor: const Color(0xff727272),
-                                  textColor: Colors.white,
-                                  onPress: () {}),
-                            )
-                          ],
-                        )),
-                  );
-                }
-
-                return Container();
               },
             ),
-          )),
+          ],
+          child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+            listener: (context, authenState) {
+              User? currentUser =
+                  BlocProvider.of<AuthenticationBloc>(context).currentUser;
+
+              if (authenState is AuthenticationLoggedInState) {
+                currentUser = authenState.currentUser;
+              }
+
+              if (currentUser != null) {
+                setState(() {
+                  _fullNameController.text = currentUser?.name ?? '';
+                  _emailController.text = currentUser?.email ?? '';
+                  _userNameController.text = currentUser?.userName ?? '';
+                  _phoneNumberController.text = currentUser?.phoneNumber ?? '';
+                  _addressController.text = currentUser?.address ?? '';
+                  _cityController.text = currentUser?.city ?? '';
+                  _countryController.text = currentUser?.country ?? '';
+                });
+              }
+            },
+            builder: (context, authenState) {
+              User? currentUser =
+                  BlocProvider.of<AuthenticationBloc>(context).currentUser;
+
+              if (authenState is AuthenticationLoggedInState) {
+                currentUser = authenState.currentUser;
+              }
+
+              if (currentUser != null) {
+                _fullNameController.text = currentUser.name;
+                _emailController.text = currentUser.email ?? '';
+                _userNameController.text = currentUser.userName;
+                _phoneNumberController.text = currentUser.phoneNumber;
+                _addressController.text = currentUser.address ?? '';
+                _cityController.text = currentUser.city ?? '';
+                _countryController.text = currentUser.country ?? '';
+
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  controller: _scrollController,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30.width,
+                      vertical: 25.height,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _avatar(),
+                        SizedBox(height: 35.height),
+                        Text(
+                          currentUser.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20.size,
+                            fontFamily: 'Work Sans',
+                            color: const Color(0xff464646),
+                          ),
+                        ),
+                        Text(
+                          currentUser.email ?? 'UNKNOWN',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 14.size,
+                            fontFamily: 'Work Sans',
+                            color: const Color(0xff868686),
+                            height: 2.height,
+                          ),
+                        ),
+                        _textField('User name', _userNameController),
+                        _textField('Full name', _fullNameController),
+                        _textField('Email', _emailController),
+                        _textField('Phone number', _phoneNumberController),
+                        _textField('Address', _addressController),
+                        _textField('City', _cityController),
+                        _textField('Country', _countryController),
+                        Center(
+                          child: GradientElevatedButton(
+                            borderRadiusIndex: 20.radius,
+                            textSize: 18.size,
+                            borderColor: Colors.black,
+                            text: 'Update Profile',
+                            textWeight: FontWeight.w600,
+                            buttonWidth: 300.width,
+                            buttonHeight: 45.height,
+                            beginColor: Colors.black,
+                            endColor: const Color(0xff727272),
+                            textColor: Colors.white,
+                            onPress: () {},
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              return Container();
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -194,9 +206,10 @@ class _ProfilePageState extends State<ProfilePage> {
             }
 
             return CircleAvatar(
-              radius: 44,
+              radius: 44.radius,
               backgroundImage: NetworkImage(
-                  ValueRender.getGoogleDriveImageUrl(fileId ?? '')),
+                ValueRender.getGoogleDriveImageUrl(fileId ?? ''),
+              ),
             );
           },
         ),
@@ -209,27 +222,31 @@ class _ProfilePageState extends State<ProfilePage> {
                   .pickImage(
                 source: ImageSource.gallery,
               )
-                  .then((XFile? image) {
-                if (image != null) {
-                  File file = File(image.path);
+                  .then(
+                (XFile? image) {
+                  if (image != null) {
+                    File file = File(image.path);
 
-                  BlocProvider.of<UploadFileBloc>(context)
-                      .add(OnUploadFileEvent(file, isCustomer: true));
-                }
-              });
+                    BlocProvider.of<UploadFileBloc>(context).add(
+                      OnUploadFileEvent(file, isCustomer: true),
+                    );
+                  }
+                },
+              );
             },
             child: Container(
-                height: 23,
-                width: 23,
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: const Color(0xffbababa),
-                ),
-                child: Image.asset(
-                  'assets/icon/edit_icon.png',
-                  fit: BoxFit.fill,
-                )),
+              height: 23.height,
+              width: 23.width,
+              padding: EdgeInsets.all(3.size),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.radius),
+                color: const Color(0xffbababa),
+              ),
+              child: Image.asset(
+                'assets/icon/edit_icon.png',
+                fit: BoxFit.fill,
+              ),
+            ),
           ),
         )
       ],
@@ -240,11 +257,12 @@ class _ProfilePageState extends State<ProfilePage> {
       String hintText, TextEditingController? textEditingController,
       {bool editable = true}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      margin: const EdgeInsets.only(top: 25),
+      padding: EdgeInsets.symmetric(horizontal: 20.width),
+      margin: EdgeInsets.only(top: 25.height),
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: const Color(0xff777676), width: 0.5)),
+        color: Colors.white,
+        border: Border.all(color: const Color(0xff777676), width: 0.5.width),
+      ),
       child: TextField(
         controller: textEditingController,
         enabled: editable,
@@ -252,16 +270,18 @@ class _ProfilePageState extends State<ProfilePage> {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
-          hintStyle: const TextStyle(
-              fontFamily: 'Trebuchet MS',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: Color(0xff868686)),
-          labelStyle: const TextStyle(
-              fontFamily: 'Trebuchet MS',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: Color(0xff868686)),
+          hintStyle: TextStyle(
+            fontFamily: 'Trebuchet MS',
+            fontWeight: FontWeight.w400,
+            fontSize: 14.size,
+            color: const Color(0xff868686),
+          ),
+          labelStyle: TextStyle(
+            fontFamily: 'Trebuchet MS',
+            fontWeight: FontWeight.w400,
+            fontSize: 14.size,
+            color: const Color(0xff868686),
+          ),
         ),
       ),
     );

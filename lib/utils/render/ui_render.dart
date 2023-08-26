@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:fashionstore/data/entity/translator_language.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,8 +28,12 @@ class UiRender {
   }
 
   static Future<bool> showConfirmDialog(
-      BuildContext context, String title, String message,
-      {String confirmText = 'OK', bool needCenterMessage = true}) async {
+    BuildContext context,
+    String title,
+    String message, {
+    String confirmText = 'OK',
+    bool needCenterMessage = true,
+  }) async {
     bool? result = await showCupertinoDialog(
       barrierDismissible: true,
       context: context,
@@ -72,7 +77,10 @@ class UiRender {
   }
 
   static Future<void> showDialog(
-      BuildContext context, String title, String message) async {
+    BuildContext context,
+    String title,
+    String message,
+  ) async {
     return showCupertinoDialog(
       barrierDismissible: true,
       context: context,
@@ -105,27 +113,30 @@ class UiRender {
       context: context,
       builder: (BuildContext cxt) {
         return Container(
-          height: 100,
-          width: 100,
+          height: 100.height,
+          width: 100.width,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(25.radius),
           ),
           child: const Center(
-              child: CircularProgressIndicator(
-            color: Colors.orange,
-          )),
+            child: CircularProgressIndicator(
+              color: Colors.orange,
+            ),
+          ),
         );
       },
     );
   }
 
   static Future<bool> showSingleTextFieldDialog(
-      BuildContext context, TextEditingController? controller,
-      {String? title,
-      String? hintText,
-      bool needCenterText = false,
-      bool isTranslator = false}) async {
+    BuildContext context,
+    TextEditingController? controller, {
+    String? title,
+    String? hintText,
+    bool needCenterText = false,
+    bool isTranslator = false,
+  }) async {
     bool? result = await showPlatformDialog(
       barrierDismissible: true,
       context: context,
@@ -142,68 +153,78 @@ class UiRender {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: hintText ?? '',
-                  hintStyle: const TextStyle(
-                      fontFamily: 'Trebuchet MS',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
-                      color: Color(0xff8D8D8C)),
+                  hintStyle: TextStyle(
+                    fontFamily: 'Trebuchet MS',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.size,
+                    color: const Color(0xff8D8D8C),
+                  ),
                 ),
               ),
               isTranslator == true
                   ? BlocBuilder<TranslatorBloc, TranslatorState>(
                       builder: (context, translatorState) {
-                      List<TranslatorLanguage> languageList =
-                          BlocProvider.of<TranslatorBloc>(context).languageList;
-                      List<DropdownMenuItem> dropDownItemList = [];
-                      TranslatorLanguage? selectedLanguage =
-                          BlocProvider.of<TranslatorBloc>(context)
-                              .selectedLanguage;
+                        List<TranslatorLanguage> languageList =
+                            BlocProvider.of<TranslatorBloc>(context)
+                                .languageList;
+                        List<DropdownMenuItem> dropDownItemList = [];
+                        TranslatorLanguage? selectedLanguage =
+                            BlocProvider.of<TranslatorBloc>(context)
+                                .selectedLanguage;
 
-                      if (translatorState is TranslatorSelectedState) {
-                        selectedLanguage = translatorState.selectedLanguage;
-                      }
+                        if (translatorState is TranslatorSelectedState) {
+                          selectedLanguage = translatorState.selectedLanguage;
+                        }
 
-                      if (translatorState
-                          is TranslatorLanguageListLoadedState) {
-                        languageList = translatorState.translatorLanguageList;
-                      }
+                        if (translatorState
+                            is TranslatorLanguageListLoadedState) {
+                          languageList = translatorState.translatorLanguageList;
+                        }
 
-                      for (TranslatorLanguage language in languageList) {
-                        dropDownItemList.add(DropdownMenuItem(
-                          value: language.languageCode,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              children: [
-                                Container(
-                                    height: 40,
-                                    width: 60,
-                                    margin: const EdgeInsets.only(right: 15),
-                                    decoration: BoxDecoration(
+                        for (TranslatorLanguage language in languageList) {
+                          dropDownItemList.add(
+                            DropdownMenuItem(
+                              value: language.languageCode,
+                              child: Container(
+                                margin:
+                                    EdgeInsets.symmetric(vertical: 5.height),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 40.height,
+                                      width: 60.width,
+                                      margin: EdgeInsets.only(right: 15.width),
+                                      decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: AssetImage(language
-                                                .imageLocalStoragePath)),
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(
+                                            language.imageLocalStoragePath,
+                                          ),
+                                        ),
                                         borderRadius:
-                                            BorderRadius.circular(5))),
-                                Text(
-                                  language.name,
-                                  style: const TextStyle(
-                                      fontFamily: 'Trebuchet MS',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 17,
-                                      color: Color(0xff8D8D8C)),
-                                )
-                              ],
+                                            BorderRadius.circular(5.radius),
+                                      ),
+                                    ),
+                                    Text(
+                                      language.name,
+                                      style: TextStyle(
+                                        fontFamily: 'Trebuchet MS',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 17.size,
+                                        color: const Color(0xff8D8D8C),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ));
-                      }
+                          );
+                        }
 
-                      return Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
+                        return Container(
+                          margin: EdgeInsets.only(top: 10.height),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
                               // value: selectedLanguage ?? '',
                               itemHeight: null,
                               items: dropDownItemList,
@@ -213,22 +234,26 @@ class UiRender {
                                 selectedLanguage != null
                                     ? selectedLanguage.name
                                     : 'Select your language...',
-                                style: const TextStyle(
-                                    fontFamily: 'Trebuchet MS',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                    color: Color(0xff8D8D8C)),
+                                style: TextStyle(
+                                  fontFamily: 'Trebuchet MS',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16.size,
+                                  color: const Color(0xff8D8D8C),
+                                ),
                               ),
                               selectedItemBuilder: (context) {
                                 return dropDownItemList;
                               },
                               onChanged: (value) {
                                 BlocProvider.of<TranslatorBloc>(context).add(
-                                    OnSelectLanguageCodeTranslatorEvent(value));
-                              }),
-                        ),
-                      );
-                    })
+                                  OnSelectLanguageCodeTranslatorEvent(value),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   : Container()
             ],
           ),
@@ -292,5 +317,45 @@ class UiRender {
           const Center(child: CircularProgressIndicator(color: Colors.orange)),
       errorWidget: (context, url, error) => const Icon(Icons.error),
     );
+  }
+
+  static List<Widget> buildRatingStars(int overallRating, {double size = 10}) {
+    List<Widget> ratingStars = List<Widget>.generate(
+      overallRating,
+      (index) {
+        return Container(
+          height: size,
+          width: size,
+          margin: EdgeInsets.fromLTRB(0, 9.height, 2.width, 10.height),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/icon/star_icon.png',
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    List<Widget> unratingStars = List<Widget>.generate(
+      5 - overallRating,
+      (index) {
+        return Container(
+          height: size,
+          width: size,
+          margin: EdgeInsets.fromLTRB(0, 9.height, 2.width, 10.height),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/icon/unrating_star_icon.png',
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    return [...ratingStars, ...unratingStars];
   }
 }

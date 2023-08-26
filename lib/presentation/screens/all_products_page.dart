@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/categories/category_bloc.dart';
 import 'package:fashionstore/data/enum/navigation_name_enum.dart';
 import 'package:fashionstore/presentation/layout/layout.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -41,9 +42,12 @@ class _AllProductsPageState extends State<AllProductsPage> {
         !_scrollController.position.outOfRange) {
       if (BlocProvider.of<CategoryBloc>(context).selectedCategoryName ==
           'All') {
-        BlocProvider.of<ProductBloc>(context).add(OnLoadAllProductListEvent(
+        BlocProvider.of<ProductBloc>(context).add(
+          OnLoadAllProductListEvent(
             BlocProvider.of<ProductBloc>(context).currentAllProductListPage + 1,
-            8));
+            8,
+          ),
+        );
       }
     }
   }
@@ -56,8 +60,9 @@ class _AllProductsPageState extends State<AllProductsPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.isFromCategoryPage == false) {
-        BlocProvider.of<ProductBloc>(context)
-            .add(const OnLoadAllProductListEvent(1, 8));
+        BlocProvider.of<ProductBloc>(context).add(
+          const OnLoadAllProductListEvent(1, 8),
+        );
       } else {
         selectedCategoryIndex = BlocProvider.of<CategoryBloc>(context)
             .categoryList
@@ -103,7 +108,7 @@ class _AllProductsPageState extends State<AllProductsPage> {
             child: SingleChildScrollView(
               controller: _scrollController,
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.size),
                 child: _productsList(),
               ),
             ),
@@ -131,10 +136,10 @@ class _AllProductsPageState extends State<AllProductsPage> {
       },
       child: Container(
         alignment: Alignment.center,
-        margin: const EdgeInsets.only(right: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        margin: EdgeInsets.only(right: 6.width),
+        padding: EdgeInsets.symmetric(horizontal: 10.width, vertical: 5.height),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(40.radius),
           color: BlocProvider.of<CategoryBloc>(context).selectedCategoryName !=
                   name
               ? Colors.white
@@ -148,13 +153,14 @@ class _AllProductsPageState extends State<AllProductsPage> {
         child: Text(
           name,
           style: TextStyle(
-              fontFamily: 'Work Sans',
-              fontWeight: FontWeight.w400,
-              color:
-                  BlocProvider.of<CategoryBloc>(context).selectedCategoryName ==
-                          name
-                      ? Colors.white
-                      : Colors.black),
+            fontFamily: 'Work Sans',
+            fontWeight: FontWeight.w400,
+            color:
+                BlocProvider.of<CategoryBloc>(context).selectedCategoryName ==
+                        name
+                    ? Colors.white
+                    : Colors.black,
+          ),
         ),
       ),
     );
@@ -183,9 +189,9 @@ class _AllProductsPageState extends State<AllProductsPage> {
       }
 
       return Container(
-        height: 25,
-        margin: const EdgeInsets.only(bottom: 20, top: 15),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        height: 25.height,
+        margin: EdgeInsets.only(bottom: 20.height, top: 15.height),
+        padding: EdgeInsets.symmetric(horizontal: 20.width),
         child: ScrollablePositionedList.builder(
           itemScrollController: _itemScrollController,
           shrinkWrap: true,
@@ -205,14 +211,6 @@ class _AllProductsPageState extends State<AllProductsPage> {
         builder: (context, productState) {
       List<Product> productList = [];
 
-      // if(productState is ProductLoadingState) {
-      //   return const Center(
-      //     child: CircularProgressIndicator(
-      //       color: Colors.orange,
-      //     ),
-      //   );
-      // }
-
       if (productState is ProductAllListLoadedState) {
         productList = productState.productList;
       } else if (productState is ProductFilteredListLoadedState) {
@@ -225,11 +223,11 @@ class _AllProductsPageState extends State<AllProductsPage> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: productList.length,
           dragStartBehavior: DragStartBehavior.down,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 0.65,
             crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 25,
+            crossAxisSpacing: 20.height,
+            mainAxisSpacing: 25.width,
           ),
           itemBuilder: (context, index) {
             return ProductComponent(

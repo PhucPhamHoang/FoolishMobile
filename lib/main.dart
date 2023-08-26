@@ -14,6 +14,7 @@ import 'package:fashionstore/repository/shop_repository.dart';
 import 'package:fashionstore/repository/translator_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'bloc/productDetails/product_details_bloc.dart';
 import 'bloc/productSearching/product_searching_bloc.dart';
@@ -80,19 +81,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _appRouter = AppRouter();
 
-  late Future<void> _determineIndexPageFuture;
-  late Widget initPage;
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _appRouter.config(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      // home: initPage,
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp.router(
+          routerConfig: _appRouter.config(),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+        );
+      },
     );
   }
 }

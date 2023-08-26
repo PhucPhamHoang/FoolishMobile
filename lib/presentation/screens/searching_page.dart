@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fashionstore/bloc/translator/translator_bloc.dart';
 import 'package:fashionstore/config/app_router/app_router_path.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,77 +40,79 @@ class _SearchingPageState extends State<SearchingPage> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-        textEditingController: _searchingController,
-        translatorEditingController: _translateController,
-        pageName: "Product Searching",
-        needBottomNavBar: false,
-        isSearchable: true,
-        hintSearchBarText: "What product do you want to search?",
-        onSearch: (text) {
-          if (text.isNotEmpty) {
-            BlocProvider.of<ProductSearchingBloc>(context)
-                .add(OnSearchProductEvent(text, 1, 10));
-          }
+      textEditingController: _searchingController,
+      translatorEditingController: _translateController,
+      pageName: "Product Searching",
+      needBottomNavBar: false,
+      isSearchable: true,
+      hintSearchBarText: "What product do you want to search?",
+      onSearch: (text) {
+        if (text.isNotEmpty) {
+          BlocProvider.of<ProductSearchingBloc>(context)
+              .add(OnSearchProductEvent(text, 1, 10));
+        }
 
-          if (_searchingController.text.isEmpty) {
-            BlocProvider.of<ProductSearchingBloc>(context)
-                .add(const OnSearchProductEvent('', 1, 10));
-          }
-        },
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: BlocListener<TranslatorBloc, TranslatorState>(
-            listener: (context, translateState) {
-              if (translateState is TranslatorLoadingState) {
-                UiRender.showLoaderDialog(context);
+        if (_searchingController.text.isEmpty) {
+          BlocProvider.of<ProductSearchingBloc>(context)
+              .add(const OnSearchProductEvent('', 1, 10));
+        }
+      },
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: BlocListener<TranslatorBloc, TranslatorState>(
+          listener: (context, translateState) {
+            if (translateState is TranslatorLoadingState) {
+              UiRender.showLoaderDialog(context);
+            }
+
+            if (translateState is TranslatorLoadedState) {
+              context.router.pop();
+
+              BlocProvider.of<ProductSearchingBloc>(context)
+                  .add(OnSearchProductEvent(translateState.content, 1, 10));
+
+              setState(() {
+                _searchingController.text = translateState.content;
+              });
+            }
+          },
+          child: BlocBuilder<ProductSearchingBloc, ProductSearchingState>(
+            builder: (context, productState) {
+              List<Product> productList =
+                  BlocProvider.of<ProductSearchingBloc>(context)
+                      .searchingProductList;
+
+              if (productState is ProductSearchingListLoadedState) {
+                productList = productState.productList;
               }
 
-              if (translateState is TranslatorLoadedState) {
-                context.router.pop();
+              if (productState is ProductSearchingLoadingState) {
+                return UiRender.loadingCircle();
+              }
 
-                BlocProvider.of<ProductSearchingBloc>(context)
-                    .add(OnSearchProductEvent(translateState.content, 1, 10));
-
-                setState(() {
-                  _searchingController.text = translateState.content;
-                });
+              if (productList.isNotEmpty) {
+                return Container(
+                  color: Colors.white,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: productList.length,
+                    padding: EdgeInsets.symmetric(horizontal: 10.width),
+                    itemBuilder: (context, index) {
+                      return _searchingResultComponent(productList[index]);
+                    },
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text('No result!'),
+                );
               }
             },
-            child: BlocBuilder<ProductSearchingBloc, ProductSearchingState>(
-              builder: (context, productState) {
-                List<Product> productList =
-                    BlocProvider.of<ProductSearchingBloc>(context)
-                        .searchingProductList;
-
-                if (productState is ProductSearchingListLoadedState) {
-                  productList = productState.productList;
-                }
-
-                if (productState is ProductSearchingLoadingState) {
-                  return UiRender.loadingCircle();
-                }
-
-                if (productList.isNotEmpty) {
-                  return Container(
-                    color: Colors.white,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: productList.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        itemBuilder: (context, index) {
-                          return _searchingResultComponent(productList[index]);
-                        }),
-                  );
-                } else {
-                  return const Center(
-                    child: Text('No result!'),
-                  );
-                }
-              },
-            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _searchingResultComponent(Product product) {
@@ -120,33 +123,36 @@ class _SearchingPageState extends State<SearchingPage> {
         context.router.pushNamed(AppRouterPath.productDetails);
       },
       child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(5),
+        height: 90.height,
+        padding: EdgeInsets.all(5.size),
         decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-          color: Colors.grey,
-        ))),
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+        ),
         child: Row(
           children: [
             UiRender.buildCachedNetworkImage(
               context,
               product.image1 ?? '',
-              height: 80,
-              width: 75,
-              margin: const EdgeInsets.only(right: 8),
-              borderRadius: BorderRadius.circular(8),
+              height: 80.height,
+              width: 75.width,
+              margin: EdgeInsets.only(right: 8.width),
+              borderRadius: BorderRadius.circular(8.radius),
             ),
             Expanded(
               child: Text(
                 '${product.name} - Color: ${product.color}',
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    color: Color(0xff868686),
-                    fontFamily: 'Work Sans',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: const Color(0xff868686),
+                  fontFamily: 'Work Sans',
+                  fontSize: 14.size,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             )
           ],

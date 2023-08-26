@@ -7,7 +7,6 @@ import '../../presentation/screens/all_categories_page.dart';
 import '../../presentation/screens/all_products_page.dart';
 import '../../presentation/screens/cart_page.dart';
 import '../../presentation/screens/checkout_page.dart';
-import '../../presentation/screens/home_page.dart';
 import '../../presentation/screens/initial_loading_page.dart';
 import '../../presentation/screens/login_page.dart';
 import '../../presentation/screens/product_details_page.dart';
@@ -43,10 +42,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           page: IndexRoute.page,
           path: AppRouterPath.index,
-        ),
-        AutoRoute(
-          page: HomeRoute.page,
-          path: AppRouterPath.home,
         ),
         AutoRoute(
           page: InitialLoadingRoute.page,

@@ -1,3 +1,4 @@
+import 'package:fashionstore/utils/extension/number_extension.dart';
 import 'package:flutter/material.dart';
 
 class GradientElevatedButton extends StatefulWidget {
@@ -71,26 +72,28 @@ class _GradientElevatedButtonState extends State<GradientElevatedButton> {
             padding: EdgeInsets.zero,
           ),
           child: InkWell(
-            overlayColor: MaterialStateColor.resolveWith((states) => Colors.orange),
+            overlayColor:
+                MaterialStateColor.resolveWith((states) => Colors.orange),
             child: Container(
               height: widget.buttonHeight,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(widget.borderRadiusIndex),
                 gradient: LinearGradient(
-                    begin: widget.begin,
-                    end: widget.end,
-                    colors: [
-                      widget.beginColor,
-                      widget.endColor,
-                    ]),
+                  begin: widget.begin,
+                  end: widget.end,
+                  colors: [
+                    widget.beginColor,
+                    widget.endColor,
+                  ],
+                ),
               ),
               child: Container(
                 alignment: Alignment.center,
                 height: widget.buttonHeight,
                 child: widget.isLoading
                     ? SizedBox(
-                        height: 20,
-                        width: 20,
+                        height: 20.height,
+                        width: 20.width,
                         child: CircularProgressIndicator(
                           color: widget.textColor,
                         ),
@@ -99,12 +102,11 @@ class _GradientElevatedButtonState extends State<GradientElevatedButton> {
                         widget.text,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: 'Be Vietnam Pro',
-                          color: widget.textColor,
-                          fontSize: widget.textSize,
-                          fontWeight: widget.textWeight,
-                          fontStyle: widget.textFontStyle
-                        ),
+                            fontFamily: 'Be Vietnam Pro',
+                            color: widget.textColor,
+                            fontSize: widget.textSize,
+                            fontWeight: widget.textWeight,
+                            fontStyle: widget.textFontStyle),
                       ),
               ),
             ),

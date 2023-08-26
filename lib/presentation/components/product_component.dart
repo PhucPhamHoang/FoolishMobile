@@ -1,4 +1,6 @@
 import 'package:fashionstore/data/entity/product.dart';
+import 'package:fashionstore/utils/extension/number_extension.dart';
+import 'package:fashionstore/utils/extension/string%20_extension.dart';
 import 'package:fashionstore/utils/render/ui_render.dart';
 import 'package:fashionstore/utils/render/value_render.dart';
 import 'package:flutter/material.dart';
@@ -20,113 +22,117 @@ class _ProductComponentState extends State<ProductComponent> {
     return GestureDetector(
       onTap: widget.onClick,
       child: Container(
-        width: (MediaQuery.of(context).size.width / 2) - 34,
-        constraints: const BoxConstraints(
-          maxHeight: 600,
+        width: (MediaQuery.of(context).size.width / 2) - 34.width,
+        constraints: BoxConstraints(
+          maxHeight: 600.height,
         ),
-        child: Stack(children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 7,
-                child: UiRender.buildCachedNetworkImage(
-                  context,
-                  widget.product.image1 ?? '',
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: UiRender.buildCachedNetworkImage(
+                    context,
+                    widget.product.image1 ?? '',
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: List<Widget>.generate(
-                            widget.product.overallRating.toInt(), (index) {
-                          return Container(
-                            height: 10,
-                            width: 10,
-                            margin: const EdgeInsets.fromLTRB(0, 9, 2, 10),
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/icon/star_icon.png'))),
-                          );
-                        })),
-                    Text(
-                      widget.product.name,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: const TextStyle(
+                        children: UiRender.buildRatingStars(
+                          widget.product.overallRating.toInt(),
+                        ),
+                      ),
+                      Text(
+                        widget.product.name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
                           fontFamily: 'Work Sans',
-                          fontSize: 13,
+                          fontSize: 13.size,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xff464646)),
-                    ),
-                    widget.product.discount > 0
-                        ? RichText(
-                            text: TextSpan(
-                                text:
-                                    '\$${ValueRender.getDiscountPrice(widget.product.sellingPrice, widget.product.discount)}  ',
-                                style: const TextStyle(
-                                    fontFamily: 'Sen',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                    color: Colors.red,
-                                    height: 1.5),
+                          color: const Color(0xff464646),
+                        ),
+                      ),
+                      widget.product.discount > 0
+                          ? RichText(
+                              text: TextSpan(
+                                text: ValueRender.getDiscountPrice(
+                                  widget.product.sellingPrice,
+                                  widget.product.discount,
+                                ).format.dollar,
+                                style: TextStyle(
+                                  fontFamily: 'Sen',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.size,
+                                  color: Colors.red,
+                                  height: 1.5,
+                                ),
                                 children: [
-                                TextSpan(
-                                  text:
-                                      '\$${widget.product.sellingPrice.toString()}',
-                                  style: const TextStyle(
+                                  TextSpan(
+                                    text: widget
+                                        .product.sellingPrice.format.dollar,
+                                    style: TextStyle(
                                       fontFamily: 'Sen',
                                       decoration: TextDecoration.lineThrough,
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 9,
-                                      color: Color(0xffacacac)),
-                                )
-                              ]))
-                        : Text(
-                            '\$${widget.product.sellingPrice.toString()}',
-                            style: const TextStyle(
+                                      fontSize: 9.size,
+                                      color: const Color(0xffacacac),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Text(
+                              widget.product.sellingPrice.format.dollar,
+                              style: TextStyle(
                                 fontFamily: 'Sen',
                                 fontWeight: FontWeight.w700,
-                                fontSize: 14,
+                                fontSize: 14.size,
                                 color: Colors.red,
-                                height: 1.5),
-                          )
-                  ],
+                                height: 1.5.height,
+                              ),
+                            ),
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
-          widget.product.discount > 0
-              ? Positioned(
-                  left: 0,
-                  top: 23,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    height: 23,
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
+              ],
+            ),
+            widget.product.discount > 0
+                ? Positioned(
+                    left: 0,
+                    top: 23.height,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 50.width,
+                      height: 23.height,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20.radius),
+                          bottomRight: Radius.circular(20.radius),
                         ),
-                        gradient: UiRender.generalLinearGradient()),
-                    child: Text(
-                      '-${widget.product.discount}%',
-                      style: const TextStyle(
-                        fontFamily: 'Sen',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 11,
-                        color: Colors.white,
+                        gradient: UiRender.generalLinearGradient(),
+                      ),
+                      child: Text(
+                        '-${widget.product.discount}%',
+                        style: TextStyle(
+                          fontFamily: 'Sen',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 11.size,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ))
-              : Container(),
-        ]),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }
